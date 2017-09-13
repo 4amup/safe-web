@@ -19,15 +19,32 @@ var mysqlOption = {
     idle: 10000
   }
 }
-var DB = new Sequelize('test', 'root', '8307', mysqlOption);
+var sequelize = new Sequelize('test', 'root', '8307', mysqlOption);
 // 测试数据库连接情况
-DB.authenticate()
+sequelize.authenticate()
   .then(function(err) {
     console.log('成功连接数据库');
   })
   .catch(function (err) {
     console.log('数据库连接错误：', err);
   });
+
+// 创建model
+var Trouble = sequelize.define('trouble', {
+  imagePath: {
+    type: Sequelize.STRING
+  },
+  troubleDescription: {
+    type: Sequelize.STRING
+  }
+});
+
+// 实例化model，创建数据表
+sequelize.sync()
+  .then(() => Trouble.create({
+    imagePath: 'test/test/test',
+    troubleDescription: '测试一下这个模型'
+  }))
 
 var index = require('./routes/index');
 var users = require('./routes/users');
