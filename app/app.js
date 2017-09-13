@@ -5,6 +5,29 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var nunjucks = require('nunjucks');
+var Sequelize = require('sequelize');
+
+// 数据库实例
+var mysqlOption = {
+  host: 'localhost',
+  dialect: 'mysql',
+  port: 3306,
+
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000
+  }
+}
+var DB = new Sequelize('test', 'root', '8307', mysqlOption);
+// 测试数据库连接情况
+DB.authenticate()
+  .then(function(err) {
+    console.log('成功连接数据库');
+  })
+  .catch(function (err) {
+    console.log('数据库连接错误：', err);
+  });
 
 var index = require('./routes/index');
 var users = require('./routes/users');
