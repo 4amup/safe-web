@@ -96,7 +96,7 @@ window.onload = function(){
     //origin是切图坐标，该坐标是相对于图片左上角默认为（0,0）的相对像素坐标
     //anchor是锚点坐标，描述经纬度点对应图标中的位置
     //缩放尺寸，用于拉伸或缩小原图片时使用，该尺寸是用来改变整个图片的尺寸
-    var anchor = new qq.maps.Point(10, 10),
+    var anchor = new qq.maps.Point(10, 0),
     size = new qq.maps.Size(20, 20),
     origin = new qq.maps.Point(0, 0),
     scaleSize = new qq.maps.Size(20, 20)
