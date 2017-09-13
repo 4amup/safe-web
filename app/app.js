@@ -5,47 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var nunjucks = require('nunjucks');
-var Sequelize = require('sequelize');
 
-// 数据库实例
-var mysqlOption = {
-  host: 'localhost',
-  dialect: 'mysql',
-  port: 3306,
-
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000
-  }
-}
-var sequelize = new Sequelize('test', 'root', '8307', mysqlOption);
-// 测试数据库连接情况
-sequelize.authenticate()
-  .then(function(err) {
-    console.log('成功连接数据库');
-  })
-  .catch(function (err) {
-    console.log('数据库连接错误：', err);
-  });
-
-// 创建model
-var Trouble = sequelize.define('trouble', {
-  imagePath: {
-    type: Sequelize.STRING
-  },
-  troubleDescription: {
-    type: Sequelize.STRING
-  }
-});
-
-// 实例化model，创建数据表
-sequelize.sync()
-  .then(() => Trouble.create({
-    imagePath: 'test/test/test',
-    troubleDescription: '测试一下这个模型'
-  }))
-
+// 引入路由文件
 var index = require('./routes/index');
 var users = require('./routes/users');
 
