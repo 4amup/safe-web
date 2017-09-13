@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+#map {
+  width: 48%;
+  height: 100%;
+}
+#form {
+  width: 48%;
+  height: 100%;
+}

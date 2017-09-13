@@ -1,12 +1,27 @@
 {% extends "layout.njk" %}
+{# 首页自定义样式文件 #}
+{% block stylesheets %}
+<link rel="stylesheet" href="css/index.css">
+{% endblock %}
+
 {% block content %}
 <h1>{{ title }}</h1>
-<p>欢迎 {{ title }}</p>
-<div id="map" style="min-width:600px; min-height:767px"></div>
-<form action="/upload" method="post" enctype="multipart/form-data">
-  <input type="file" id="chooseImage">
-  <input type="submit" value="提交">
-</form>
+<div class="container">
+  <div id="map" style="min-width:600px; min-height:600px"></div>
+  <form action="/upload" method="post" enctype="multipart/form-data" id="form">
+    <p>
+      <label for="image">图片上传</label>
+      <input type="file" id="chooseImage" name="image">
+    </p>
+    <p>
+      <label for="description">问题描述</label>
+      <textarea name="description" id="troubleDescription" cols="30" rows="10"></textarea>
+    </p>
+    <p>
+      <input type="submit" value="提交">
+    </p>
+  </form>
+</div>
 <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=QXZBZ-GNZWW-TC2RM-RJTDS-2SUV3-QRFUC"></script>
 <script src="js/index.js"></script>
 {% endblock %}
