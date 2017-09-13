@@ -5,10 +5,14 @@ window.onload = function(){
   function init() {
     var sw = new qq.maps.LatLng(45.710540, 126.672342); //西南角坐标
     var ne = new qq.maps.LatLng(45.718960, 126.682878); //东北角坐标
+
+    // 中心点
+    var center = new qq.maps.LatLng(45.7137085949, 126.6769766808);
+
     //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
     var map = new qq.maps.Map(document.getElementById("map"), {
       // 地图的中心地理坐标。
-      center: new qq.maps.LatLng(45.7137085949,126.6769766808),
+      center: new qq.maps.LatLng(45.7137085949, 126.6769766808),
       //初始化地图缩放级别
       zoom: 17,
 
@@ -32,7 +36,7 @@ window.onload = function(){
       draggingCursor: "pointer",
 
       //地图类型ID
-      mapTypeId: qq.maps.MapTypeId.SATELLITE,
+      mapTypeId: qq.maps.MapTypeId.HYBRID,
 
       //若为false则禁止拖拽
       draggable: true,
@@ -52,9 +56,9 @@ window.onload = function(){
       //地图类型控件参数
       mapTypeControlOptions: {
         mapTypeIds: [
-            qq.maps.MapTypeId.ROADMAP,
-            qq.maps.MapTypeId.HYBRID,
-            qq.maps.MapTypeId.SATELLITE
+          qq.maps.MapTypeId.ROADMAP,
+          qq.maps.MapTypeId.HYBRID,
+          qq.maps.MapTypeId.SATELLITE
         ],
         position: qq.maps.ControlPosition.TOP_RIGHT
       },
@@ -83,6 +87,30 @@ window.onload = function(){
         position: qq.maps.ControlPosition.BOTTOM_RIGHT
       }
     });
+
+
+    //设置Marker自定义图标的属性
+    //size是图标尺寸，该尺寸为显示图标的实际尺寸
+    //origin是切图坐标，该坐标是相对于图片左上角默认为（0,0）的相对像素坐标
+    //anchor是锚点坐标，描述经纬度点对应图标中的位置
+    //缩放尺寸，用于拉伸或缩小原图片时使用，该尺寸是用来改变整个图片的尺寸
+    var anchor = new qq.maps.Point(0, 39),
+    size = new qq.maps.Size(20, 20),
+    origin = new qq.maps.Point(0, 0),
+    scaleSize = new qq.maps.Size(20, 20)
+    icon = new qq.maps.MarkerImage(
+      "images/todo.png",
+      size,
+      origin,
+      anchor,
+      scaleSize
+    );
+    // 自定义标注
+    var marker = new qq.maps.Marker({
+      position: center,
+      map: map,
+    });
+    marker.setIcon(icon);
   }
 
   //调用初始化函数地图
