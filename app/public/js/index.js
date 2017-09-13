@@ -3,6 +3,8 @@ window.onload = function(){
 
   //初始化地图函数  自定义函数名init
   function init() {
+    // 作为地图弹出窗口的内容
+    var trouble = `<div><h1 style="text-align:center">需参数化标题</h1><img style="width:400px; height:200px;" src="example/example.jpg"/></div>`
     var sw = new qq.maps.LatLng(45.710540, 126.672342); //西南角坐标
     var ne = new qq.maps.LatLng(45.718960, 126.682878); //东北角坐标
 
@@ -94,7 +96,7 @@ window.onload = function(){
     //origin是切图坐标，该坐标是相对于图片左上角默认为（0,0）的相对像素坐标
     //anchor是锚点坐标，描述经纬度点对应图标中的位置
     //缩放尺寸，用于拉伸或缩小原图片时使用，该尺寸是用来改变整个图片的尺寸
-    var anchor = new qq.maps.Point(0, 39),
+    var anchor = new qq.maps.Point(10, 10),
     size = new qq.maps.Size(20, 20),
     origin = new qq.maps.Point(0, 0),
     scaleSize = new qq.maps.Size(20, 20)
@@ -111,6 +113,19 @@ window.onload = function(){
       map: map,
     });
     marker.setIcon(icon);
+
+    // 标注事件自定义
+    //添加到提示窗
+    var info = new qq.maps.InfoWindow({
+      map: map
+    });
+    //获取标记的点击事件
+    qq.maps.event.addListener(marker, 'click', function() {
+      info.open();
+      // 以下显示的内容将来要通过数据库的实例改变
+      info.setContent(trouble);
+      info.setPosition(center);
+    });
   }
 
   //调用初始化函数地图
