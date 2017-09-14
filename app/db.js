@@ -22,7 +22,7 @@ function defineModel(name, attributes) {
   var attrs = {};
 
   // 以下for循环的if和else针对的是两种模型定义
-  
+
   // else针对这种model
   // var Project = sequelize.define('project', {
   //   title: Sequelize.STRING,
@@ -36,7 +36,7 @@ function defineModel(name, attributes) {
   //   // default values for dates => current time
   //   myDate: { type: Sequelize.DATE, defaultValue: Sequelize.NOW }
   // })
-  
+
   for (let key in attributes) {
     let value = attributes[key];
     if (typeof value === 'object' && value['type']) { // 如果值是个对象且对象有type属性
