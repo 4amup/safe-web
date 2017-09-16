@@ -5,6 +5,7 @@ window.onload = function(){
   function init() {
     // 作为地图弹出窗口的内容
     var trouble = `<div><h1 style="text-align:center">需参数化标题</h1><img style="width:400px; height:200px;" src="example/example.jpg"/></div>`
+    // 以下用于限制地图范围
     var sw = new qq.maps.LatLng(45.710540, 126.672342); //西南角坐标
     var ne = new qq.maps.LatLng(45.718960, 126.682878); //东北角坐标
 
