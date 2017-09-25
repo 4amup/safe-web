@@ -30,12 +30,6 @@ const Trouble = sequelize.define('trouble', {
   },
   troubleDescription: {
     type: Sequelize.STRING
-  },
-  Lng: {
-    type: Sequelize.DECIMAL(12, 10)
-  },
-  Lat: {
-    type: Sequelize.DECIMAL(13, 10)
   }
 });
 
