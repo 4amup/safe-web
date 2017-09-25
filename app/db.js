@@ -30,12 +30,13 @@ const Trouble = sequelize.define('trouble', {
   },
   troubleDescription: {
     type: Sequelize.STRING
+  },
+  Lng: { // 纬度
+    type: Sequelize.DECIMAL(12, 10)
+  },
+  Lat: { // 经度
+    type: Sequelize.DECIMAL(13, 10)
   }
-});
-
-// 同步数据表
-Trouble.sync({force: true}).then(() => {
-  console.log('数据表创建成功')
 });
 
 module.exports = Trouble;
