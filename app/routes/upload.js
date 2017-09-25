@@ -17,8 +17,17 @@ var Trouble = require('../db')
 
 // 解析post请求，将解析内容写入数据库
 router.post('/',upload.single('image'), function(req, res, next) {
-  Trouble.create({ 'imagePath': req.file.path+'.jpg', 'troubleDescription': req.body.description});
+  var location = genLocationInfo([45.710540, 126.672342], [45.718960, 126.682878]);
+  Trouble.create({ 'imagePath': req.file.path+'.jpg', 'troubleDescription': req.body.description, 'Lng': location[0], 'Lat': location[1]});
   res.redirect('/');
 });
+
+// 临时写一个自动生成经纬度信息的函数，如果是手机端运行，就要求定位权限
+function genLocationInfo (x, y) { // x是西南角坐标，y是东北角坐标，x，y形式是[Lng, Lat]
+  // 获取传入坐标的取值范围
+  var Lng = x[0] + Math.random() * (y[0] - x[0]);
+  var Lat = x[1] + Math.random() * (y[1] - x[1]);
+  return [Lng, Lat];
+}
 
 module.exports = router;
