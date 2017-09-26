@@ -28,7 +28,7 @@ const Trouble = sequelize.define('trouble', {
   imagePath: {
     type: Sequelize.STRING
   },
-  troubleDescription: {
+  imageDescription: {
     type: Sequelize.STRING
   },
   Lng: { // 纬度

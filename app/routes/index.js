@@ -6,13 +6,24 @@ var Trouble = require('../db');
 router.get('/', function(req, res, next) {
   // 数据库中查询出内容
   Trouble.findAll().then(troubles => {
-    var trouble = troubles[troubles.length - 1];
-    var path = trouble.imagePath.split('\\').splice(1, 3).join('/');
-    res.render('index', { title: '开发中的首页', imageDescription: trouble.troubleDescription, imagePath: path, Lng: trouble.Lng, Lat: trouble.Lat});
-  })
-  .catch(error => {
-    console.log('数据库查询结果为空，显示默认内容')
-    res.render('index', {title: '默认', imageDescription: '默认', imagePath: `example/example.jpg`, Lng:45.7137085949, Lat:126.6769766808})
+    if (troubles.length) {
+      // troubles
+      console.log('有查询内容，正常渲染');
+    } else {
+      console.log('数据库查询结果为空，显示默认内容');
+
+      // 默认数据格式
+      var trouble = {
+        imageDescription: '无数据，显示默认内容',
+        imagePath:'example/example.jpg',
+        Lng:45.7137085949,
+        Lat:126.6769766808
+      }
+      troubles.push(trouble);
+    }
+
+    // 传递处理过的数据到模板
+    res.render('index', { title: '开发中的首页', troubles: troubles});
   })
 });
 
