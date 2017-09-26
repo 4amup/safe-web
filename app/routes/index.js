@@ -5,10 +5,15 @@ var Trouble = require('../db');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   // 数据库中查询出内容
-  Trouble.findAll().then(troubles => {
+
+  Trouble.findAll({
+    attributes: ['id', 'imageDescription', 'imagePath', 'Lng', 'Lat']
+  })
+  .then(troubles => {
     if (troubles.length) {
       // troubles
       console.log('有查询内容，正常渲染');
+      res.render('index', { title: '开发中的首页', troubles: troubles});
     } else {
       console.log('数据库查询结果为空，显示默认内容');
 
@@ -20,10 +25,8 @@ router.get('/', function(req, res, next) {
         Lat:126.6769766808
       }
       troubles.push(trouble);
+      res.render('index', { title: '开发中的首页', troubles: troubles});
     }
-
-    // 传递处理过的数据到模板
-    res.render('index', { title: '开发中的首页', troubles: troubles});
   })
 });
 
