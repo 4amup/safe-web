@@ -19,8 +19,11 @@ var Trouble = require('../db')
 router.post('/',upload.single('image'), function(req, res, next) {
   var location = genLacationInfo([45.710540, 126.672342], [45.718960, 126.682878]);
   // 处理一下path，将\处理成\/后返回
-  Trouble.create({ 'imagePath': req.file.path.split('\\').splice(1, 3).join('/'), 'imageDescription': req.body.description, 'Lng': location[0], 'Lat': location[1]});
-  res.redirect('/');
+  Trouble.create({ 'imagePath': req.file.path.split('\\').splice(1, 3).join('/'), 'imageDescription': req.body.description, 'Lng': location[0], 'Lat': location[1]})
+  .then(trouble => {
+    console.log(`${ trouble }数据没有已经插入数据库中了`)
+    res.send([trouble]);
+  });
 });
 
 // 模拟一个随机生成经纬度的函数
