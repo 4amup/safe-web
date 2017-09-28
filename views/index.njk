@@ -23,25 +23,4 @@
   </form>
 </div>
 <script src="js/index.js"></script>
-<script>
-// 循环区
-{# var markers = new Array({{ troubles.length }});
-{% for trouble in troubles %}
-
-var location{{trouble.id - 1}} = new qq.maps.LatLng({{ trouble.Lng }}, {{ trouble.Lat }});
-markers[{{ trouble.id - 1}}] = new qq.maps.Marker({
-position: location{{trouble.id - 1}},
-map: map,
-});
-markers[{{ trouble.id - 1}}].setIcon(icon); // 添加icon
-
-var trouble{{trouble.id - 1}} = `<div><h1 style="text-align:center">{{ trouble.imageDescription }}</h1><img style="width:400px; height:200px;" src={{ trouble.imagePath }}></div>`;
-
-qq.maps.event.addListener(markers[{{ trouble.id - 1}}], 'click', function() {
-  info.open();
-  info.setContent(trouble{{trouble.id - 1}});
-  info.setPosition(location{{trouble.id - 1}});
-});
-{% endfor %} #}
-</script>
 {% endblock %}
