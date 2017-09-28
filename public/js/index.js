@@ -132,34 +132,4 @@ $(function () {
     // 载入地图
     loadScript(troubles);
   })
-
-
-
-  // 异步提交表单
-  $('#form').submit(function (ev) {
-    // 取消默认事件，然后使用ajax方式提交表单
-    ev.preventDefault()
-    let form = $(this)
-    console.log('使用ajax提交')
-    $.ajax({
-      url: form.attr('action'),
-      type: 'POST',
-      data: form.serialize(), // 表单序列化为查询字符串
-    })
-    .done(function (trouble) {
-      var markers222 = new qq.maps.Marker({
-      position: new qq.maps.LatLng(trouble.Lng, trouble.Lat),
-      map: map,
-      });
-      markers222.setIcon(icon); // 添加icon
-
-      ;
-
-      qq.maps.event.addListener(markers222, 'click', function() {
-        info.open();
-        info.setContent(`<div><h1 style="text-align:center">${ trouble.imageDescription }</h1><img style="width:400px; height:200px;" src=${ trouble.imagePath }></div>`);
-        info.setPosition(new qq.maps.LatLng(trouble.Lng, trouble.Lat));
-      });
-    })
-  })
 })
