@@ -1,0 +1,20 @@
+{# 先在前端实现数据格式，在做这个超级管理员页面 #}
+{% extends "layout.njk" %}
+{# 首页自定义样式文件 #}
+{% block stylesheets %}
+<link rel="stylesheet" href="css/admin.css">
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<div class="container">
+  <div id="map" style="min-width:600px; min-height:600px"></div>
+  <div id="nullmap" style="min-width:600px; min-height:600px; display:none"></div>
+  <div id="show">点击后传值</div>
+  <div>
+    <button id="changePolygon">确认</button>
+  </div>
+</div>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&libraries=drawing"></script>
+<script src="js/admin.js"></script>
+{% endblock %}
