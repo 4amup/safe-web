@@ -18,9 +18,9 @@ router.get('/', function(req, res, next) {
       // 默认数据格式
       var trouble = {
         imageDescription: '无数据，显示默认内容',
-        imagePath:'example/example.jpg',
-        Lng:45.7137085949,
-        Lat:126.6769766808
+        imagePath: 'example/example.jpg',
+        Lng: 45.716503,
+        Lat: 126.678114
       }
       troubles.push(trouble);
     }

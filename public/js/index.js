@@ -8,21 +8,44 @@ $(function () {
   })
   .done(function (troubles) {
     console.log('数据传送成功！')
-    function initMap (troubles) {
+    function initMap (troubles, data) {
       //设置地图中心点，即工厂正中心位置
-      var centerLatlng = new qq.maps.LatLng(45.7137085949, 126.6769766808);
+      var centerLatlng = new qq.maps.LatLng(45.716503,126.678114);
       // 以下用于限制地图范围
-      var sw = new qq.maps.LatLng(45.710540, 126.672342); //西南角坐标
-      var ne = new qq.maps.LatLng(45.718960, 126.682878); //东北角坐标
+      var sw = new qq.maps.LatLng(45.710824,126.666484); //西南角坐标
+      var ne = new qq.maps.LatLng(45.721252,126.686912); //东北角坐标
       //设置地图范围的西南角和东北角
+      // 厂区范围数据，后端提供,设置厂区面积
+      var data = [
+        [45.71248374645855, 126.67219161987305],
+        [45.715255536384234, 126.67401552200317],
+        [45.71650092425703, 126.67458951473236],
+        [45.716651211668655, 126.67415365576744],
+        [45.717258443605346, 126.67451173067093],
+        [45.71767137628016, 126.6734254360199],
+        [45.72099907152751, 126.6754800081253],
+        [45.71917326440228, 126.68216943740845],
+        [45.71493341650691, 126.68201923370361],
+        [45.71241632282879, 126.68121993541718],
+        [45.7121082332633, 126.6817831993103],
+        [45.710444145672874, 126.68116092681885],
+        [45.71064455051665, 126.68005585670471],
+        [45.71140495862153, 126.67605400085449]
+      ];
+
+      console.log(data);
+
+      var companyPath = data.map((value, index) => {
+        return new qq.maps.LatLng(value[0], value[1]);
+      });
 
       //定义工厂模式函数
       var myOptions = {
         center: centerLatlng, //设置中心点
         mapTypeId: qq.maps.MapTypeId.ROADMAP, //设置地图样式详情参见MapType
         //初始化地图缩放级别
-        zoom: 17,
-        minZoom: 16,
+        zoom: 16,
+        minZoom: 15,
         maxZoom: 18,
         //如果为 true，在初始化地图时不会清除地图容器内的内容
         noClear: true,
@@ -30,7 +53,7 @@ $(function () {
         //仅在地图初始化时，才能设置此选项
         backgroundColor: "#ffffff",
         //boundary规定了地图的边界，当拖拽超出限定的边界范围后，会自动移动回来
-        boundary:new qq.maps.LatLngBounds (sw, ne),
+        // boundary:new qq.maps.LatLngBounds (sw, ne),
         //地图的默认鼠标指针样式
         draggableCursor: "crosshair",
         //拖动地图时的鼠标指针样式
@@ -89,6 +112,12 @@ $(function () {
         anchor,
         scaleSize
       );
+
+      // 厂区范围用多边形覆盖物
+      var polygon = new qq.maps.Polygon({
+        path: companyPath,
+        map: map
+      });
 
       var info = new qq.maps.InfoWindow({ // 信息窗口，公用
         map: map

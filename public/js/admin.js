@@ -33,10 +33,10 @@ $(function() {
       visible:false
       },
       circleOptions: {
-          fillColor: new qq.maps.Color(255, 208, 70, 0.3),
-          strokeColor: new qq.maps.Color(88, 88, 88, 1),
-          strokeWeight: 3,
-          clickable: false
+        fillColor: new qq.maps.Color(255, 208, 70, 0.3),
+        strokeColor: new qq.maps.Color(88, 88, 88, 1),
+        strokeWeight: 3,
+        clickable: false
       }
     });
     drawingManager.setMap(map);
