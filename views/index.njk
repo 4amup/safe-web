@@ -9,10 +9,10 @@
 <div class="container">
   <div id="map" style="min-width:600px; min-height:600px"></div>
   <form action="/upload" method="post" enctype="multipart/form-data" id="form">
-    <p>
-      <label for="image">图片上传</label>
-      <input type="file" id="chooseImage" name="image">
-    </p>
+    <div id="upfile" class="upfile upfile-advanced">
+      <label id="demo-preview" for="demo-file"></label>
+      <input type="file" id="demo-file" accept="image/*">
+    </div>
     <p>
       <label for="description">问题描述</label>
       <textarea name="description" id="troubleDescription" cols="30" rows="10"></textarea>
@@ -22,5 +22,64 @@
     </p>
   </form>
 </div>
+<script src="vendors/exif.js"></script>
 <script src="js/index.js"></script>
+<script>
+(function(){
+  var upfileBox = $('#upfile');
+  var fileInput = $('#demo-file');
+  var fileLabel = $('#demo-preview');
+  var demoLog = $('#demo-log');
+  var demoVal = $('#demo-val');
+
+  if (typeof window.FileReader === 'function' || typeof window.FileReader === 'object') {
+    upfileBox.addClass('upfile-advanced');
+
+    var oFile = new FileReader();
+    var passFileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png)$/i;
+
+    oFile.onloadend = function(oFREvent){
+      fileLabel.attr('class', '');
+
+      var state = oFREvent.currentTarget.readyState;
+      if (state === 2) {
+        fileLabel.addClass('set').css('backgroundImage', 'url(' + oFREvent.target.result + ')');
+      } else {
+        fileLabel.addClass('error');
+      };
+    };
+
+    fileInput.on('change', function(e){
+      if (!e.target || !e.target.files.length || !e.target.files[0]) {return};
+
+      var _file = e.target.files[0];
+
+      if (!passFileType.test(_file.type)) {return};
+
+      oFile.readAsDataURL(_file);
+
+      EXIF.getData(_file, function(){
+        var _dataTxt = EXIF.pretty(this);
+        var _dataJson = JSON.stringify(EXIF.getAllTags(this));
+
+        demoLog.html(_dataJson);
+        demoVal.val(_dataTxt);
+
+        var _rotate = 0;
+        var _orientation = EXIF.getTag(this, 'Orientation');
+
+        if (_orientation == 3) {
+          _rotate = 180;
+        } else if (_orientation == 6) {
+          _rotate = 90;
+        } else if (_orientation == 8) {
+          _rotate = 270;
+        };
+
+        fileLabel.addClass('rotate-' + _rotate);
+      });
+    });
+  };
+})();
+</script>
 {% endblock %}
