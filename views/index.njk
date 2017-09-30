@@ -10,12 +10,24 @@
   <div id="map" style="min-width:600px; min-height:600px"></div>
   <form action="/upload" method="post" enctype="multipart/form-data" id="form">
     <div id="upfile" class="upfile upfile-advanced">
-      <label id="demo-preview" for="demo-file"></label>
+      <label id="demo-preview" for="demo-file">照片上传：</label>
       <input type="file" id="demo-file" accept="image/*">
     </div>
+    <div>
+      <label id="location">定位点：</label>
+      <select id="department">
+        {# 第一级可以后端直接渲染好，第二级将数据传进html，由页面js实时更改联动，可参考百度前端学院任务 #}
+        <option value ="vessel-factory">重容分厂</option>
+        <option value ="tube-factory">管子分厂</option>
+      </select>
+      <select id="region">
+        <option value ="region-1">一跨</option>
+        <option value ="region-2">二跨</option>
+      </select>
+    </div>
     <p>
-      <label for="description">问题描述</label>
-      <textarea name="description" id="troubleDescription" cols="30" rows="10"></textarea>
+      <label for="description">问题描述：</label>
+      <input type="text" name="description" id="troubleDescription">
     </p>
     <p>
       <input type="submit" value="提交">
@@ -25,6 +37,7 @@
 <script src="vendors/exif.js"></script>
 <script src="js/index.js"></script>
 <script>
+{# 此脚本程序用于实时在前端页面显示图片预览，前端位置信息和select双向绑定 #}
 (function(){
   var upfileBox = $('#upfile');
   var fileInput = $('#demo-file');
