@@ -1,6 +1,96 @@
 $(function () {
   // 载入提示
-  console.log('main.js loaded!');
+  console.log('main.js load start!');
+  var upfileBox = $('#upfile');
+  var fileInput = $('#demo-file');
+  var fileLabel = $('#demo-preview');
+  var dateInput = $('#dateInput'); // 拍摄时间自动读取
+  var timeInput = $('#timeInput'); // 拍摄时间自动读取
+  var locationInput = $('#troubleLocation');
+
+  if (typeof window.FileReader === 'function' || typeof window.FileReader === 'object') { // 火狐谷歌浏览器支持window.FileReader对象，IE不支持
+    upfileBox.addClass('upfile-advanced');
+
+    var oFile = new FileReader();
+    var passFileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png)$/i; // 规定上传文件的扩展名格式
+
+    // 开始读取图片时，重新将日期清空
+    oFile.onloadstart = function () {
+      dateInput.val('');
+      timeInput.val('');
+      locationInput.val('');
+      dateInput.removeAttr('disabled');
+      timeInput.removeAttr('disabled');
+    }
+    oFile.onloadend = function(oFREvent){ // onloadend，读取完触发事件，无论成败，都通过
+      fileLabel.attr('class', '');
+
+      var state = oFREvent.currentTarget.readyState;
+      if (state === 2) {
+        fileLabel.addClass('set').css('backgroundImage', 'url(' + oFREvent.target.result + ')');
+      } else {
+        fileLabel.addClass('error');
+      };
+    };
+
+    fileInput.on('change', function(e){ // 监听fileInput文件上传框的内容改变事件
+      if (!e.target || !e.target.files.length || !e.target.files[0]) {return};
+
+      var _file = e.target.files[0];
+
+      if (!passFileType.test(_file.type)) {return}; // 如果不符合规定格式，立即返回
+
+      oFile.readAsDataURL(_file); // 开始读取文件
+
+      EXIF.getData(_file, function(){
+        var _datetime = EXIF.getTag(this, 'DateTime');
+        var _date;
+        var _time;
+
+        // 前端显示时间
+        if (_datetime) {
+          _datetime = _datetime.split(' ');
+          _date = _datetime[0].split(':').join('-');
+          _time = _datetime[1];
+          dateInput.val(_date);
+          timeInput.val(_time);
+          dateInput.attr('disabled','disabled');
+          timeInput.attr('disabled','disabled');
+        } else {
+          _datetime = new Date();
+          _date = `${_datetime.getFullYear()}-${_datetime.getMonth()+1}-${_datetime.getDate()}`;
+          _time = `${_datetime.getHours()}:${(_datetime.getMinutes() < 10)? '0'+_datetime.getMinutes():_datetime.getMinutes()}:${(_datetime.getSeconds() < 10)? '0'+_datetime.getSeconds() : _datetime.getSeconds()}`;
+          dateInput.val(_date);
+          timeInput.val(_time);
+        }
+
+        // 调整图片旋转
+        var _rotate = 0;
+        var _orientation = EXIF.getTag(this, 'Orientation'); // 此参数显示拍摄方向
+
+        if (_orientation == 3) {
+          _rotate = 180;
+        } else if (_orientation == 6) {
+          _rotate = 90;
+        } else if (_orientation == 8) {
+          _rotate = 270;
+        };
+
+        fileLabel.addClass('rotate-' + _rotate);
+
+        // 自动添加gps定位信息
+        var _gpsLat = EXIF.getTag(this, 'GPSLatitude');
+        var _gpsLng = EXIF.getTag(this, 'GPSLongitude');
+        var Lat = _gpsLat[0] + (_gpsLat[1]+_gpsLat[2]/60)/60;
+        var Lng = _gpsLng[0] + (_gpsLng[1]+_gpsLng[2]/60)/60;
+        locationInput.val(Lat + ',' + Lng);
+      });
+    });
+  } else {
+    alert('当前浏览器不支持实时预览，请更换现代浏览器，或切换至极速模式后刷新');
+  }
+
+
   $.ajax({
     url: '/api',
     type: 'GET',
@@ -130,7 +220,6 @@ $(function () {
         map: map,
         });
         markers[i].setIcon(icon); // 添加icon
-
         ;
 
         qq.maps.event.addListener(markers[i], 'click', function() {
@@ -139,6 +228,20 @@ $(function () {
           info.setPosition(new qq.maps.LatLng(trouble.Lng, trouble.Lat));
         });
       }
+
+      // 点击事件添加
+      qq.maps.event.addListener(map, 'click', function(event) {
+        var newMarker=new qq.maps.Marker({
+          position:event.latLng,
+          map:map,
+          animation: qq.maps.MarkerAnimation.BOUNCE // 跳动标记，表示新增的问题点
+        });
+        qq.maps.event.addListener(map, 'click', function(event) {
+          newMarker.setMap(null);
+        });
+        newMarker.setIcon(icon);
+        locationInput.val(newMarker.getPosition());
+      });
     }
 
     window.init = function () {
@@ -159,4 +262,7 @@ $(function () {
     // 载入地图
     loadScript(troubles);
   })
+
+  console.log('main.js loaded!');
+
 })
