@@ -33,8 +33,6 @@ $(function () {
         [45.71140495862153, 126.67605400085449]
       ];
 
-      console.log(data);
-
       var companyPath = data.map((value, index) => {
         return new qq.maps.LatLng(value[0], value[1]);
       });

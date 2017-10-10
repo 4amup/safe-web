@@ -9,10 +9,12 @@
 <div class="container">
   <div id="map" style="min-width:600px; min-height:600px"></div>
   <form action="/upload" method="post" enctype="multipart/form-data" id="form">
+
     <div id="upfile" class="upfile upfile-advanced">
       <label id="demo-preview" for="demo-file">照片上传：</label>
       <input type="file" id="demo-file" accept="image/*">
     </div>
+
     <div>
       <label id="location">定位点：</label>
       <select id="department">
@@ -30,6 +32,11 @@
       <input type="text" name="description" id="troubleDescription">
     </p>
     <p>
+      <label for="datetime">拍摄时间：</label>
+      <input type="date" name="dateInput" id="dateInput">
+      <input type="time" name="dateInput" id="timeInput">
+    </p>
+    <p>
       <input type="submit" value="提交">
     </p>
   </form>
@@ -37,21 +44,28 @@
 <script src="vendors/exif.js"></script>
 <script src="js/index.js"></script>
 <script>
-{# 此脚本程序用于实时在前端页面显示图片预览，前端位置信息和select双向绑定 #}
+{# 此脚本程序用于实时在前端页面显示图片预览 #}
 (function(){
   var upfileBox = $('#upfile');
   var fileInput = $('#demo-file');
   var fileLabel = $('#demo-preview');
-  var demoLog = $('#demo-log');
-  var demoVal = $('#demo-val');
+  var dateInput = $('#dateInput'); // 拍摄时间自动读取
+  var timeInput = $('#timeInput'); // 拍摄时间自动读取
 
-  if (typeof window.FileReader === 'function' || typeof window.FileReader === 'object') {
+  if (typeof window.FileReader === 'function' || typeof window.FileReader === 'object') { // 火狐谷歌浏览器支持window.FileReader对象，IE不支持
     upfileBox.addClass('upfile-advanced');
 
     var oFile = new FileReader();
-    var passFileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png)$/i;
+    var passFileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png)$/i; // 规定上传文件的扩展名格式
 
-    oFile.onloadend = function(oFREvent){
+    // 开始读取图片时，重新将日期清空
+    oFile.onloadstart = function () {
+      dateInput.val('');
+      timeInput.val('');
+      dateInput.removeAttr('disabled');
+      timeInput.removeAttr('disabled');
+    }
+    oFile.onloadend = function(oFREvent){ // onloadend，读取完触发事件，无论成败，都通过
       fileLabel.attr('class', '');
 
       var state = oFREvent.currentTarget.readyState;
@@ -62,24 +76,38 @@
       };
     };
 
-    fileInput.on('change', function(e){
+    fileInput.on('change', function(e){ // 监听fileInput文件上传框的内容改变事件
       if (!e.target || !e.target.files.length || !e.target.files[0]) {return};
 
       var _file = e.target.files[0];
 
-      if (!passFileType.test(_file.type)) {return};
+      if (!passFileType.test(_file.type)) {return}; // 如果不符合规定格式，立即返回
 
-      oFile.readAsDataURL(_file);
+      oFile.readAsDataURL(_file); // 开始读取文件
 
       EXIF.getData(_file, function(){
-        var _dataTxt = EXIF.pretty(this);
-        var _dataJson = JSON.stringify(EXIF.getAllTags(this));
-
-        demoLog.html(_dataJson);
-        demoVal.val(_dataTxt);
-
+        var _datetime = EXIF.getTag(this, 'DateTime');
+        var _date;
+        var _time;
+        // 前端显示时间
+        if (_datetime) {
+          _datetime = _datetime.split(' ');
+          _date = _datetime[0].split(':').join('-');
+          _time = _datetime[1];
+          dateInput.val(_date);
+          timeInput.val(_time);
+          dateInput.attr('disabled','disabled');
+          timeInput.attr('disabled','disabled');
+        } else {
+          _datetime = new Date();
+          _date = `${_datetime.getFullYear()}-${_datetime.getMonth()+1}-${_datetime.getDate()}`;
+          _time = `${_datetime.getHours()}:${_datetime.getMinutes()+1}:${_datetime.getSeconds()}`;
+          dateInput.val(_date);
+          timeInput.val(_time);
+        }
+        console.log(_date, _time);
         var _rotate = 0;
-        var _orientation = EXIF.getTag(this, 'Orientation');
+        var _orientation = EXIF.getTag(this, 'Orientation'); // 此参数显示拍摄方向
 
         if (_orientation == 3) {
           _rotate = 180;
@@ -92,7 +120,9 @@
         fileLabel.addClass('rotate-' + _rotate);
       });
     });
-  };
+  } else {
+    alert('当前浏览器不支持实时预览，请更换现代浏览器，或切换至极速模式后刷新');
+  }
 })();
 </script>
 {% endblock %}
