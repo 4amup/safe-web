@@ -18,7 +18,6 @@ $(function () {
     oFile.onloadstart = function () {
       dateInput.val('');
       timeInput.val('');
-      locationInput.val('');
       dateInput.removeAttr('disabled');
       timeInput.removeAttr('disabled');
     }
@@ -81,15 +80,20 @@ $(function () {
         // 自动添加gps定位信息
         var _gpsLat = EXIF.getTag(this, 'GPSLatitude');
         var _gpsLng = EXIF.getTag(this, 'GPSLongitude');
-        var Lat = _gpsLat[0] + (_gpsLat[1]+_gpsLat[2]/60)/60;
-        var Lng = _gpsLng[0] + (_gpsLng[1]+_gpsLng[2]/60)/60;
-        locationInput.val(Lat + ',' + Lng);
+        if (_gpsLat && _gpsLng) {
+          var Lat = _gpsLat[0] + (_gpsLat[1]+_gpsLat[2]/60)/60;
+          var Lng = _gpsLng[0] + (_gpsLng[1]+_gpsLng[2]/60)/60;
+          locationInput.val(Lat + ',' + Lng);
+          // 手动触发locationInput的change事件
+          locationInput.trigger('focus');
+        } else {
+          console.log('没有gps信息，启动自动定位。')
+        }
       });
     });
   } else {
     alert('当前浏览器不支持实时预览，请更换现代浏览器，或切换至极速模式后刷新');
   }
-
 
   $.ajax({
     url: '/api',
@@ -216,11 +220,10 @@ $(function () {
       for (var i=0; i<troubles.length; i++) {
         let trouble = troubles[i];
         markers[i] = new qq.maps.Marker({
-        position: new qq.maps.LatLng(trouble.Lng, trouble.Lat),
-        map: map,
+          position: new qq.maps.LatLng(trouble.Lng, trouble.Lat),
+          map: map,
         });
         markers[i].setIcon(icon); // 添加icon
-        ;
 
         qq.maps.event.addListener(markers[i], 'click', function() {
           info.open();
@@ -229,18 +232,27 @@ $(function () {
         });
       }
 
+      var marker = new qq.maps.Marker({
+        map:map,
+        // postion:new qq.maps.LatLng(45.713503,126.677114),
+        animation: qq.maps.MarkerAnimation.BOUNCE // 跳动标记，表示新增的问题点
+      });
+      marker.setIcon(icon);
+      // newMarker.setVisble(false);
+
       // 点击事件添加
       qq.maps.event.addListener(map, 'click', function(event) {
-        var newMarker=new qq.maps.Marker({
-          position:event.latLng,
-          map:map,
-          animation: qq.maps.MarkerAnimation.BOUNCE // 跳动标记，表示新增的问题点
-        });
-        qq.maps.event.addListener(map, 'click', function(event) {
-          newMarker.setMap(null);
-        });
-        newMarker.setIcon(icon);
-        locationInput.val(newMarker.getPosition());
+        console.log('location changed!');
+        marker.setPosition(event.latLng);
+        locationInput.val(marker.getPosition());
+      });
+
+      // 监听DOM事件
+      var troubleLocation = document.getElementById('troubleLocation');
+      qq.maps.event.addDomListener(troubleLocation,"focus",function(){
+        var locaitonString = troubleLocation.value.split(',');
+        console.log(locaitonString);
+        marker.setPosition(new qq.maps.LatLng(locaitonString[0].trim()-0, locaitonString[1].trim()-0));
       });
     }
 
