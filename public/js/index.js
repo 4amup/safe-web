@@ -103,6 +103,7 @@ $(function () {
   .done(function (troubles) {
     console.log('数据传送成功！')
     function initMap (troubles, data) {
+      // 模拟服务器返回的数据，单位是json格式组织
       var departmentList = [
         {
           id:'dep1',
@@ -146,11 +147,19 @@ $(function () {
         }
       ];
 
-      // 根据服务器返回的数据（开发阶段未模拟数据），生成前端select页面
+      // 根据服务器返回的数据（开发阶段未模拟数据）
       for (var i=0; i<departmentList.length; i++) {
+        // 根据服务端数据生成页面的option选项
         $('#department').append($('<option></option>').html(departmentList[i]['name']));
+        // 根据path数据生成polygon，并加入对象的属性
+        for (var j=0; j<departmentList[i].workshops.length; j++) {
+          departmentList[i].workshops[j].polygonPath = departmentList[i].workshops[j].pathData.map((value, index) => {
+            return new qq.maps.LatLng(value[0], value[1]);
+          });
+        }
       }
 
+      console.log(departmentList);
 
       //设置地图中心点，即工厂正中心位置
       var centerLatlng = new qq.maps.LatLng(45.716503,126.678114);
@@ -176,31 +185,7 @@ $(function () {
         [45.71140495862153, 126.67605400085449]
       ];
 
-      // 部门范围数据
-      var departmentData1 = [
-        [45.71515066034897, 126.67782425880432],
-        [45.71455885617526, 126.67754530906677],
-        [45.7137722713072, 126.68060302734375],
-        [45.714371575068014, 126.68086051940918]
-      ];
-
-      var departmentData2 = [
-        [45.714952144457584, 126.67534589767456],
-        [45.7136037159665, 126.67474508285522],
-        [45.7131542325726, 126.676504611969],
-        [45.71459256670792, 126.6772985458374]
-      ];
-
-
-
       var companyPath = companyData.map((value, index) => {
-        return new qq.maps.LatLng(value[0], value[1]);
-      });
-
-      var departmentPath1 = departmentData1.map((value, index) => {
-        return new qq.maps.LatLng(value[0], value[1]);
-      });
-      var departmentPath2 = departmentData2.map((value, index) => {
         return new qq.maps.LatLng(value[0], value[1]);
       });
 
@@ -284,21 +269,6 @@ $(function () {
         map: map,
         strokeWeight: 1,
         fillColor: new qq.maps.Color(229,104,17, 0.2),
-      });
-
-      // 部门范围用多边形覆盖物，测试
-      var departmentPolygon1 = new qq.maps.Polygon({
-        path: departmentPath1,
-        map: map,
-        strokeWeight: 1,
-        fillColor: new qq.maps.Color(13,148,227, 0.2),
-      });
-
-      var departmentPolygon2 = new qq.maps.Polygon({
-        path: departmentPath2,
-        map: map,
-        strokeWeight: 1,
-        fillColor: new qq.maps.Color(13,148,227, 0.2),
       });
 
       var info = new qq.maps.InfoWindow({ // 信息窗口，公用
