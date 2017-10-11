@@ -58,7 +58,7 @@ $(function () {
         } else {
           _datetime = new Date();
           _date = `${_datetime.getFullYear()}-${_datetime.getMonth()+1}-${_datetime.getDate()}`;
-          _time = `${_datetime.getHours()}:${(_datetime.getMinutes() < 10)? '0'+_datetime.getMinutes():_datetime.getMinutes()}:${(_datetime.getSeconds() < 10)? '0'+_datetime.getSeconds() : _datetime.getSeconds()}`;
+          _time = `${(_datetime.getHours()<10)?'0'+_datetime.getHours():_datetime.getHours()}:${(_datetime.getMinutes() < 10)? '0'+_datetime.getMinutes():_datetime.getMinutes()}:${(_datetime.getSeconds() < 10)? '0'+_datetime.getSeconds() : _datetime.getSeconds()}`;
           dateInput.val(_date);
           timeInput.val(_time);
         }
@@ -84,7 +84,7 @@ $(function () {
           var Lat = _gpsLat[0] + (_gpsLat[1]+_gpsLat[2]/60)/60;
           var Lng = _gpsLng[0] + (_gpsLng[1]+_gpsLng[2]/60)/60;
           locationInput.val(Lat + ',' + Lng);
-          // 手动触发locationInput的change事件
+          // 手动触发locationInput的focus事件
           locationInput.trigger('focus');
         } else {
           console.log('没有gps信息，启动自动定位。')
@@ -103,14 +103,63 @@ $(function () {
   .done(function (troubles) {
     console.log('数据传送成功！')
     function initMap (troubles, data) {
+      var departmentList = [
+        {
+          id:'dep1',
+          name:'管二分厂',
+          workshops: [{
+            id: 'workshop1',
+            name: '四厂房',
+            pathData: [
+              [45.71515066034897, 126.67782425880432],
+              [45.71455885617526, 126.67754530906677],
+              [45.7137722713072, 126.68060302734375],
+              [45.714371575068014, 126.68086051940918]
+            ]
+          }, {
+            id: 'workshop2',
+            name: '十厂房',
+            pathData: [
+              [45.718214457692014, 126.67874693870544],
+              [45.71792980878267, 126.67859673500061],
+              [45.71777999298482, 126.67927265167236],
+              [45.71754777770435, 126.67914390563965],
+              [45.71688858068238, 126.68177247047424],
+              [45.717248143658395, 126.68198704719543],
+              [45.71747286934346, 126.68193340301514]
+            ]
+          }]
+        },
+        {
+          id:'dep2',
+          name:'轻容分厂',
+          workshops: [{
+            id: 'workshop1',
+            name: '五厂房',
+            pathData: [
+              [45.714952144457584, 126.67534589767456],
+              [45.7136037159665, 126.67474508285522],
+              [45.7131542325726, 126.676504611969],
+              [45.71459256670792, 126.6772985458374]
+            ]
+          }]
+        }
+      ];
+
+      // 根据服务器返回的数据（开发阶段未模拟数据），生成前端select页面
+      for (var i=0; i<departmentList.length; i++) {
+        $('#department').append($('<option></option>').html(departmentList[i]['name']));
+      }
+
+
       //设置地图中心点，即工厂正中心位置
       var centerLatlng = new qq.maps.LatLng(45.716503,126.678114);
-      // 以下用于限制地图范围
+      // 以下用于限制地图范围，设置地图范围的西南角和东北角
       var sw = new qq.maps.LatLng(45.710824,126.666484); //西南角坐标
       var ne = new qq.maps.LatLng(45.721252,126.686912); //东北角坐标
-      //设置地图范围的西南角和东北角
+
       // 厂区范围数据，后端提供,设置厂区面积
-      var data = [
+      var companyData = [
         [45.71248374645855, 126.67219161987305],
         [45.715255536384234, 126.67401552200317],
         [45.71650092425703, 126.67458951473236],
@@ -127,7 +176,31 @@ $(function () {
         [45.71140495862153, 126.67605400085449]
       ];
 
-      var companyPath = data.map((value, index) => {
+      // 部门范围数据
+      var departmentData1 = [
+        [45.71515066034897, 126.67782425880432],
+        [45.71455885617526, 126.67754530906677],
+        [45.7137722713072, 126.68060302734375],
+        [45.714371575068014, 126.68086051940918]
+      ];
+
+      var departmentData2 = [
+        [45.714952144457584, 126.67534589767456],
+        [45.7136037159665, 126.67474508285522],
+        [45.7131542325726, 126.676504611969],
+        [45.71459256670792, 126.6772985458374]
+      ];
+
+
+
+      var companyPath = companyData.map((value, index) => {
+        return new qq.maps.LatLng(value[0], value[1]);
+      });
+
+      var departmentPath1 = departmentData1.map((value, index) => {
+        return new qq.maps.LatLng(value[0], value[1]);
+      });
+      var departmentPath2 = departmentData2.map((value, index) => {
         return new qq.maps.LatLng(value[0], value[1]);
       });
 
@@ -206,9 +279,26 @@ $(function () {
       );
 
       // 厂区范围用多边形覆盖物
-      var polygon = new qq.maps.Polygon({
+      var factoryPolygon = new qq.maps.Polygon({
         path: companyPath,
-        map: map
+        map: map,
+        strokeWeight: 1,
+        fillColor: new qq.maps.Color(229,104,17, 0.2),
+      });
+
+      // 部门范围用多边形覆盖物，测试
+      var departmentPolygon1 = new qq.maps.Polygon({
+        path: departmentPath1,
+        map: map,
+        strokeWeight: 1,
+        fillColor: new qq.maps.Color(13,148,227, 0.2),
+      });
+
+      var departmentPolygon2 = new qq.maps.Polygon({
+        path: departmentPath2,
+        map: map,
+        strokeWeight: 1,
+        fillColor: new qq.maps.Color(13,148,227, 0.2),
       });
 
       var info = new qq.maps.InfoWindow({ // 信息窗口，公用
@@ -229,12 +319,13 @@ $(function () {
           info.open();
           info.setContent(`<div><h1 style="text-align:center">${ trouble.imageDescription }</h1><img style="width:400px; height:200px;" src=${ trouble.imagePath }></div>`);
           info.setPosition(new qq.maps.LatLng(trouble.Lng, trouble.Lat));
+          map.panTo(new qq.maps.LatLng(trouble.Lng, trouble.Lat));
         });
       }
 
       var marker = new qq.maps.Marker({
         map:map,
-        // postion:new qq.maps.LatLng(45.713503,126.677114),
+        postion:new qq.maps.LatLng(45.713503,126.677114),
         animation: qq.maps.MarkerAnimation.BOUNCE // 跳动标记，表示新增的问题点
       });
       marker.setIcon(icon);
@@ -242,9 +333,19 @@ $(function () {
 
       // 点击事件添加
       qq.maps.event.addListener(map, 'click', function(event) {
-        console.log('location changed!');
-        marker.setPosition(event.latLng);
-        locationInput.val(marker.getPosition());
+        if (!factoryPolygon.getBounds().contains(event.latLng)) { // 判断添加点是否在公司范围内
+          console.log('不在规定范围，自动定位至map中央，请自行重新选点');
+          marker.setPosition(centerLatlng);
+          locationInput.val('45.716503,126.678114');
+          map.panTo(centerLatlng);
+          map.zoomTo(18);
+        } else {
+          console.log('在规定范围，正常定位')
+          marker.setPosition(event.latLng);
+          locationInput.val(marker.getPosition());
+          map.panTo(event.latLng);
+          map.zoomTo(18);
+        }
       });
 
       // 监听DOM事件
@@ -252,7 +353,10 @@ $(function () {
       qq.maps.event.addDomListener(troubleLocation,"focus",function(){
         var locaitonString = troubleLocation.value.split(',');
         console.log(locaitonString);
-        marker.setPosition(new qq.maps.LatLng(locaitonString[0].trim()-0, locaitonString[1].trim()-0));
+        qq.maps.convertor.translate(new qq.maps.LatLng(locaitonString[0].trim()-0, locaitonString[1].trim()-0), 1, function(res){
+          marker.setPosition(res[0]);
+          map.panTo(res[0]);
+        });
       });
     }
 
@@ -266,14 +370,28 @@ $(function () {
       //设置标签的type属性
       script.type = "text/javascript";
       //设置标签的链接地址
-      script.src = "http://map.qq.com/api/js?v=2.exp&callback=init";
+      script.src = "http://map.qq.com/api/js?v=2.exp&libraries=convertor&callback=init";
       //添加标签到dom
       document.body.appendChild(script);
     }
 
     // 载入地图
     loadScript(troubles);
+  });
+
+  $('#form').submit(function (ev) {
+    ev.preventDefault();
+    var form = this;
+    $.ajax({
+      url: form.attr('action'),
+      type: 'POST',
+      dataType: 'json'
+    })
+    .done(function() {
+      //
+    })
   })
+
 
   console.log('main.js loaded!');
 

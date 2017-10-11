@@ -5,12 +5,10 @@
   justify-content: space-between;
 }
 #map {
-  width: 48%;
-  height: 100%;
+  width: 40%;
 }
-#form {
-  width: 48%;
-  height: 100%;
+#formbox {
+  width: 40%;
 }
 .upfile{margin-bottom:20px;}
 .upfile label{display:none;}

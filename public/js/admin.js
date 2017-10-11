@@ -72,7 +72,7 @@ $(function() {
     if (arr.length>0) {
       var ul = $("<ul></ul>");
       for (var i=0; i<arr.length; i++) {
-        ul.append($("<li></li>").text(`第${i+1}个标记点坐标：[${arr[i].lat}, ${arr[i].lng}]`));
+        ul.append($("<li></li>").text(`[${arr[i].lat}, ${arr[i].lng}]`));
       }
       $("#show").append(ul);
     } else {

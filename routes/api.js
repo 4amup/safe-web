@@ -3,7 +3,7 @@ var router = express.Router();
 var Trouble = require('../db');
 
 // 首页数据传递
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   // 数据库中查询出内容
 
   Trouble.findAll({
@@ -28,5 +28,11 @@ router.get('/', function(req, res, next) {
     res.send(troubles);
   })
 });
+
+// 首页提交数据
+router.post('/', function (req, res, next) {
+  // 向数据库中存储内容
+
+})
 
 module.exports = router;

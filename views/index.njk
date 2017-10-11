@@ -8,30 +8,46 @@
 <h1>{{ title }}</h1>
 <div class="container">
   <div id="map" style="min-width:600px; min-height:600px"></div>
-  <form action="/upload" method="post" enctype="multipart/form-data" id="form">
+  <div id="formbox">
+    <form action="api/upload" method="post" enctype="multipart/form-data" id="form">
 
-    <div id="upfile" class="upfile upfile-advanced">
-      <label id="demo-preview" for="demo-file"></label>
-      <input type="file" id="demo-file" accept="image/*">
-    </div>
+      <p id="upfile" class="upfile upfile-advanced">
+        <label id="demo-preview" for="demo-file"></label>
+        <input type="file" id="demo-file" accept="image/*">
+      </p>
 
-    <div>
-      <label for="location">定位点：</label>
-      <input type="text" name="location" id="troubleLocation"></input>
-    </div>
-    <p>
-      <label for="description">问题描述：</label>
-      <input type="text" name="description" id="troubleDescription">
-    </p>
-    <p>
-      <label for="datetime">拍摄时间：</label>
-      <input type="date" name="dateInput" id="dateInput">
-      <input type="time" name="dateInput" id="timeInput">
-    </p>
-    <p>
-      <input type="submit" value="提交">
-    </p>
-  </form>
+      <p>
+        <label for="location">定位点：</label>
+        <input type="text" name="location" id="troubleLocation"></input>
+      </p>
+
+      <p>
+        <label for="select">定位点：</label>
+        <select id="department">
+          <option>选择单位</option>
+        </select>
+        <select id="workshop">
+          <option>选择厂房</option>
+        </select>
+        <select>
+          <option>选择区域</option>
+        </select>
+      </p>
+
+      <p>
+        <label for="description">问题描述：</label>
+        <input type="text" name="description" id="troubleDescription">
+      </p>
+      <p>
+        <label for="datetime">拍摄时间：</label>
+        <input type="date" name="dateInput" id="dateInput">
+        <input type="time" name="dateInput" id="timeInput">
+      </p>
+      <p>
+        <input type="submit" value="提交">
+      </p>
+    </form>
+  </div>
 </div>
 <script src="vendors/exif.js"></script>
 <script src="js/index.js"></script>
