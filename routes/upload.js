@@ -2,22 +2,23 @@ var express = require('express');
 var router = express.Router();
 // 文件上传中间件配置
 var multer = require('multer');
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/example')
-  },
-  filename: function (req, file, cb) {
-    var fileFormat = (file.originalname).split(".");
-    cb(null, file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
-  }
-})
-var upload = multer({ storage: storage }); // 规定文件储存位置
+// var storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'public/example')
+//   },
+//   filename: function (req, file, cb) {
+//     var fileFormat = (file.originalname).split(".");
+//     cb(null, file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
+//   }
+// })
+// var upload = multer({ storage: storage }); // 规定文件储存位置
+var upload = multer({ dest: 'public/example' })
 // 引入模型
 var Trouble = require('../db')
 
 // 解析post请求，将解析内容写入数据库
-router.post('/',upload.single('image'), function(req, res, next) {
-  var location = genLacationInfo([45.710540, 126.672342], [45.718960, 126.682878]);
+router.post('/',upload.single('demo-file'), function(req, res, next) {
+  var location = req.body.location.split(',');
   // 处理一下path，将\处理成\/后返回
   Trouble.create({ 'imagePath': req.file.path.split('\\').splice(1, 3).join('/'), 'imageDescription': req.body.description, 'Lng': location[0], 'Lat': location[1]})
   .then(trouble => {

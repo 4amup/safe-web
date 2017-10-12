@@ -164,7 +164,6 @@ $(function () {
       $('#department').change(function(event) {
         // 清除后续的options
         $("#workshop").html('').append('<option>选择厂房</option>');
-        console.log($("#department option:selected")[0]);
         var departmentSelectId = $("#department option:selected")[0].id;
         departmentList.forEach(function (value, index) {
           if(value.id === departmentSelectId) {
@@ -354,7 +353,7 @@ $(function () {
           }
 
           marker.setPosition(event.latLng);
-          locationInput.val(marker.getPosition());
+          locationInput.val(marker.getPosition().lat+','+marker.getPosition().lng);
           map.panTo(event.latLng);
           map.zoomTo(17);
         }
@@ -397,20 +396,5 @@ $(function () {
     loadScript(troubles);
   });
 
-  $('#form').submit(function (ev) {
-    ev.preventDefault();
-    var form = this;
-    $.ajax({
-      url: form.attr('action'),
-      type: 'POST',
-      dataType: 'json'
-    })
-    .done(function() {
-      //
-    })
-  })
-
-
   console.log('main.js loaded!');
-
-})
+});
