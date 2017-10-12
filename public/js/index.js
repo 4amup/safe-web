@@ -163,7 +163,7 @@ $(function () {
       // 表单联动，监听到selected时间后，自动生成对应的option
       $('#department').change(function(event) {
         // 清除后续的options
-        $("#workshop").html('').append('<option>选择厂房</option');
+        $("#workshop").html('').append('<option>选择厂房</option>');
         console.log($("#department option:selected")[0]);
         var departmentSelectId = $("#department option:selected")[0].id;
         departmentList.forEach(function (value, index) {
@@ -332,28 +332,32 @@ $(function () {
 
       // 点击事件添加
       qq.maps.event.addListener(map, 'click', function(event) {
+        // 全部清除selected状态
+        $('#department option').removeAttr('selected');
+        $('#department').trigger('change');
+        $('#department option:nth-child(1)').attr('selected', 'selected');
         if (!factoryPolygon.getBounds().contains(event.latLng)) { // 判断添加点是否在公司范围内
           marker.setPosition(centerLatlng);
           locationInput.val('45.716503,126.678114');
           map.panTo(centerLatlng);
-          map.zoomTo(18);
+          map.zoomTo(17);
         } else { // 判断逻辑，在公司范围内，确定是在具体哪个区域，随后改变响应的option选项
           for(var i=0; i<departmentList.length; i++) {
-            // departmentList[i].workshops
             for(var j=0; j<departmentList[i].workshops.length; j++) {
-              if(departmentList[i].workshops[j].polygon.getBounds().contains(event.latLng)) {
+              if (departmentList[i].workshops[j].polygon.getBounds().contains(event.latLng)) {
                 $(`#department option:nth-child(${i+2})`).attr('selected', 'selected'); // department单位设定为选定状态
                 // 手动触发change事件，将option改变
                 $('#department').trigger('change');
                 $(`#workshop option:nth-child(${j+2})`).attr('selected', 'selected'); // workshop厂房设定为选定状态
-                continue;
-              }
+                break;
+              };
             }
           }
+
           marker.setPosition(event.latLng);
           locationInput.val(marker.getPosition());
           map.panTo(event.latLng);
-          map.zoomTo(18);
+          map.zoomTo(17);
         }
       });
 
@@ -363,8 +367,14 @@ $(function () {
         var locaitonString = troubleLocation.value.split(',');
         console.log(locaitonString);
         qq.maps.convertor.translate(new qq.maps.LatLng(locaitonString[0].trim()-0, locaitonString[1].trim()-0), 1, function(res){
-          marker.setPosition(res[0]);
-          map.panTo(res[0]);
+          if(!factoryPolygon.getBounds().contains(res[0])) { // 逻辑：如果不在公司范围内，强制定位到公司中心
+            marker.setPosition(centerLatlng);
+            map.panTo(centerLatlng);
+            map.zoomTo(18);
+          } else { // 如果在厂区范围内，则正常定位
+            marker.setPosition(res[0]);
+            map.panTo(res[0]);
+          };
         });
       });
     }
