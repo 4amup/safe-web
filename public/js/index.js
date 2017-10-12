@@ -149,8 +149,9 @@ $(function () {
 
       // 根据服务器返回的数据（开发阶段未模拟数据）
       for (var i=0; i<departmentList.length; i++) {
-        // 根据服务端数据生成页面的option选项
-        $('#department').append($('<option></option>').html(departmentList[i]['name']));
+        // 根据服务端数据生成页面的单位option选项
+        var departmentOption = $('<option></option>').attr('id', `${departmentList[i].id}`).html(departmentList[i]['name']);
+        $('#department').append(departmentOption);
         // 根据path数据生成polygon，并加入对象的属性
         for (var j=0; j<departmentList[i].workshops.length; j++) {
           departmentList[i].workshops[j].polygonPath = departmentList[i].workshops[j].pathData.map((value, index) => {
@@ -159,7 +160,21 @@ $(function () {
         }
       }
 
-      console.log(departmentList);
+      // 表单联动，监听到selected时间后，自动生成对应的option
+      $('#department').change(function(event) {
+        // 清除后续的options
+        $("#workshop").html('').append('<option>选择厂房</option');
+        console.log($("#department option:selected")[0]);
+        var departmentSelectId = $("#department option:selected")[0].id;
+        departmentList.forEach(function (value, index) {
+          if(value.id === departmentSelectId) {
+            value.workshops.forEach(function (val, idx) {
+              $("#workshop").append($("<option></option>").html(val.name));
+            });
+          };
+        });
+        departmentList[departmentSelectId]
+      });
 
       //设置地图中心点，即工厂正中心位置
       var centerLatlng = new qq.maps.LatLng(45.716503,126.678114);
@@ -250,11 +265,13 @@ $(function () {
       }
       //获取dom元素添加地图信息
       var map = new qq.maps.Map(document.getElementById("map"), myOptions);
+
       //icon是可以公用的，info是可以公用的
       var anchor = new qq.maps.Point(10, 0),
       size = new qq.maps.Size(20, 20),
       origin = new qq.maps.Point(0, 0),
       scaleSize = new qq.maps.Size(20, 20),
+
       icon = new qq.maps.MarkerImage( // marker图标，公用
         "images/todo.png",
         size,
@@ -269,6 +286,18 @@ $(function () {
         map: map,
         strokeWeight: 1,
         fillColor: new qq.maps.Color(229,104,17, 0.2),
+      });
+
+      // 生成区域多边形覆盖物，并加入departmentList对象的对应属性中
+      departmentList.forEach(function (value, index) {
+        value.workshops.forEach(function (val, idx) {
+          val.polygon = new qq.maps.Polygon({
+            path: val.polygonPath,
+            map: map,
+            strokeWeight: 1,
+            fillColor: new qq.maps.Color(13,148,227, 0.2)
+          });
+        });
       });
 
       var info = new qq.maps.InfoWindow({ // 信息窗口，公用
@@ -304,13 +333,23 @@ $(function () {
       // 点击事件添加
       qq.maps.event.addListener(map, 'click', function(event) {
         if (!factoryPolygon.getBounds().contains(event.latLng)) { // 判断添加点是否在公司范围内
-          console.log('不在规定范围，自动定位至map中央，请自行重新选点');
           marker.setPosition(centerLatlng);
           locationInput.val('45.716503,126.678114');
           map.panTo(centerLatlng);
           map.zoomTo(18);
-        } else {
-          console.log('在规定范围，正常定位')
+        } else { // 判断逻辑，在公司范围内，确定是在具体哪个区域，随后改变响应的option选项
+          for(var i=0; i<departmentList.length; i++) {
+            // departmentList[i].workshops
+            for(var j=0; j<departmentList[i].workshops.length; j++) {
+              if(departmentList[i].workshops[j].polygon.getBounds().contains(event.latLng)) {
+                $(`#department option:nth-child(${i+2})`).attr('selected', 'selected'); // department单位设定为选定状态
+                // 手动触发change事件，将option改变
+                $('#department').trigger('change');
+                $(`#workshop option:nth-child(${j+2})`).attr('selected', 'selected'); // workshop厂房设定为选定状态
+                continue;
+              }
+            }
+          }
           marker.setPosition(event.latLng);
           locationInput.val(marker.getPosition());
           map.panTo(event.latLng);
