@@ -335,7 +335,6 @@ $(function () {
         // 全部清除selected状态
         $('#department option').removeAttr('selected');
         $('#department').trigger('change');
-        $('#department option:nth-child(1)').attr('selected', 'selected');
         if (!factoryPolygon.getBounds().contains(event.latLng)) { // 判断添加点是否在公司范围内
           marker.setPosition(centerLatlng);
           locationInput.val('45.716503,126.678114');
