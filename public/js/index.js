@@ -1,100 +1,62 @@
 $(function () {
   // 载入提示
   console.log('main.js load start!');
-  var upfileBox = $('#upfile');
-  var fileInput = $('#demo-file');
-  var fileLabel = $('#demo-preview');
+
+  var fileInput = $('#upImage');
+  var troubleDescription = $('#troubleDescription');
   var dateInput = $('#dateInput'); // 拍摄时间自动读取
   var timeInput = $('#timeInput'); // 拍摄时间自动读取
-  var locationInput = $('#troubleLocation');
+  var locationInput = $('#troubleLocation'); // 定位点获取
 
-  if (typeof window.FileReader === 'function' || typeof window.FileReader === 'object') { // 火狐谷歌浏览器支持window.FileReader对象，IE不支持
-    upfileBox.addClass('upfile-advanced');
+  // 上传前得到上传文件信息，读取exif的时间和定位信息，然后改变相应的表单内容
+  fileInput.on('change', function(e){ // 监听fileInput文件上传框的内容改变事件
+    // input文件改变后，首先要清除原先的旧信息
+    locationInput.val('');
+    troubleDescription.val('');
 
-    var oFile = new FileReader();
-    var passFileType = /^(?:image\/bmp|image\/gif|image\/jpeg|image\/png)$/i; // 规定上传文件的扩展名格式
+    var _file = e.target.files[0]; // 原始文件信息
 
-    // 开始读取图片时，重新将日期清空
-    oFile.onloadstart = function () {
-      dateInput.val('');
-      timeInput.val('');
-      dateInput.removeAttr('disabled');
-      timeInput.removeAttr('disabled');
-    }
-    oFile.onloadend = function(oFREvent){ // onloadend，读取完触发事件，无论成败，都通过
-      fileLabel.attr('class', '');
+    EXIF.getData(_file, function(){
+      var _datetime = EXIF.getTag(this, 'DateTime'); // exif时间信息
+      var _date, _time;
+      // 前端显示时间
+      if (_datetime) { // 将有时间信息的照片的时间输入框设为不可编辑
+        _datetime = _datetime.split(' ');
+        _date = _datetime[0].split(':').join('-');
+        _time = _datetime[1];
+        dateInput.val(_date);
+        timeInput.val(_time);
+        dateInput.attr('disabled','disabled');
+        timeInput.attr('disabled','disabled');
+      } else { // 如果没有时间信息，则使用当前时间，时间输入框可编辑
+        _datetime = new Date();
+        _date = `${_datetime.getFullYear()}-${_datetime.getMonth()+1}-${_datetime.getDate()}`;
+        var hours = (_datetime.getHours()<10)?'0'+_datetime.getHours():_datetime.getHours();
+        var minutes = (_datetime.getMinutes()<10)?'0'+_datetime.getMinutes():_datetime.getMinutes();
+        _time = `${hours}:${minutes}`;
+        dateInput.val(_date);
+        timeInput.val(_time);
+      }
 
-      var state = oFREvent.currentTarget.readyState;
-      if (state === 2) {
-        fileLabel.addClass('set').css('backgroundImage', 'url(' + oFREvent.target.result + ')');
+      // 自动添加gps定位信息
+      var _gpsLat = EXIF.getTag(this, 'GPSLatitude');
+      var _gpsLng = EXIF.getTag(this, 'GPSLongitude');
+      // 前端直接显示gps经纬度
+      if (_gpsLat && _gpsLng) { // 如果有经纬度，将经纬度信息换算成小数模式后，写入定位输入框内
+        var Lat = _gpsLat[0] + (_gpsLat[1]+_gpsLat[2]/60)/60;
+        var Lng = _gpsLng[0] + (_gpsLng[1]+_gpsLng[2]/60)/60;
+        locationInput.val(Lat + ',' + Lng);
+        // 手动触发locationInput的change事件，使地图出现跳动marker
+        locationInput.trigger("focus");
       } else {
-        fileLabel.addClass('error');
-      };
-    };
-
-    fileInput.on('change', function(e){ // 监听fileInput文件上传框的内容改变事件
-      if (!e.target || !e.target.files.length || !e.target.files[0]) {return};
-
-      var _file = e.target.files[0];
-
-      if (!passFileType.test(_file.type)) {return}; // 如果不符合规定格式，立即返回
-
-      oFile.readAsDataURL(_file); // 开始读取文件
-
-      EXIF.getData(_file, function(){
-        var _datetime = EXIF.getTag(this, 'DateTime');
-        var _date;
-        var _time;
-
-        // 前端显示时间
-        if (_datetime) {
-          _datetime = _datetime.split(' ');
-          _date = _datetime[0].split(':').join('-');
-          _time = _datetime[1];
-          dateInput.val(_date);
-          timeInput.val(_time);
-          dateInput.attr('disabled','disabled');
-          timeInput.attr('disabled','disabled');
-        } else {
-          _datetime = new Date();
-          _date = `${_datetime.getFullYear()}-${_datetime.getMonth()+1}-${_datetime.getDate()}`;
-          _time = `${(_datetime.getHours()<10)?'0'+_datetime.getHours():_datetime.getHours()}:${(_datetime.getMinutes() < 10)? '0'+_datetime.getMinutes():_datetime.getMinutes()}:${(_datetime.getSeconds() < 10)? '0'+_datetime.getSeconds() : _datetime.getSeconds()}`;
-          dateInput.val(_date);
-          timeInput.val(_time);
-        }
-
-        // 调整图片旋转
-        var _rotate = 0;
-        var _orientation = EXIF.getTag(this, 'Orientation'); // 此参数显示拍摄方向
-
-        if (_orientation == 3) {
-          _rotate = 180;
-        } else if (_orientation == 6) {
-          _rotate = 90;
-        } else if (_orientation == 8) {
-          _rotate = 270;
-        };
-
-        fileLabel.addClass('rotate-' + _rotate);
-
-        // 自动添加gps定位信息
-        var _gpsLat = EXIF.getTag(this, 'GPSLatitude');
-        var _gpsLng = EXIF.getTag(this, 'GPSLongitude');
-        if (_gpsLat && _gpsLng) {
-          var Lat = _gpsLat[0] + (_gpsLat[1]+_gpsLat[2]/60)/60;
-          var Lng = _gpsLng[0] + (_gpsLng[1]+_gpsLng[2]/60)/60;
-          locationInput.val(Lat + ',' + Lng);
-          // 手动触发locationInput的focus事件
-          locationInput.trigger('focus');
-        } else {
-          console.log('没有gps信息，启动自动定位。')
-        }
-      });
+        // to-do
+        // 将来可以添加到页面提示信息栏目
+        console.log('照片无gps信息，请手动在地图上点击，添加位置信息');
+      }
     });
-  } else {
-    alert('当前浏览器不支持实时预览，请更换现代浏览器，或切换至极速模式后刷新');
-  }
+  });
 
+  // 通过ajax异步从服务器获取数据，返回数据，生成页面地图
   $.ajax({
     url: '/api',
     type: 'GET',
@@ -327,7 +289,6 @@ $(function () {
         animation: qq.maps.MarkerAnimation.BOUNCE // 跳动标记，表示新增的问题点
       });
       marker.setIcon(icon);
-      // newMarker.setVisble(false);
 
       // 点击事件添加
       qq.maps.event.addListener(map, 'click', function(event) {

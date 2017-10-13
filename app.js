@@ -9,7 +9,6 @@ var nunjucks = require('nunjucks');
 // 引入路由文件
 var index = require('./routes/index');
 var users = require('./routes/users');
-var upload = require('./routes/upload');
 var api = require('./routes/api');
 var admin = require('./routes/admin');
 
@@ -33,7 +32,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/upload', upload);
 app.use('/api', api);
 app.use('/admin', admin);
 
