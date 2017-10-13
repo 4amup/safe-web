@@ -7,6 +7,18 @@ $(function () {
   var dateInput = $('#dateInput'); // 拍摄时间自动读取
   var timeInput = $('#timeInput'); // 拍摄时间自动读取
   var locationInput = $('#troubleLocation'); // 定位点获取
+  var statusInput = $('#status');
+  var reformBox = $('#reformBox');
+
+  // 添加整改图片联动逻辑
+  statusInput.change(function() {
+    var status = $(this).val();
+    if(status == "true") {
+      reformBox.show();
+    } else {
+      reformBox.hide();
+    }
+  });
 
   // 上传前得到上传文件信息，读取exif的时间和定位信息，然后改变相应的表单内容
   fileInput.on('change', function(e){ // 监听fileInput文件上传框的内容改变事件

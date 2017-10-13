@@ -14,3 +14,8 @@
 #troubleLocation {
   width: 50%;
 }
+
+/* 默认让整改图片上传框隐藏，由整改状态按钮触发改变 */
+#reformBox {
+  display: none;
+}

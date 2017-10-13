@@ -11,7 +11,7 @@
   <div id="formbox">
     <form action="/api" method="post" enctype="multipart/form-data" id="form">
 
-      <p id="upfile" class="upfile upfile-advanced">
+      <p id="troubleBox">
         <label for="upImage">上传图片：</label>
         <input id="upImage" type="file" accept="image/*" name="upImage" />
       </p>
@@ -39,10 +39,24 @@
         <input type="text" name="description" id="troubleDescription">
       </p>
       <p>
+        <label for="status">是否整改</label>
+        <select name="status" id="status">
+          <option value="false">待整改</option>
+          <option value="true">已整改</option>
+        </select>
+      </p>
+
+      <p id="reformBox">
+        <label for="upReform">整改上传：</label>
+        <input id="upReform" type="file" accept="image/*" name="upReform" />
+      </p>
+
+      <p>
         <label for="datetime">拍摄时间：</label>
         <input type="date" name="dateInput" id="dateInput">
         <input type="time" name="dateInput" id="timeInput">
       </p>
+
       <p>
         <input type="submit" value="提交">
       </p>
