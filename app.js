@@ -11,6 +11,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var api = require('./routes/api');
 var admin = require('./routes/admin');
+var reglog = require('./routes/reglog');
 
 var app = express();
 
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/', reglog);
 app.use('/api', api);
 app.use('/admin', admin);
 
