@@ -4,11 +4,14 @@
   flex-wrap: nowrap;
   justify-content: space-between;
 }
+#troublesBox {
+  width: 25%;
+}
 #map {
   width: 40%;
 }
 #formbox {
-  width: 40%;
+  width: 25%;
 }
 
 #troubleLocation {
