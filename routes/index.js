@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var Trouble = require('../db');
+var { sequelize } = require("../db");
+var Trouble = sequelize.import("../models/trouble");
 
 
 // 首页get请求
@@ -26,7 +27,7 @@ router.get('/', function(req, res, next) {
     // 将处理后的数据传输到前端页面
     res.render('index', { title: '开发中的首页', troubles: troubles});
   })
-  
+
 });
 
 module.exports = router;

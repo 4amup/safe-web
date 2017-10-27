@@ -23,20 +23,7 @@ sequelize
   console.error('数据库连接失败，错误代码：', err);
 });
 
-// 建立数据表
-const Trouble = sequelize.define('trouble', {
-  imagePath: {
-    type: Sequelize.STRING
-  },
-  imageDescription: {
-    type: Sequelize.STRING
-  },
-  Lng: { // 纬度
-    type: Sequelize.DECIMAL(12, 10)
-  },
-  Lat: { // 经度
-    type: Sequelize.DECIMAL(13, 10)
-  }
-});
-
-module.exports = Trouble;
+module.exports = {
+  Sequelize: Sequelize,
+  sequelize: sequelize
+}

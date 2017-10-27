@@ -1,9 +1,9 @@
-var Trouble = require('./db');
+var { sequelize } = require("./db");
 
 // 同步数据表
-Trouble.sync({force: true}).then(() => {
-  console.log('数据表创建成功');
+sequelize.sync({force: true}).then(() => {
+  console.log('数据表初始化成功');
   // 退出
-  process.exit(1);
+  process.exit(0);
 });
 
