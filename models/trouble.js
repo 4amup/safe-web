@@ -1,19 +1,9 @@
 // 建立问题数据表
-module.exports = function (sequelize, DataTypes) {
-  var Trouble = sequelize.define('trouble', {
-    imagePath: {
-      type: DataTypes.STRING
-    },
-    imageDescription: {
-      type: DataTypes.STRING
-    },
-    Lng: { // 纬度
-      type: DataTypes.DECIMAL(12, 10)
-    },
-    Lat: { // 经度
-      type: DataTypes.DECIMAL(13, 10)
-    }
-  });
+var db = require('../db');
 
-  return Trouble;
-}
+module.exports = db.defineModel('trouble', {
+  imagePath: db.STRING,
+  imageDescription: db.STRING,
+  Lng: db.DECIMAL(12, 10), // 纬度
+  Lat: db.DECIMAL(13, 10) // 经度
+});

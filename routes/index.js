@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var { sequelize } = require("../db");
-var Trouble = sequelize.import("../models/trouble");
-
+var model = require('../model');
+var Trouble = model.Trouble;
 
 // 首页get请求
 router.get('/', function(req, res, next) {

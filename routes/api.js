@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var { sequelize } = require("../db");
-var Trouble = sequelize.import("../models/trouble");
+var model = require('../model');
+var Trouble = model.Trouble;
 // 文件上传中间件配置
 var multer = require('multer');
 var storage = multer.diskStorage({
