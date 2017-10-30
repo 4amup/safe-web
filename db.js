@@ -88,7 +88,8 @@ function defineModel(name, attributes) {
 
 var exp = {
   defineModel: defineModel,
-  sync: sequelize.sync()
+  Sequelize: Sequelize,
+  sequelize: sequelize
 }
 
 // 将数据类型绑在导出的db中
