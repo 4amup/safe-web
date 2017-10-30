@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   .then(troubles => {
     if (troubles.length) {
       // troubles
-      console.log('有查询内容，正常渲染');
+      console.log(`此次共查询到${troubles.length}条问题，左边列表部分正常渲染`);
     } else {
       console.log('数据库查询结果为空，显示默认内容');
       // 默认数据格式

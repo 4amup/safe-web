@@ -82,31 +82,13 @@ function defineModel(name, attributes) {
           obj.version++;
         }
       }
-      // beforeCreate: instance => {
-      //   let now = Date.now();
-      //   console.log('will create entity...' + instance);
-      //   !instance.id && (instance.id = generateId());
-
-      //   instance.createdAt = now;
-      //   instance.updatedAt = now;
-      //   instance.version = 0;
-      // },
-      // // update操作，需要在option加上 individualHooks: true，让每个instance都update
-      // beforeUpdate: instance => {
-      //   let now = Date.now();
-      //   console.log('will update entity...');
-      //   instance.updatedAt = now;
-      //   instance.version++;
-      // }
     }
   });
 }
 
-
-
 var exp = {
   defineModel: defineModel,
-  sync: sequelize.sync({force: true})
+  sync: sequelize.sync()
 }
 
 // 将数据类型绑在导出的db中
