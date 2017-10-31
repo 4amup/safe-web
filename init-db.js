@@ -4,4 +4,3 @@ model.sequelize.sync({force: true}).then(() => {
   // 退出
   process.exit(0);
 });
-

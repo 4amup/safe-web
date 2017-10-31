@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
   .then(troubles => {
     if (troubles.length) {
       // troubles
-      console.log('有查询内容，正常渲染');
+      console.log(`共查询到${troubles.length}条问题，API数据提供正常`);
     } else {
       console.log('数据库查询结果为空，显示默认内容');
       // 默认数据格式
@@ -47,10 +47,9 @@ router.get('/', function (req, res, next) {
 router.post('/',upload.single('upImage'), function(req, res, next) {
   var location = req.body.location.split(',');
   // 处理一下path，将\处理成\/后返回
-  console.log(req.body);
   Trouble.create({ 'imagePath': req.file.path.split('\\').splice(1, 3).join('/'), 'imageDescription': req.body.description, 'Lng': location[0], 'Lat': location[1]})
   .then(trouble => {
-    console.log(`已经将数据插入数据库中了`);
+    console.log(`已将以上数据插入到数据库中`);
     res.redirect('/');
   });
 });
