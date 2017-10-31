@@ -44,11 +44,11 @@ function defineModel(name, attributes) {
     type: ID_TYPE,
     primaryKey: true
   };
-  attrs.createAt = {
+  attrs.createdAt = {
     type: Sequelize.BIGINT,
     allowNull: false
   };
-  attrs.updateAt = {
+  attrs.updatedAt = {
     type: Sequelize.BIGINT,
     allowNull: false
   };
@@ -67,18 +67,18 @@ function defineModel(name, attributes) {
     hooks: {
       beforeValidate: function (obj) {
         var now = Date.now();
-        if(obj.isNewRecord) {
+        if(obj.isNewRecord) { // bug to fix
           console.log('will create entity...' + obj);
           if(!obj.id) {
             obj.id = generateId();
           }
 
-          obj.createAt = now;
-          obj.updateAt = now;
+          obj.createdAt = now;
+          obj.updatedAt = now;
           obj.version = 0;
         } else {
           console.log('will update entity...');
-          obj.updateAt = now;
+          obj.updatedAt = now;
           obj.version++;
         }
       }

@@ -1,0 +1,21 @@
+{% extends "layout.njk" %}
+{% block content %}
+<h1>{{ title }}</h1>
+<form action="/register" method="post">
+  <div>
+    <lable for="email">邮箱：</lable>
+    <input type="email" name="email" id="email">
+  </div>
+  <div>
+    <label for="password">密码：</label>
+    <input type="password" name="password" id="password">
+  </div>
+  <div>
+    <label for="username">用户名：</label>
+    <input type="text" name="name" id="username">
+  </div>
+  <div>
+    <input type="submit" value="注册">
+  </div>
+</form>
+{% endblock %}

@@ -49,7 +49,7 @@ router.post('/',upload.single('upImage'), function(req, res, next) {
   // 处理一下path，将\处理成\/后返回
   Trouble.create({ 'imagePath': req.file.path.split('\\').splice(1, 3).join('/'), 'imageDescription': req.body.description, 'Lng': location[0], 'Lat': location[1]})
   .then(trouble => {
-    console.log(`已将以上数据插入到数据库中`);
+    console.log(`已将${trouble}数据添加到数据库中`);
     res.redirect('/');
   });
 });
