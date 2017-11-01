@@ -9,11 +9,19 @@
 <h1>{{ title }}</h1>
 <div class="container">
   <div id="map" style="min-width:600px; min-height:600px"></div>
-  <div id="nullmap" style="min-width:600px; min-height:600px; display:none"></div>
-  <div id="show">点击后传值</div>
-  <div>
-    <button id="changePolygon">确认</button>
-  </div>
+  <form action="/admin" method="POST">
+    <div>
+      <label for="companyName">公司名：</label>
+      <input type="text" name="companyName" id="companyName">
+    </div>
+    <div>
+      <label for="companyInfo">公司简介：</label>
+      <input name="companyInfo" id="companyInfo"></input>
+    </div>
+    <div>
+      <input type="submit" value="保存">
+    </div>
+  </form>
 </div>
 <script src="js/admin.js"></script>
 {% endblock %}

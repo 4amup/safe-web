@@ -2,8 +2,18 @@ $(function() {
   loadScript();
   window.init = function(){
     var map = new AMap.Map('map', {
-        center: [117.00, 36.68],
-        zoom: 6
+        center: [126.683507, 45.713941],
+        zoom: 16
+    });
+    map.setMapStyle('amap://styles/dark');
+
+    AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.MapType', 'AMap.Geolocation'],
+    function(){
+      map.addControl(new AMap.ToolBar());
+
+      map.addControl(new AMap.Scale());
+      // map.addControl(new AMap.MapType());
+      map.addControl(new AMap.Geolocation());
     });
   }
   //异步加载地图库函数文件
