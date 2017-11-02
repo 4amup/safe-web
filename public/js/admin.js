@@ -1,112 +1,66 @@
 $(function() {
-  loadScript();
-  window.init = function(){
-    var map = new AMap.Map('map', {
-        center: [126.683507, 45.713941],
-        zoom: 16
+  var map = new AMap.Map('map', {
+      center: [126.683507, 45.713941],
+      zoom: 16
+  });
+  map.setMapStyle('amap://styles/dark');
+
+  AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.MapType', 'AMap.Geolocation'],
+  function(){
+    map.addControl(new AMap.ToolBar());
+
+    map.addControl(new AMap.Scale());
+    // map.addControl(new AMap.MapType());
+    map.addControl(new AMap.Geolocation());
+  });
+
+  // 加载鼠标绘制多边形插件
+  var mouseTool = new AMap.MouseTool(map);   //在地图中添加MouseTool插件
+  map.plugin(mouseTool);
+  // 定义绘制的多边形
+  var drawPolygon;
+  // 添加事件监听按钮点击
+  AMap.event.addDomListener(document.getElementById('addArea'), 'click', function() {
+    drawPolygon = mouseTool.polygon(); //用鼠标工具画多边形
+  }, false);
+  // 定义多边形的路径，待后面赋值
+  var path;
+  // 监听鼠标画完事件
+  AMap.event.addListener( mouseTool,'draw',function(e){ //添加事件
+    path = e.obj.getPath();
+    mouseTool.close(true); //画完后把画的图擦除，重新绘制可以编辑的多边形
+    drawPolygon = new AMap.Polygon({
+      map: map,
+      path: path,
+      strokeColor: "#0000ff",
+      strokeOpacity: 1,
+      strokeWeight: 3,
+      fillColor: "#f5deb3",
+      fillOpacity: 0.35
     });
-    map.setMapStyle('amap://styles/dark');
+    drawPolygonEdit = new AMap.PolyEditor(map,drawPolygon);
+    drawPolygonEdit.open();
 
-    AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.MapType', 'AMap.Geolocation'],
-    function(){
-      map.addControl(new AMap.ToolBar());
-
-      map.addControl(new AMap.Scale());
-      // map.addControl(new AMap.MapType());
-      map.addControl(new AMap.Geolocation());
-    });
-  }
-  //异步加载地图库函数文件
-  function loadScript() {
-    //创建script标签
-    var script = $("<script></script>");
-    //设置标签的type属性
-    script.attr('type', "text/javascript");
-    //设置标签的链接地址
-    script.attr('src', 'http://webapi.amap.com/maps?v=1.4.1&key=c5da74a5a86f1b5b119e5dd939bf49d0&callback=init');
-    //添加标签到dom
-    $('body').append(script);
-  }
-
-  // var pathArray = [];
-  // //初始化地图函数  自定义函数名init
-  // function init() {
-  //   //定义map变量 调用 qq.maps.Map() 构造函数   获取地图显示容器
-  //   var map = new qq.maps.Map(document.getElementById("map"), {
-  //       center: new qq.maps.LatLng(45.7137085949, 126.6769766808),
-  //       zoom:17,
-  //       mapTypeId: qq.maps.MapTypeId.HYBRID
-  //   });
-  //   // 增加一个空地图，将控件隐藏
-  //   var nullmap = new qq.maps.Map(document.getElementById("nullmap"), {
-  //     center: new qq.maps.LatLng(45.7137085949, 126.6769766808),
-  //     zoom:17,
-  //     mapTypeId: qq.maps.MapTypeId.HYBRID
-  //   });
-
-  //   // 添加绘制多边形的库
-  //   var drawingManager = new qq.maps.drawing.DrawingManager({
-  //     drawingMode: qq.maps.drawing.OverlayType.POLYGON,
-  //     drawingControl: true,
-  //     drawingControlOptions: {
-  //       position: qq.maps.ControlPosition.TOP_CENTER,
-  //       drawingModes: [
-  //         qq.maps.drawing.OverlayType.MARKER,
-  //         qq.maps.drawing.OverlayType.CIRCLE,
-  //         qq.maps.drawing.OverlayType.POLYGON,
-  //         qq.maps.drawing.OverlayType.RECTANGLE
-  //       ]
-  //     },
-  //     markerOptions:{
-  //     visible:false
-  //     },
-  //     circleOptions: {
-  //       fillColor: new qq.maps.Color(255, 208, 70, 0.3),
-  //       strokeColor: new qq.maps.Color(88, 88, 88, 1),
-  //       strokeWeight: 3,
-  //       clickable: false
-  //     }
-  //   });
-  //   drawingManager.setMap(map);
-
-  //   // 多边形覆盖绘制
-  //   var polygon = new qq.maps.Polygon({
-  //     map: map, // 显示多边形的地图实例
-  //     editable: true, // 多边形是否可编辑
-  //     cursor: 'crosshair', //鼠标在折线上时的样式
-  //   });
-
-  //   // 监听画完事件
-  //   qq.maps.event.addListener(drawingManager, 'overlaycomplete', function(event) {
-  //     console.log(event.overlay.path.elems);
-  //     pathArray = event.overlay.path.elems;
-  //     // 根据绘制的多边形渲染生成一个多边形覆盖物
-  //     polygon.setPath(pathArray);
-  //     renderShow(pathArray);
-  //     drawingManager.setMap(nullmap);
-  //   });
-
-  //   polygon.setPath(pathArray);
-  //   // 手动触发多边形更改事件
-  //   $("#changePolygon").click(function() {
-  //     pathArray = polygon.getPath().elems;
-  //     renderShow(pathArray);
-  //   })
-  // }
-  // // 根据数组渲染页面内容
-  // function renderShow(arr) {
-  //   $("#show").empty();
-  //   var path = [];
-  //   if (arr.length>0) {
-  //     var ul = $("<ul></ul>");
-  //     for (var i=0; i<arr.length; i++) {
-  //       ul.append($("<li></li>").text(`[${arr[i].lat}, ${arr[i].lng}]`));
-  //     }
-  //     $("#show").append(ul);
-  //   } else {
-  //     $("#show").text("未点击");
-  //   }
-  // }
-  // //调用初始化函数地图
-  // init();
+    // 添加确认/结束按钮
+    $('#buttonBox').append($('<input>').attr('type', 'button').attr('value', '重画范围').attr('id', 'restArea'));
+    $('#buttonBox').append($('<input>').attr('type', 'button').attr('value', '编辑范围').attr('id', 'editArea'));
+    $('#buttonBox').append($('<input>').attr('type', 'button').attr('value', '确认范围').attr('id', 'confirmArea'));
+    // 确认多边形范围
+    AMap.event.addDomListener(document.getElementById('confirmArea'), 'click', function() {
+      drawPolygonEdit.close();
+      console.log(drawPolygon.getPath());//获取路径/范围
+    }, false);
+    // 确认多边形范围
+    AMap.event.addDomListener(document.getElementById('editArea'), 'click', function() {
+      drawPolygonEdit.open();
+    }, false);
+      // 添加重画事件按钮事件
+    AMap.event.addDomListener(document.getElementById('restArea'), 'click', function() {
+      drawPolygonEdit.close();
+      drawPolygon.setMap(null);
+      $('#restArea').remove();
+      $('#editArea').remove();
+      $('#confirmArea').remove();
+    }, false);
+  });
 })

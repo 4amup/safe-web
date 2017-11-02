@@ -1,8 +1,11 @@
 {# 先在前端实现数据格式，在做这个超级管理员页面 #}
 {% extends "layout.njk" %}
 {# 首页自定义样式文件 #}
-{% block stylesheets %}
+{% block cssFiles %}
 <link rel="stylesheet" href="css/admin.css">
+{% endblock %}
+{% block jsFiles %}
+<script src="http://webapi.amap.com/maps?v=1.4.1&key=c5da74a5a86f1b5b119e5dd939bf49d0&plugin=AMap.PolyEditor,AMap.MouseTool"></script>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +19,11 @@
     </div>
     <div>
       <label for="companyInfo">公司简介：</label>
-      <input name="companyInfo" id="companyInfo"></input>
+      <input type="text" name="companyInfo" id="companyInfo"></input>
+    </div>
+    <div id="buttonBox">
+      <label for="companyArea">地图编辑：</label>
+      <input type="button" name="addArea" id="addArea" value="添加范围"></input>
     </div>
     <div>
       <input type="submit" value="保存">
