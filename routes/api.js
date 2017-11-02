@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var model = require('../model');
 var Trouble = model.Trouble;
+var Company = model.Company;
 // 文件上传中间件配置
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -53,5 +54,13 @@ router.post('/',upload.single('upImage'), function(req, res, next) {
     res.redirect('/');
   });
 });
+
+// 增加公司信息
+router.post('/company', function(req, res, next) {
+  Company.create(req.body)
+  .then(function(company) {
+    res.send(company);
+  })
+})
 
 module.exports = router;
