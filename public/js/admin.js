@@ -3,7 +3,26 @@ $(function() {
       center: [126.683507, 45.713941],
       zoom: 16
   });
-  map.setMapStyle('amap://styles/dark');
+
+  var companyPolygon = new AMap.Polygon({
+    map: map,
+    strokeColor: "#0000ff",
+    strokeOpacity: 1,
+    strokeWeight: 1,
+    fillColor: "#f5deb3",
+    fillOpacity: 0.35
+  });
+  // 异步请求公司数据，在地图上绘制
+  $.ajax({
+    url: '/api/company',
+    type: 'GET',
+    dataType: 'json'
+  })
+  .done(function(obj) {
+    companyPolygon.setPath(obj.polygon);
+    console.log('公司path数据载入成功');
+  })
+
 
   AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.MapType', 'AMap.Geolocation'],
   function(){
@@ -17,14 +36,14 @@ $(function() {
   // 加载鼠标绘制多边形插件
   var mouseTool = new AMap.MouseTool(map); //在地图中添加MouseTool插件
   map.plugin(mouseTool);
-  // 定义绘制的多边形
-  var drawPolygon;
+  // 定义绘制的多边形及路径
+  var drawPolygon, path;
   // 添加事件监听按钮点击
   AMap.event.addDomListener(document.getElementById('addArea'), 'click', function() {
     drawPolygon = mouseTool.polygon(); //用鼠标工具画多边形
+    map.setMapStyle('amap://styles/dark');
   }, false);
   // 定义多边形的路径，待后面赋值
-  var path;
   // 监听鼠标画完事件
   AMap.event.addListener( mouseTool,'draw',function(e){ //添加事件
     path = e.obj.getPath();
@@ -48,7 +67,6 @@ $(function() {
     AMap.event.addDomListener(document.getElementById('confirmArea'), 'click', function() {
       drawPolygonEdit.close();
       path = drawPolygon.getPath(); //获取路径/范围
-      console.log(path);
     }, false);
     // 确认多边形范围dom事件
     AMap.event.addDomListener(document.getElementById('editArea'), 'click', function() {
@@ -63,7 +81,9 @@ $(function() {
       $('#confirmArea').remove();
     }, false);
   });
+  // ajax异步提交
   $('form').submit(function(ev) {
+    console.log(path);
     // 取消默认的体检事件，使用ajax提交表单
     ev.preventDefault();
     var form = $(this);
@@ -74,7 +94,23 @@ $(function() {
     })
     .done(function(obj) {
       console.log('上传成功');
-    })
-  });
+      console.log(obj);
+      var companyPolygon = new AMap.Polygon({
+        path: obj.path,
+        strokeColor: "#0000ff",
+        strokeOpacity: 1,
+        strokeWeight: 1,
+        fillColor: "#f5deb3",
+        fillOpacity: 0.35
+      });
 
+      companyPolygon.setMap(map);
+
+      var content = $('<div></div>');
+      var companyName = $('<p>').text(obj.name);
+      var companyInfo = $('<p>').text(obj.info);
+      content.append(companyName).append(companyInfo);
+      $('#company').append(content);
+    });
+  });
 })

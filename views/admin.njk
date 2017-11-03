@@ -11,14 +11,39 @@
 {% block content %}
 <h1>{{ title }}</h1>
 <div class="container">
+  <div id="company">
+    <span>{{ company.id }}</span>
+    <span>{{ company.name }}</span>
+    <span>{{ company.info }}</span>
+  </div>
+  <div id="departments"></div>
   <div id="map" style="min-width:600px; min-height:600px"></div>
+
   <form action="api/company" method="POST" id="from">
     <div>
-      <label for="companyName">公司名：</label>
+      <label for="companyName">公司名称：</label>
       <input type="text" name="name" id="companyName">
     </div>
     <div>
       <label for="companyInfo">公司简介：</label>
+      <input type="text" name="info" id="companyInfo"></input>
+    </div>
+    <div id="buttonBox">
+      <label for="companyArea">地图编辑：</label>
+      <input type="button" name="addArea" id="addArea" value="添加范围"></input>
+    </div>
+    <div>
+      <input type="submit" value="保存">
+    </div>
+  </form>
+
+  <form action="api/company/{{ project.id }}/departments" method="POST" id="departmentFrom">
+    <div>
+      <label for="companyName">单位名称：</label>
+      <input type="text" name="name" id="companyName">
+    </div>
+    <div>
+      <label for="companyInfo">单位简介：</label>
       <input type="text" name="info" id="companyInfo"></input>
     </div>
     <div id="buttonBox">

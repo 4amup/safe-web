@@ -1,4 +1,7 @@
 const model = require('./model');
+
+model.Department.belongsTo(model.Company);
+
 model.sequelize.sync({force: true}).then(() => {
   console.log('数据表初始化成功');
   // 退出

@@ -61,6 +61,14 @@ router.post('/company', function(req, res, next) {
   .then(function(company) {
     res.send(company);
   })
+});
+
+// 查公司信息
+router.get('/company', function (req, res, next) {
+  Company.findOne()
+  .then(function(company) {
+    res.send(company);
+  })
 })
 
 module.exports = router;
