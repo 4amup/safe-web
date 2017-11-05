@@ -3,6 +3,7 @@ var router = express.Router();
 var model = require('../model');
 var Trouble = model.Trouble;
 var Company = model.Company;
+var Department = model.Department;
 // 文件上传中间件配置
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -56,7 +57,7 @@ router.post('/',upload.single('upImage'), function(req, res, next) {
 });
 
 // 增加公司信息
-router.post('/company', function(req, res, next) {
+router.post('/company', function (req, res, next) {
   Company.create(req.body)
   .then(function(company) {
     res.send(company);
@@ -69,6 +70,15 @@ router.get('/company', function (req, res, next) {
   .then(function(company) {
     res.send(company);
   })
-})
+});
+
+// 增加对应公司的单位信息
+router.post('/company/:id/departments', function (req, res, next) {
+  req.body.companyID = req.params.id; // 设置关联
+  Department.create(req.body)
+  .then(function(department) {
+    res.send(department);
+  })
+});
 
 module.exports = router;

@@ -4,26 +4,31 @@ $(function() {
       zoom: 16
   });
 
-  var companyPolygon = new AMap.Polygon({
-    map: map,
-    strokeColor: "#0000ff",
-    strokeOpacity: 1,
-    strokeWeight: 1,
-    fillColor: "#f5deb3",
-    fillOpacity: 0.35
-  });
+  // 如果有公司的数据，则新建一个公司范围的polygon
+  if( $('#companyBox span:eq(0)').text() !== "") {
+    var companyPolygon = new AMap.Polygon({
+      map: map,
+      strokeColor: "#0000ff",
+      strokeOpacity: 1,
+      strokeWeight: 3,
+      fillColor: "#f5deb3",
+      fillOpacity: 0.35
+    });
+  }
   // 异步请求公司数据，在地图上绘制
   $.ajax({
     url: '/api/company',
     type: 'GET',
     dataType: 'json'
   })
-  .done(function(obj) {
-    companyPolygon.setPath(obj.polygon);
-    console.log('公司path数据载入成功');
-  })
+  .done(function(company) {
+    var path = JSON.parse(company.polygonPath).map(function(value, index) { 
+      return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式      
+    });
+    companyPolygon.setPath(path); // 根据path将company的多边形显示在地图上。
+  });
 
-
+  // 加载页面的一些基础工具
   AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.MapType', 'AMap.Geolocation'],
   function(){
     map.addControl(new AMap.ToolBar());
@@ -37,23 +42,23 @@ $(function() {
   var mouseTool = new AMap.MouseTool(map); //在地图中添加MouseTool插件
   map.plugin(mouseTool);
   // 定义绘制的多边形及路径
-  var drawPolygon, path;
+  var drawPolygon, editpath;
   // 添加事件监听按钮点击
   AMap.event.addDomListener(document.getElementById('addArea'), 'click', function() {
     drawPolygon = mouseTool.polygon(); //用鼠标工具画多边形
-    map.setMapStyle('amap://styles/dark');
+    // map.setMapStyle('amap://styles/dark');
   }, false);
   // 定义多边形的路径，待后面赋值
   // 监听鼠标画完事件
   AMap.event.addListener( mouseTool,'draw',function(e){ //添加事件
-    path = e.obj.getPath();
-    mouseTool.close(true); //画完后把画的图擦除，然后根据path绘制多边形
+    editpath = e.obj.getPath();
+    mouseTool.close(true); //画完后把画的图擦除，然后根据editpath绘制多边形
     drawPolygon = new AMap.Polygon({
       map: map,
-      path: path,
+      path: editpath,
       strokeColor: "#0000ff",
       strokeOpacity: 1,
-      strokeWeight: 3,
+      strokeWeight: 1,
       fillColor: "#f5deb3",
       fillOpacity: 0.35
     });
@@ -66,7 +71,7 @@ $(function() {
     // 确认多边形范围dom事件
     AMap.event.addDomListener(document.getElementById('confirmArea'), 'click', function() {
       drawPolygonEdit.close();
-      path = drawPolygon.getPath(); //获取路径/范围
+      editpath = drawPolygon.getPath(); //获取路径/范围
     }, false);
     // 确认多边形范围dom事件
     AMap.event.addDomListener(document.getElementById('editArea'), 'click', function() {
@@ -83,34 +88,68 @@ $(function() {
   });
   // ajax异步提交
   $('form').submit(function(ev) {
-    console.log(path);
+    console.log(editpath);
+    // 提交前将编辑中的多边形去掉
+    drawPolygon.setMap(null);
     // 取消默认的体检事件，使用ajax提交表单
     ev.preventDefault();
     var form = $(this);
     $.ajax({
       url: form.attr('action'),
       type: 'POST',
-      data: form.serialize()+'&polygon='+ JSON.stringify(path)
+      data: form.serialize()+'&polygonPath='+ JSON.stringify(editpath)
     })
-    .done(function(obj) {
+    .done(function(company) {
       console.log('上传成功');
-      console.log(obj);
+      console.log(company);
+      // 前端显示刚上传的数据。
+      $('#companyBox span:eq(0)').text(company.id);
+      $('#companyBox span:eq(1)').text(company.name);
+      $('#companyBox span:eq(2)').text(company.info);
+      // 实时显示更新的地图
       var companyPolygon = new AMap.Polygon({
-        path: obj.path,
+        map: map,
+        path: editpath,
         strokeColor: "#0000ff",
         strokeOpacity: 1,
-        strokeWeight: 1,
+        strokeWeight: 3,
         fillColor: "#f5deb3",
         fillOpacity: 0.35
       });
+    });
+  });
 
-      companyPolygon.setMap(map);
 
-      var content = $('<div></div>');
-      var companyName = $('<p>').text(obj.name);
-      var companyInfo = $('<p>').text(obj.info);
-      content.append(companyName).append(companyInfo);
-      $('#company').append(content);
+  // ajax异步提交
+  $('#departmentFrom').submit(function(ev) {
+    console.log(editpath);
+    // 提交前将编辑中的多边形去掉
+    drawPolygon.setMap(null);
+    // 取消默认的体检事件，使用ajax提交表单
+    ev.preventDefault();
+    var form = $(this);
+    $.ajax({
+      url: form.attr('action'),
+      type: 'POST',
+      data: form.serialize()+'&polygonPath='+ JSON.stringify(editpath)
+    })
+    .done(function(company) {
+      console.log('上传成功');
+      console.log(company);
+      // 前端显示刚上传的数据。
+      $('#companyBox span:eq(0)').text(company.id);
+      $('#companyBox span:eq(1)').text(company.name);
+      $('#companyBox span:eq(2)').text(company.info);
+      // 实时显示更新的地图
+      var companyPolygon = new AMap.Polygon({
+        map: map,
+        path: editpath,
+        strokeColor: "#0000ff",
+        strokeOpacity: 1,
+        strokeWeight: 3,
+        fillColor: "#f5deb3",
+        fillOpacity: 0.35
+      });
     });
   });
 })
