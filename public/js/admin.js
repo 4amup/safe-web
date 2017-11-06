@@ -22,8 +22,8 @@ $(function() {
     dataType: 'json'
   })
   .done(function(company) {
-    var path = JSON.parse(company.polygonPath).map(function(value, index) { 
-      return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式      
+    var path = JSON.parse(company.polygonPath).map(function(value, index) {
+      return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
     });
     companyPolygon.setPath(path); // 根据path将company的多边形显示在地图上。
   });
@@ -87,11 +87,10 @@ $(function() {
     }, false);
   });
   // ajax异步提交
-  $('form').submit(function(ev) {
-    console.log(editpath);
+  $('form:eq(0)').submit(function(ev) {
     // 提交前将编辑中的多边形去掉
     drawPolygon.setMap(null);
-    // 取消默认的体检事件，使用ajax提交表单
+    // 取消默认的提交事件，使用ajax提交表单
     ev.preventDefault();
     var form = $(this);
     $.ajax({
@@ -100,7 +99,7 @@ $(function() {
       data: form.serialize()+'&polygonPath='+ JSON.stringify(editpath)
     })
     .done(function(company) {
-      console.log('上传成功');
+      console.log('公司信息上传成功');
       console.log(company);
       // 前端显示刚上传的数据。
       $('#companyBox span:eq(0)').text(company.id);
@@ -121,11 +120,10 @@ $(function() {
 
 
   // ajax异步提交
-  $('#departmentFrom').submit(function(ev) {
-    console.log(editpath);
+  $('form:eq(1)').submit(function(ev) {
     // 提交前将编辑中的多边形去掉
     drawPolygon.setMap(null);
-    // 取消默认的体检事件，使用ajax提交表单
+    // 取消默认的提交事件，使用ajax提交表单
     ev.preventDefault();
     var form = $(this);
     $.ajax({
@@ -133,23 +131,23 @@ $(function() {
       type: 'POST',
       data: form.serialize()+'&polygonPath='+ JSON.stringify(editpath)
     })
-    .done(function(company) {
-      console.log('上传成功');
-      console.log(company);
-      // 前端显示刚上传的数据。
-      $('#companyBox span:eq(0)').text(company.id);
-      $('#companyBox span:eq(1)').text(company.name);
-      $('#companyBox span:eq(2)').text(company.info);
-      // 实时显示更新的地图
-      var companyPolygon = new AMap.Polygon({
-        map: map,
-        path: editpath,
-        strokeColor: "#0000ff",
-        strokeOpacity: 1,
-        strokeWeight: 3,
-        fillColor: "#f5deb3",
-        fillOpacity: 0.35
-      });
+    .done(function(department) {
+      console.log('单位信息上传成功');
+      console.log(department);
+      // // 前端显示刚上传的数据。
+      // $('#companyBox span:eq(0)').text(company.id);
+      // $('#companyBox span:eq(1)').text(company.name);
+      // $('#companyBox span:eq(2)').text(company.info);
+      // // 实时显示更新的地图
+      // var companyPolygon = new AMap.Polygon({
+      //   map: map,
+      //   path: editpath,
+      //   strokeColor: "#0000ff",
+      //   strokeOpacity: 1,
+      //   strokeWeight: 3,
+      //   fillColor: "#f5deb3",
+      //   fillOpacity: 0.35
+      // });
     });
   });
 })

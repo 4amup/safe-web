@@ -6,9 +6,13 @@ var Company  = model.Company;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  console.log('首页查询公司信息...')
   Company.findOne()
   .then(function (company) {
-    res.render('admin', { title: '管理员面板', company: company });
+    company.getDepartments()
+    .then(function (departments) {
+      res.render('admin', { title: '管理员面板', company: company, departments: departments });
+    });
   })
   .catch(function (err) {
     console.log(err);

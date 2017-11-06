@@ -44,18 +44,19 @@ function defineModel(name, attributes) {
     type: ID_TYPE,
     primaryKey: true
   };
-  attrs.createdAt = {
-    type: Sequelize.BIGINT,
-    allowNull: false
-  };
-  attrs.updatedAt = {
-    type: Sequelize.BIGINT,
-    allowNull: false
-  };
-  attrs.version = {
-    type: Sequelize.BIGINT,
-    allowNull: false
-  }
+  // attrs.createdAt = {
+  //   type: Sequelize.BIGINT,
+  //   allowNull: false
+  // };
+  // attrs.updatedAt = {
+  //   type: Sequelize.BIGINT,
+  //   allowNull: false
+  // };
+  // attrs.version = {
+  //   type: Sequelize.BIGINT,
+  //   defaultValue: 0,
+  //   allowNull: false
+  // };
 
   // 显示正在创建的表单名
   console.log('model defined for table: ' + name + '\n');
@@ -63,24 +64,33 @@ function defineModel(name, attributes) {
   // 返回创建的model
   return  sequelize.define(name, attrs, {
     tableName: name, // 自定义表单名
-    timestamps: false,
+    timestamps: true,
     hooks: {
-      beforeValidate: function (obj) {
-        var now = Date.now();
-        if(obj.isNewRecord) { // bug to fix
-          console.log('will create entity...' + obj);
-          if(!obj.id) {
-            obj.id = generateId();
-          }
+    //   beforeValidate: function (obj) {
+    //     var now = Date.now();
+    //     if(obj.isNewRecord) { // bug to fix
+    //       console.log('will create entity...' + obj);
+    //       if(!obj.id) {
+    //         obj.id = generateId();
+    //       }
 
-          obj.createdAt = now;
-          obj.updatedAt = now;
-          obj.version = 0;
-        } else {
-          console.log('will update entity...');
-          obj.updatedAt = now;
-          obj.version++;
+    //       obj.createdAt = now;
+    //       obj.updatedAt = now;
+    //       obj.version = 0;
+    //     } else {
+    //       console.log('will update entity...');
+    //       obj.updatedAt = now;
+    //       obj.version++;
+    //     }
+    //   }
+      beforeCreate: function (obj) {
+        console.log('will create entity...' + obj);
+        if(!obj.id) {
+          obj.id = generateId();
         }
+      },
+      beforeUpdate: function (obj) {
+        console.log('will update entity...' + obj);
       }
     }
   });

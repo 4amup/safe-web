@@ -17,13 +17,11 @@
     <span>{{ company.info }}</span>
   </div>
   <div id="departments">
-    {# {% if {{ departments}}}
     <ul>
       {% for department in departments %}
       <li>{{ department.name }}</li>
-      {$ endfor %}
+      {% endfor %}
     </ul>
-    {% endif} #}
   </div>
   <div id="map" style="min-width:600px; min-height:600px"></div>
 
@@ -32,7 +30,7 @@
     <input type="button" name="addArea" id="addArea" value="添加范围"></input>
   </div>
 
-  <form action="api/company" method="POST" id="from">
+  <form action="api/company" method="POST" id="companyFrom">
     <div>
       <label for="companyName">公司名称：</label>
       <input type="text" name="name" id="companyName">

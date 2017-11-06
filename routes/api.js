@@ -66,6 +66,7 @@ router.post('/company', function (req, res, next) {
 
 // 查公司信息
 router.get('/company', function (req, res, next) {
+  console.log('api查询公司信息...')
   Company.findOne()
   .then(function(company) {
     res.send(company);
@@ -74,7 +75,7 @@ router.get('/company', function (req, res, next) {
 
 // 增加对应公司的单位信息
 router.post('/company/:id/departments', function (req, res, next) {
-  req.body.companyID = req.params.id; // 设置关联
+  req.body.companyId = req.params.id; // 设置关联
   Department.create(req.body)
   .then(function(department) {
     res.send(department);
