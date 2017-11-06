@@ -73,6 +73,18 @@ router.get('/company', function (req, res, next) {
   })
 });
 
+// 查公司对应的部门信息
+router.get('/company/:id/departments', function (req, res, next) {
+  console.log(`api查询id为${req.params.id}的公司下属的部门信息...`);
+  Company.findOne()
+  .then(function (company) {
+    company.getDepartments()
+    .then(function (departments) {
+      res.send(departments);
+    })
+  })
+})
+
 // 增加对应公司的单位信息
 router.post('/company/:id/departments', function (req, res, next) {
   req.body.companyId = req.params.id; // 设置关联

@@ -11,7 +11,7 @@
 {% block content %}
 <h1>{{ title }}</h1>
 <div class="container">
-  <div id="companyBox">
+  <div class="companyBox" id={{ company.id }}>
     <span>{{ company.id }}</span>
     <span>{{ company.name }}</span>
     <span>{{ company.info }}</span>
@@ -19,7 +19,7 @@
   <div id="departments">
     <ul>
       {% for department in departments %}
-      <li>{{ department.name }}</li>
+      <li class="departmentBox" id={{ department.id }}>{{ department.name }}</li>
       {% endfor %}
     </ul>
   </div>

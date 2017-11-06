@@ -9,10 +9,14 @@ router.get('/', function(req, res, next) {
   console.log('首页查询公司信息...')
   Company.findOne()
   .then(function (company) {
-    company.getDepartments()
-    .then(function (departments) {
-      res.render('admin', { title: '管理员面板', company: company, departments: departments });
-    });
+    if(company == null) {
+      res.render('admin', {title: '初始化管理', company: company});
+    } else {
+      company.getDepartments()
+      .then(function (departments) {
+        res.render('admin', { title: '管理员', company: company, departments: departments });
+      });
+    }
   })
   .catch(function (err) {
     console.log(err);
