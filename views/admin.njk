@@ -12,51 +12,69 @@
 <h1>{{ title }}</h1>
 <div class="container">
   <div class="companyBox" id={{ company.id }}>
-    <span>{{ company.id }}</span>
     <span>{{ company.name }}</span>
     <span>{{ company.info }}</span>
+    {% if company %}
+    <form action="/api/company/{{ company.id }}" method="PUT" id="updateCompany">
+      <div>
+        <label for="companyName">修改公司名称：</label>
+        <input type="text" name="name" id="companyName">
+      </div>
+      <div>
+        <label for="companyInfo">修改公司简介：</label>
+        <input type="text" name="info" id="companyInfo"></input>
+      </div>
+      <div>
+        <input type="submit" value="保存">
+      </div>
+    </form>
+    {% else %}
+    <form action="api/company" method="POST" id="createCompany">
+      <div>
+        <label for="companyName">公司名称：</label>
+        <input type="text" name="name" id="companyName">
+      </div>
+      <div>
+        <label for="companyInfo">公司简介：</label>
+        <input type="text" name="info" id="companyInfo"></input>
+      </div>
+      <div>
+        <input type="text" name="info" id="companyPath" display="none" value="0"></input>
+      </div>
+      <div id="buttonBox">
+        <label for="addCompanyArea">地图编辑：</label>
+        <input type="button" name="addCompanyArea" id="addCompanyArea" value="添加范围"></input>
+      </div>
+      <div>
+        <input type="submit" value="保存">
+      </div>
+    </form>
+    {% endif %}
   </div>
   <div id="departments">
+    {% if departments.length %}
     <ul>
       {% for department in departments %}
       <li class="departmentBox" id={{ department.id }}>{{ department.name }}</li>
       {% endfor %}
     </ul>
+    {% else %}
+    <form action="api/company/{{ company.id }}/departments" method="POST" id="createDepartment">
+      <div>
+        <label for="companyName">单位名称：</label>
+        <input type="text" name="name" id="companyName">
+      </div>
+      <div>
+        <label for="companyInfo">单位简介：</label>
+        <input type="text" name="info" id="companyInfo"></input>
+      </div>
+      <div>
+        <input type="submit" value="保存">
+      </div>
+    </form>
+    {% endif %}
   </div>
   <div id="map" style="min-width:600px; min-height:600px"></div>
-
-  <div id="buttonBox">
-    <label for="companyArea">地图编辑：</label>
-    <input type="button" name="addArea" id="addArea" value="添加范围"></input>
-  </div>
-
-  <form action="api/company" method="POST" id="companyFrom">
-    <div>
-      <label for="companyName">公司名称：</label>
-      <input type="text" name="name" id="companyName">
-    </div>
-    <div>
-      <label for="companyInfo">公司简介：</label>
-      <input type="text" name="info" id="companyInfo"></input>
-    </div>
-    <div>
-      <input type="submit" value="保存">
-    </div>
-  </form>
-
-  <form action="api/company/{{ company.id }}/departments" method="POST" id="departmentFrom">
-    <div>
-      <label for="companyName">单位名称：</label>
-      <input type="text" name="name" id="companyName">
-    </div>
-    <div>
-      <label for="companyInfo">单位简介：</label>
-      <input type="text" name="info" id="companyInfo"></input>
-    </div>
-    <div>
-      <input type="submit" value="保存">
-    </div>
-  </form>
 </div>
 <script src="js/admin.js"></script>
 {% endblock %}

@@ -9,8 +9,8 @@ router.get('/', function(req, res, next) {
   console.log('首页查询公司信息...')
   Company.findOne()
   .then(function (company) {
-    if(company == null) {
-      res.render('admin', {title: '初始化管理', company: company});
+    if(company === null) {
+      res.render('admin', {title: '初始化管理', company: null, departments: null});
     } else {
       company.getDepartments()
       .then(function (departments) {
