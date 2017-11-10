@@ -12,36 +12,22 @@
 <h2>{{ title }}</h2>
 <div class="container">
   <div class="companyBox">
-    <h3 class="companyShow">
-      {% if company %}
+    <h3 class="companyShow" id="{{ company.id }}">
       <span>{{ company.name }}</span>
       <span>{{ company.info }}</span>
-      <a href="">edit</a>
-      <a href="">del</a>
-      <form action="api/company/{{company.id}}">
-          <span>
-            <label for="">公司名称：</label>
-            <input type="text">
-          </span>
-          <span>
-            <label for="">公司简介：</label>
-            <input type="text">
-          </span>
-          <span><input type="submit" value="修改"></span>
-        </form>
-      {% else %}
-      <form action="api/company">
+      <a href="" class="editCompany">edit</a>
+      <a href="api/company/{{company.id}}">del</a>
+      <form action="api/company" method="POST" id="createCompany">
         <span>
-          <label for="">公司名称：</label>
-          <input type="text">
+          <label for="companyName">公司名称：</label>
+          <input type="text" name="name" id="CompanyName">
         </span>
         <span>
-          <label for="">公司简介：</label>
-          <input type="text">
+          <label for="companyInfo">公司简介：</label>
+          <input type="text" name="info" id="companyInfo">
         </span>
         <span><input type="submit" value="提交"></span>
       </form>
-      {% endif %}
     </h3>
     <div class="departmentBox">
       <form action="">
@@ -56,7 +42,7 @@
         <span><input type="submit" value="提交"></span>
       </form>
 
-      {% for department in departments}
+      {% for department in departments %}
       <h4 class="departmentShow">
         <span></span>
         <span></span>
@@ -76,7 +62,7 @@
             </span>
             <span><input type="submit" value="提交"></span>
           </form>
-          {% for area in areas}
+          {% for area in areas %}
           <h5 class="areaShow">
           <span></span>
           <span></span>
@@ -87,7 +73,10 @@
       </div>
     </div>
   </div>
-  <div class="mapBox"></div>
+  <div class="mapBox">
+    <div class="buttonBox"></div>
+    <div id="map"></div>
+  </div>
 </div>
 <script src="js/admin.js"></script>
 {% endblock %}
