@@ -74,8 +74,8 @@ router.get('/company', function (req, res, next) {
 });
 
 // 查公司对应的部门信息
-router.get('/company/:id/departments', function (req, res, next) {
-  console.log(`api查询id为${req.params.id}的公司下属的部门信息...`);
+router.get('/company/departments', function (req, res, next) {
+  console.log(`api查询公司下属的部门信息...`);
   Company.findOne()
   .then(function (company) {
     company.getDepartments()
@@ -93,5 +93,18 @@ router.post('/company/:id/departments', function (req, res, next) {
     res.send(department);
   })
 });
+
+// 修改公司信息
+router.put('/company/:id', function(req, res,next) {
+  // req.body.companyId = req.params.id;
+  Company.findById(req.params.id)
+  .then(function(company) {
+    company.update(req.body, {where: {id: company.id}})
+    .then(function(company) {
+      res.send(company);
+    });
+  });
+});
+
 
 module.exports = router;

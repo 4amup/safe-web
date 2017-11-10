@@ -15,7 +15,7 @@
     <span>{{ company.name }}</span>
     <span>{{ company.info }}</span>
     {% if company %}
-    <form action="/api/company/{{ company.id }}" method="PUT" id="updateCompany">
+    <form action="api/company/{{ company.id }}" method="PUT" id="updateCompany">
       <div>
         <label for="companyName">修改公司名称：</label>
         <input type="text" name="name" id="companyName">
@@ -38,10 +38,7 @@
         <label for="companyInfo">公司简介：</label>
         <input type="text" name="info" id="companyInfo"></input>
       </div>
-      <div>
-        <input type="text" name="info" id="companyPath" display="none" value="0"></input>
-      </div>
-      <div id="buttonBox">
+      <div class="buttonBox">
         <label for="addCompanyArea">地图编辑：</label>
         <input type="button" name="addCompanyArea" id="addCompanyArea" value="添加范围"></input>
       </div>
@@ -52,27 +49,31 @@
     {% endif %}
   </div>
   <div id="departments">
-    {% if departments.length %}
     <ul>
       {% for department in departments %}
-      <li class="departmentBox" id={{ department.id }}>{{ department.name }}</li>
+      <li class="departmentBox" id={{ department.id }}>
+        {{ department.name }}-----{{ department.info }}
+        <button>编辑</button>
+      </li>
       {% endfor %}
     </ul>
-    {% else %}
     <form action="api/company/{{ company.id }}/departments" method="POST" id="createDepartment">
       <div>
-        <label for="companyName">单位名称：</label>
-        <input type="text" name="name" id="companyName">
+        <label for="deparmentName">单位名称：</label>
+        <input type="text" name="name" id="deparmentName">
       </div>
       <div>
-        <label for="companyInfo">单位简介：</label>
-        <input type="text" name="info" id="companyInfo"></input>
+        <label for="deparmentInfo">单位简介：</label>
+        <input type="text" name="info" id="deparmentInfo"></input>
+      </div>
+      <div class="buttonBox">
+        <label for="addDeparmentArea">地图编辑：</label>
+        <input type="button" name="addDeparmentArea" id="addDeparmentArea" value="添加范围"></input>
       </div>
       <div>
         <input type="submit" value="保存">
       </div>
     </form>
-    {% endif %}
   </div>
   <div id="map" style="min-width:600px; min-height:600px"></div>
 </div>
