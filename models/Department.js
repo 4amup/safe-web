@@ -10,8 +10,4 @@ module.exports = db.defineModel('department', {
     type: db.STRING(100),
     comment: '部门信息'
   },
-  polygonPath: {
-    type: db.TEXT(),
-    comment: '路径点集合，json格式'
-  }
 });

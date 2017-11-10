@@ -1,4 +1,22 @@
-#map {
-  width: 100%;
-  height: 80%;
+body {
+  margin: 0;
+  padding: 0;
+}
+.container {
+  display: flex;
+  justify-content: space-around;
+}
+.mapBox {
+  width: 70%;
+}
+.companyBox {
+  width: 30%;
+}
+.companyBox, .departmentBox, .areaBox {
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid red;
+}
+h2, h3, h4, h5 {
+  text-align: center;
 }

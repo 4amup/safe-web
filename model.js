@@ -21,4 +21,7 @@ for (var f of js_files) {
 module.exports.Department.belongsTo(module.exports.Company);
 module.exports.Company.hasMany(module.exports.Department);
 
+module.exports.Area.belongsTo(module.exports.Department);
+module.exports.Department.hasMany(module.exports.Area);
+
 db.sequelize.sync();

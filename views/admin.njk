@@ -9,73 +9,85 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{ title }}</h1>
+<h2>{{ title }}</h2>
 <div class="container">
-  <div class="companyBox" id={{ company.id }}>
-    <span>{{ company.name }}</span>
-    <span>{{ company.info }}</span>
-    {% if company %}
-    <form action="api/company/{{ company.id }}" method="PUT" id="updateCompany">
-      <div>
-        <label for="companyName">修改公司名称：</label>
-        <input type="text" name="name" id="companyName">
-      </div>
-      <div>
-        <label for="companyInfo">修改公司简介：</label>
-        <input type="text" name="info" id="companyInfo"></input>
-      </div>
-      <div>
-        <input type="submit" value="保存">
-      </div>
-    </form>
-    {% else %}
-    <form action="api/company" method="POST" id="createCompany">
-      <div>
-        <label for="companyName">公司名称：</label>
-        <input type="text" name="name" id="companyName">
-      </div>
-      <div>
-        <label for="companyInfo">公司简介：</label>
-        <input type="text" name="info" id="companyInfo"></input>
-      </div>
-      <div class="buttonBox">
-        <label for="addCompanyArea">地图编辑：</label>
-        <input type="button" name="addCompanyArea" id="addCompanyArea" value="添加范围"></input>
-      </div>
-      <div>
-        <input type="submit" value="保存">
-      </div>
-    </form>
-    {% endif %}
-  </div>
-  <div id="departments">
-    <ul>
-      {% for department in departments %}
-      <li class="departmentBox" id={{ department.id }}>
-        {{ department.name }}-----{{ department.info }}
-        <button>编辑</button>
-      </li>
+  <div class="companyBox">
+    <h3 class="companyShow">
+      {% if company %}
+      <span>{{ company.name }}</span>
+      <span>{{ company.info }}</span>
+      <a href="">edit</a>
+      <a href="">del</a>
+      <form action="api/company/{{company.id}}">
+          <span>
+            <label for="">公司名称：</label>
+            <input type="text">
+          </span>
+          <span>
+            <label for="">公司简介：</label>
+            <input type="text">
+          </span>
+          <span><input type="submit" value="修改"></span>
+        </form>
+      {% else %}
+      <form action="api/company">
+        <span>
+          <label for="">公司名称：</label>
+          <input type="text">
+        </span>
+        <span>
+          <label for="">公司简介：</label>
+          <input type="text">
+        </span>
+        <span><input type="submit" value="提交"></span>
+      </form>
+      {% endif %}
+    </h3>
+    <div class="departmentBox">
+      <form action="">
+        <span>
+          <label for="">单位名称：</label>
+          <input type="text">
+        </span>
+        <span>
+          <label for="">单位简介：</label>
+          <input type="text">
+        </span>
+        <span><input type="submit" value="提交"></span>
+      </form>
+
+      {% for department in departments}
+      <h4 class="departmentShow">
+        <span></span>
+        <span></span>
+        <a href="">edit</a>
+        <a href="">del</a>
+      </h4>
       {% endfor %}
-    </ul>
-    <form action="api/company/{{ company.id }}/departments" method="POST" id="createDepartment">
-      <div>
-        <label for="deparmentName">单位名称：</label>
-        <input type="text" name="name" id="deparmentName">
+        <div class="areaBox">
+          <form action="">
+            <span>
+              <label for="">厂房名称：</label>
+              <input type="text">
+            </span>
+            <span>
+              <label for="">厂房介绍：</label>
+              <input type="text">
+            </span>
+            <span><input type="submit" value="提交"></span>
+          </form>
+          {% for area in areas}
+          <h5 class="areaShow">
+          <span></span>
+          <span></span>
+          <a href="">edit</a>
+          <a href="">del</a>
+          {% endfor %}
+        </h5>
       </div>
-      <div>
-        <label for="deparmentInfo">单位简介：</label>
-        <input type="text" name="info" id="deparmentInfo"></input>
-      </div>
-      <div class="buttonBox">
-        <label for="addDeparmentArea">地图编辑：</label>
-        <input type="button" name="addDeparmentArea" id="addDeparmentArea" value="添加范围"></input>
-      </div>
-      <div>
-        <input type="submit" value="保存">
-      </div>
-    </form>
+    </div>
   </div>
-  <div id="map" style="min-width:600px; min-height:600px"></div>
+  <div class="mapBox"></div>
 </div>
 <script src="js/admin.js"></script>
 {% endblock %}
