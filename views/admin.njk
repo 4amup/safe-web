@@ -23,6 +23,7 @@
       <form action="api/company/{{ company.id }}" method="PUT" id="updateCompany">
         <input type="text" name="name" id="CompanyName">
         <input type="text" name="info" id="companyInfo">
+        <input type="button" value="编辑范围">
         <input type="submit" value="修改">
       </form>
     </div>
@@ -30,6 +31,7 @@
     <form action="api/company" method="POST" id="createCompany">
       <input type="text" name="name" id="CompanyName">
       <input type="text" name="info" id="companyInfo">
+      <input type="button" value="添加范围">
       <input type="submit" value="提交">
     </form>
     {% endif %}

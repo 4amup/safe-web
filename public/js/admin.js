@@ -24,8 +24,8 @@ $(function() {
   companyPolygon.departments = [];
 
   // 逻辑：初始化即让用户操作画company范围
-  if (!$('.companyBox span:eq(0)').text()) { //如果没有渲染company文字对象
-    map.setMapStyle('amap://styles/dark'); // 设置地图特殊样式，提示可以开始划范围了
+  $('.companyBox').on('click', 'input:button', function() {
+    map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
     mouseTool.polygon();
     AMap.event.addListener( mouseTool,'draw',function(e){ // 监听鼠标画完事件
       var companyPath = e.obj.getPath();
@@ -42,8 +42,8 @@ $(function() {
         $('#restArea').remove();
       }, false);
     });
-    map.setMapStyle('amap://styles/normal'); // 恢复地图正常样式
-  }
+  });
+
   // 异步请求公司数据，在地图上绘制
   $.ajax({
     url: '/api/company',
@@ -69,7 +69,8 @@ $(function() {
     form.attr('method', 'PUT')
     .attr('action', 'api/company/' + $('.companyShow').id)
     .attr('id', 'updateCompany');
-  })
+  });
+
   // ajax异步提交
   $('#createCompany').submit(function(ev) {
     editCompanyPolygon.close(); // 如果没有关闭多边形编辑，则在提交前关闭
@@ -97,12 +98,14 @@ $(function() {
       <form action="api/company/${company.id}" method="PUT" id="updateCompany">
         <input type="text" name="name" id="CompanyName">
         <input type="text" name="info" id="companyInfo">
+        <input type="button" value="编辑范围">
         <input type="submit" value="修改">
       </form>
       `
       );
       $('.companyBox').prepend(companyShow);
       $('#createCompany').remove();
+      map.setMapStyle('amap://styles/normal'); // 恢复地图正常样式
     });
   });
 
@@ -144,6 +147,7 @@ $(function() {
       <form action="api/company" method="POST" id="createCompany">
         <input type="text" name="name" id="CompanyName">
         <input type="text" name="info" id="companyInfo">
+        <input type="button" value="编辑范围">
         <input type="submit" value="提交">
       </form>
       `
