@@ -12,65 +12,42 @@
 <h2>{{ title }}</h2>
 <div class="container">
   <div class="companyBox">
-    <h3 class="companyShow" id="{{ company.id }}">
-      <span>{{ company.name }}</span>
-      <span>{{ company.info }}</span>
-      <a href="" class="editCompany">edit</a>
-      <a href="api/company/{{company.id}}">del</a>
-      <form action="api/company" method="POST" id="createCompany">
-        <span>
-          <label for="companyName">公司名称：</label>
-          <input type="text" name="name" id="CompanyName">
-        </span>
-        <span>
-          <label for="companyInfo">公司简介：</label>
-          <input type="text" name="info" id="companyInfo">
-        </span>
-        <span><input type="submit" value="提交"></span>
+    {% if company.id %}
+    <div class="companyShow" id="{{ company.id }}">
+      <h3>
+        <span>{{ company.name }}</span>
+        <span>{{ company.info }}</span>
+        <a href="" class="editCompany">edit</a>
+        <a href="api/company/{{company.id}}" class="deleteItem">del</a>
+      </h3>
+      <form action="api/company/{{ company.id }}" method="PUT" id="updateCompany">
+        <input type="text" name="name" id="CompanyName">
+        <input type="text" name="info" id="companyInfo">
+        <input type="submit" value="修改">
       </form>
-    </h3>
-    <div class="departmentBox">
-      <form action="">
-        <span>
-          <label for="">单位名称：</label>
-          <input type="text">
-        </span>
-        <span>
-          <label for="">单位简介：</label>
-          <input type="text">
-        </span>
-        <span><input type="submit" value="提交"></span>
-      </form>
+    </div>
+    {% else %}
+    <form action="api/company" method="POST" id="createCompany">
+      <input type="text" name="name" id="CompanyName">
+      <input type="text" name="info" id="companyInfo">
+      <input type="submit" value="提交">
+    </form>
+    {% endif %}
 
-      {% for department in departments %}
-      <h4 class="departmentShow">
+    <div class="areaBox">
+      <form action="">
+        <input type="text">
+        <input type="text">
+        <input type="submit" value="提交">
+      </form>
+      {% for area in areas %}
+      <h5 class="areaShow">
         <span></span>
         <span></span>
         <a href="">edit</a>
         <a href="">del</a>
-      </h4>
+      </h5>
       {% endfor %}
-        <div class="areaBox">
-          <form action="">
-            <span>
-              <label for="">厂房名称：</label>
-              <input type="text">
-            </span>
-            <span>
-              <label for="">厂房介绍：</label>
-              <input type="text">
-            </span>
-            <span><input type="submit" value="提交"></span>
-          </form>
-          {% for area in areas %}
-          <h5 class="areaShow">
-          <span></span>
-          <span></span>
-          <a href="">edit</a>
-          <a href="">del</a>
-          {% endfor %}
-        </h5>
-      </div>
     </div>
   </div>
   <div class="mapBox">

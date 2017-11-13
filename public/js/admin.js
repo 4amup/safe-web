@@ -6,7 +6,7 @@ $(function() {
       rotateEnable: true,
       resizeEnable: true,
       // showBuildingBlock: true,
-      layers: [new AMap.TileLayer.Satellite()],
+      // layers: [new AMap.TileLayer.Satellite()],
   });
   // 加载鼠标绘制多边形插件
   var mouseTool = new AMap.MouseTool(map); //在地图中添加MouseTool插件
@@ -25,7 +25,7 @@ $(function() {
 
   // 逻辑：初始化即让用户操作画company范围
   if (!$('.companyBox span:eq(0)').text()) { //如果没有渲染company文字对象
-    map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
+    map.setMapStyle('amap://styles/dark'); // 设置地图特殊样式，提示可以开始划范围了
     mouseTool.polygon();
     AMap.event.addListener( mouseTool,'draw',function(e){ // 监听鼠标画完事件
       var companyPath = e.obj.getPath();
@@ -85,8 +85,24 @@ $(function() {
       console.log(company);
       companyPolygon.id = company.id;
       // 前端显示刚上传的数据。
-      $('.companyBox span:eq(0)').text(company.name);
-      $('.companyBox span:eq(1)').text(company.info);
+      var companyShow = $('<div></div>').attr('class', 'companyShow').attr('id', company.id);
+      companyShow.html(
+      `
+      <h3>
+        <span>${company.name}</span>
+        <span>${company.info}</span>
+        <a href="" class="editCompany">edit</a>
+        <a href="api/company/${company.id}" class="deleteItem">del</a>
+      </h3>
+      <form action="api/company/${company.id}" method="PUT" id="updateCompany">
+        <input type="text" name="name" id="CompanyName">
+        <input type="text" name="info" id="companyInfo">
+        <input type="submit" value="修改">
+      </form>
+      `
+      );
+      $('.companyBox').prepend(companyShow);
+      $('#createCompany').remove();
     });
   });
 
@@ -108,6 +124,35 @@ $(function() {
       $('.companyBox span:eq(1)').text(company.info);
     });
   });
+
+  // 删除数据
+  $('.companyBox').on('click', 'a.deleteItem', function(ev) {
+    var item = $(ev.target);
+    var company = $('.companyShow');
+    ev.preventDefault();
+    $.ajax({
+      url: item.attr('href'),
+      type: 'DELETE'
+    })
+    .done(function(data) {
+      console.log(data);
+      console.log('公司信息DELETE成功');
+      companyPolygon.setPath(null);
+      company.remove();
+      $('.companyBox').prepend(
+      `
+      <form action="api/company" method="POST" id="createCompany">
+        <input type="text" name="name" id="CompanyName">
+        <input type="text" name="info" id="companyInfo">
+        <input type="submit" value="提交">
+      </form>
+      `
+      );
+    })
+    .fail(function() {
+      console.log('公司信息DELETE失败');
+    });
+  })
   // ajax异步提交
   $('#createDepartment').submit(function(ev) {
     editDepartmentPolygon.close();

@@ -14,7 +14,13 @@ body {
 .companyBox {
   width: 40%;
 }
-.companyBox, .departmentBox, .areaBox {
+.companyBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.areaBox {
   display: flex;
   justify-content: space-around;
   border: 1px solid red;
@@ -25,4 +31,10 @@ h2, h3, h4, h5 {
 }
 #map {
   height: 500px;
+}
+form {
+  display: flex;
+}
+form input {
+  width: 5em;
 }

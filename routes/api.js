@@ -95,7 +95,7 @@ router.post('/company/:id/departments', function (req, res, next) {
 });
 
 // 修改公司信息
-router.put('/company/:id', function(req, res,next) {
+router.put('/company/:id', function(req, res, next) {
   // req.body.companyId = req.params.id;
   Company.findById(req.params.id)
   .then(function(company) {
@@ -105,6 +105,18 @@ router.put('/company/:id', function(req, res,next) {
     });
   });
 });
+
+// 删除公司
+router.delete('/company/:id', function(req, res, next) {
+  console.log(`api删除公司信息...`);
+  Company.destroy({where: {id: req.params.id}})
+  .then(() => {
+    res.send(`delete`)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+})
 
 
 module.exports = router;
