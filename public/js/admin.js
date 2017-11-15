@@ -23,27 +23,6 @@ $(function() {
   });
   companyPolygon.departments = [];
 
-  // 逻辑：初始化即让用户操作画company范围
-  $('.companyBox').on('click', 'input:button', function() {
-    map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
-    mouseTool.polygon();
-    AMap.event.addListener( mouseTool,'draw',function(e){ // 监听鼠标画完事件
-      var companyPath = e.obj.getPath();
-      mouseTool.close(true); //画完后把画的图擦除
-      companyPolygon.setPath(companyPath);
-      editCompanyPolygon = new AMap.PolyEditor(map,companyPolygon); // 接着把绘制的多边形变成可编辑状态
-      editCompanyPolygon.open();
-      // 添加确认/结束按钮
-      $('.buttonBox').append($('<input>').attr('type', 'button').attr('value', '重画').attr('id', 'restArea'));
-      // 添加重画事件按钮事件
-      AMap.event.addDomListener(document.getElementById('restArea'), 'click', function() {
-        editCompanyPolygon.close();
-        companyPolygon.setMap(null);
-        $('#restArea').remove();
-      }, false);
-    });
-  });
-
   // 异步请求公司数据，在地图上绘制
   $.ajax({
     url: '/api/company',
@@ -71,9 +50,38 @@ $(function() {
     .attr('id', 'updateCompany');
   });
 
+  // 编辑地图按钮
+  $('.companyBox').on('click', 'input:button', function() {
+    map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
+    mouseTool.polygon();
+    // 添加重画按钮
+    $('.buttonBox').append($('<input>').attr('type', 'button').attr('value', '重画').attr('id', 'restPolygon'));
+    $('.buttonBox').append($('<input>').attr('type', 'button').attr('value', '编辑').attr('id', 'editPolygon'));
+    $('.buttonBox').append($('<input>').attr('type', 'button').attr('value', '结束编辑').attr('id', 'overPolygon'));
+
+    AMap.event.addListener( mouseTool,'draw',function(e){ // 监听鼠标画完事件
+      var companyPath = e.obj.getPath();
+      mouseTool.close(true); //画完后把画的图擦除
+      companyPolygon.setPath(companyPath);
+      editCompanyPolygon = new AMap.PolyEditor(map,companyPolygon); // 接着把绘制的多边形变成可编辑状态
+      // 添加重画事件按钮事件
+      AMap.event.addDomListener(document.getElementById('restPolygon'), 'click', function() {
+        editCompanyPolygon.close();
+        companyPolygon.setMap(null);
+      }, false);
+      // 添加重画事件按钮事件
+      AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
+        editCompanyPolygon.open();
+      }, false);
+      // 添加重画事件按钮事件
+      AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
+        editCompanyPolygon.close();
+      }, false);
+    });
+  });
+
   // ajax异步提交
   $('#createCompany').submit(function(ev) {
-    editCompanyPolygon.close(); // 如果没有关闭多边形编辑，则在提交前关闭
     ev.preventDefault(); // 取消默认的提交事件，使用ajax提交表单
     var form = $(this);
     $.ajax({
@@ -85,27 +93,20 @@ $(function() {
       console.log(`公司信息${form.attr('method')}成功`);
       console.log(company);
       companyPolygon.id = company.id;
+      editCompanyPolygon.close();
       // 前端显示刚上传的数据。
-      var companyShow = $('<div></div>').attr('class', 'companyShow').attr('id', company.id);
-      companyShow.html(
-      `
-      <h3>
-        <span>${company.name}</span>
-        <span>${company.info}</span>
-        <a href="" class="editCompany">edit</a>
-        <a href="api/company/${company.id}" class="deleteItem">del</a>
-      </h3>
-      <form action="api/company/${company.id}" method="PUT" id="updateCompany">
-        <input type="text" name="name" id="CompanyName">
-        <input type="text" name="info" id="companyInfo">
-        <input type="button" value="编辑范围">
-        <input type="submit" value="修改">
-      </form>
-      `
-      );
-      $('.companyBox').prepend(companyShow);
-      $('#createCompany').remove();
+      $('.companyBox span:eq(0)').text(company.name);
+      $('.companyBox span:eq(1)').text(company.info);
+      $('.companyBox a:eq(1)').attr('href', `api/company/${company.id}`);
+      $('#updateCompany').attr('action', `api/company/${company.id}`);
+      var path = JSON.parse(company.polygonPath).map(function(value, index) {
+        return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
+      });
+      companyPolygon.setPath(path);
       map.setMapStyle('amap://styles/normal'); // 恢复地图正常样式
+      $('#restPolygon').remove();
+      $('#overPolygon').remove();
+      $('#editPolygon').remove();
     });
   });
 
@@ -122,16 +123,24 @@ $(function() {
       console.log(`公司信息${form.attr('method')}成功`);
       console.log(company);
       companyPolygon.id = company.id;
+      editCompanyPolygon.close();
+      var path = JSON.parse(company.polygonPath).map(function(value, index) {
+        return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
+      });
+      companyPolygon.setPath(path);
       // 前端显示刚上传的数据。
       $('.companyBox span:eq(0)').text(company.name);
       $('.companyBox span:eq(1)').text(company.info);
+      map.setMapStyle('amap://styles/normal'); // 恢复地图正常样式
+      $('#restPolygon').remove();
+      $('#overPolygon').remove();
+      $('#editPolygon').remove();
     });
   });
 
   // 删除数据
   $('.companyBox').on('click', 'a.deleteItem', function(ev) {
     var item = $(ev.target);
-    var company = $('.companyShow');
     ev.preventDefault();
     $.ajax({
       url: item.attr('href'),
@@ -141,46 +150,14 @@ $(function() {
       console.log(data);
       console.log('公司信息DELETE成功');
       companyPolygon.setPath(null);
-      company.remove();
-      $('.companyBox').prepend(
-      `
-      <form action="api/company" method="POST" id="createCompany">
-        <input type="text" name="name" id="CompanyName">
-        <input type="text" name="info" id="companyInfo">
-        <input type="button" value="编辑范围">
-        <input type="submit" value="提交">
-      </form>
-      `
-      );
+      $('.companyBox span:eq(0)').text(null);
+      $('.companyBox span:eq(1)').text(null);
+      $('#restPolygon').remove();
+      $('#overPolygon').remove();
+      $('#editPolygon').remove();
     })
     .fail(function() {
       console.log('公司信息DELETE失败');
-    });
-  })
-  // ajax异步提交
-  $('#createDepartment').submit(function(ev) {
-    editDepartmentPolygon.close();
-    // 取消默认的提交事件，使用ajax提交表单
-    ev.preventDefault();
-    var form = $(this);
-    $.ajax({
-      url: form.attr('action'),
-      type: 'POST',
-      data: form.serialize()+'&polygonPath='+ JSON.stringify(companyPolygon.departments[companyPolygon.departments.length-1].getPath())
-    })
-    .done(function(department) {
-      console.log(`单位信息${form.attr('method')}成功`);
-      console.log(department);
-      companyPolygon.departments[companyPolygon.departments.length-1].id = department.id;
-      // 前端显示刚上传的数据
-      var department = $('<li>')
-      .attr('id', department.id)
-      .attr('class', 'departmentBox')
-      .html(`
-      ${department.name}-----${department.info}
-      <button>编辑</button>`)
-      $('#departments ul').append(department);
-      // 实时显示更新的地图
     });
   });
 })

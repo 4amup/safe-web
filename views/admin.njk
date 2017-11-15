@@ -12,7 +12,6 @@
 <h2>{{ title }}</h2>
 <div class="container">
   <div class="companyBox">
-    {% if company.id %}
     <div class="companyShow" id="{{ company.id }}">
       <h3>
         <span>{{ company.name }}</span>
@@ -20,6 +19,12 @@
         <a href="" class="editCompany">edit</a>
         <a href="api/company/{{company.id}}" class="deleteItem">del</a>
       </h3>
+      <form action="api/company" method="POST" id="createCompany">
+        <input type="text" name="name" id="CompanyName">
+        <input type="text" name="info" id="companyInfo">
+        <input type="button" value="添加范围">
+        <input type="submit" value="提交">
+      </form>
       <form action="api/company/{{ company.id }}" method="PUT" id="updateCompany">
         <input type="text" name="name" id="CompanyName">
         <input type="text" name="info" id="companyInfo">
@@ -27,14 +32,6 @@
         <input type="submit" value="修改">
       </form>
     </div>
-    {% else %}
-    <form action="api/company" method="POST" id="createCompany">
-      <input type="text" name="name" id="CompanyName">
-      <input type="text" name="info" id="companyInfo">
-      <input type="button" value="添加范围">
-      <input type="submit" value="提交">
-    </form>
-    {% endif %}
 
     <div class="areaBox">
       <form action="">
