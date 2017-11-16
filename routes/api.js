@@ -3,7 +3,7 @@ var router = express.Router();
 var model = require('../model');
 var Trouble = model.Trouble;
 var Company = model.Company;
-var Department = model.Department;
+var Area = model.Area;
 // 文件上传中间件配置
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -73,26 +73,30 @@ router.get('/company', function (req, res, next) {
   })
 });
 
-// 查公司对应的部门信息
-router.get('/company/departments', function (req, res, next) {
+// 查公司对应的区域信息
+router.get('/company/areas', function (req, res, next) {
   console.log(`api查询公司下属的部门信息...`);
   Company.findOne()
   .then(function (company) {
-    company.getDepartments()
-    .then(function (departments) {
-      res.send(departments);
+    company.getAreas()
+    .then(function (areas) {
+      res.send(areas);
     })
   })
 })
 
-// 增加对应公司的单位信息
-router.post('/company/:id/departments', function (req, res, next) {
+// 增加对应公司的区域信息
+router.post('/company/:id/areas', function (req, res, next) {
   req.body.companyId = req.params.id; // 设置关联
-  Department.create(req.body)
-  .then(function(department) {
-    res.send(department);
-  })
+  Area.create(req.body)
+  .then(function(area) {
+    res.send(area);
+  });
 });
+
+
+router.put('/company/:id/areas/:id', function (req, res, next) {
+})
 
 // 修改公司信息
 router.put('/company/:id', function(req, res, next) {
