@@ -13,22 +13,22 @@
 <div class="container">
   <div class="companyBox">
     <div class="companyShow" id="{{ company.id }}">
-      <h3>
+      <h3  style="display:none">
         <span>{{ company.name }}</span>
         <span>{{ company.info }}</span>
         <a href="" class="editCompany">edit</a>
         <a href="api/company/{{company.id}}" class="deleteItem">del</a>
       </h3>
-      <form action="api/company" method="POST" id="createCompany">
+      <form action="api/company" method="POST" id="createCompany" style="display:none">
         <input type="text" name="name" id="CompanyName">
         <input type="text" name="info" id="companyInfo">
-        <input type="button" value="添加范围">
-        <input type="submit" value="提交">
+        <input type="button" value="添加范围" class="createPolygon">
+        <input type="submit" value="新建">
       </form>
-      <form action="api/company/{{ company.id }}" method="PUT" id="updateCompany">
+      <form action="api/company/{{ company.id }}" method="PUT" id="updateCompany" style="display:none">
         <input type="text" name="name" id="CompanyName">
         <input type="text" name="info" id="companyInfo">
-        <input type="button" value="编辑范围">
+        <input type="button" value="编辑范围" class="updatePolygon">
         <input type="submit" value="修改">
       </form>
     </div>
@@ -37,7 +37,14 @@
       <form action="">
         <input type="text">
         <input type="text">
-        <input type="submit" value="提交">
+        <input type="button" value="添加范围">
+        <input type="submit" value="新建">
+      </form>
+      <form action="">
+        <input type="text">
+        <input type="text">
+        <input type="button" value="编辑范围">
+        <input type="submit" value="修改">
       </form>
       {% for area in areas %}
       <h5 class="areaShow">
@@ -50,7 +57,10 @@
     </div>
   </div>
   <div class="mapBox">
-    <div class="buttonBox"></div>
+    <div class="buttonBox" style="display: none">
+      <input type="button" id="editPolygon" value="编辑">
+      <input type="button" id="overPolygon" value="结束编辑">
+    </div>
     <div id="map"></div>
   </div>
 </div>
