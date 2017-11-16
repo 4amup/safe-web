@@ -22,6 +22,7 @@ body {
 }
 .areaBox {
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   border: 1px solid red;
   margin: 1em;

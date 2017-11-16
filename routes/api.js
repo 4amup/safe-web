@@ -78,10 +78,14 @@ router.get('/company/areas', function (req, res, next) {
   console.log(`api查询公司下属的部门信息...`);
   Company.findOne()
   .then(function (company) {
-    company.getAreas()
-    .then(function (areas) {
-      res.send(areas);
-    })
+    if(company){
+      company.getAreas()
+      .then(function (areas) {
+        res.send(areas);
+      })
+    } else {
+      res.send(null);
+    }
   })
 })
 

@@ -23,7 +23,6 @@ $(function() {
     fillOpacity: 0.35,
   });
   companyPolygon.areas = [];
-
   // 编辑公司信息按钮
   $('.companyBox').on('click', '.editCompany', function() {
     $('#updateCompany').toggle();
@@ -119,7 +118,7 @@ $(function() {
       $('.companyBox span:eq(1)').text(company.info);
       $('.companyBox a:eq(1)').attr('href', `api/company/${company.id}`);
       $('#updateCompany').attr('action', `api/company/${company.id}`);
-      $('#createArea').attr('action', `api/company/${company.id}/area`);
+      $('#createArea').attr('action', `api/company/${company.id}/areas`);
       var path = JSON.parse(company.polygonPath).map(function(value, index) {
         return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
       });
@@ -168,6 +167,10 @@ $(function() {
       console.log(data);
       console.log('公司信息DELETE成功');
       companyPolygon.setPath(null);
+      companyPolygon.areas.forEach(function(value, index) {
+        value.setPath(null);
+      });
+      companyPolygon.areas = [];
       $('.companyShow h3').hide();
       $('.areaBox').hide();
       $('.companyBox span:eq(0)').text(null);
@@ -189,7 +192,6 @@ $(function() {
   })
   .done(function(areas) {
     $('.areaBox').show();
-
     areas.forEach(function(value, index) {
       var path = JSON.parse(value.polygonPath).map(function(value, index) {
         return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
@@ -212,7 +214,7 @@ $(function() {
   });
 
 
-  // 增加公司范围按钮
+  // 事件绑定
   $('.areaBox').on('click', '#createArea input:button', function() {
     map.setMapStyle('amap://styles/fresh'); // 设置地图特殊样式，提示可以开始划范围了
     mouseTool.polygon();
@@ -265,14 +267,16 @@ $(function() {
   $('#createArea').submit(function(ev) {
     ev.preventDefault(); // 取消默认的提交事件，使用ajax提交表单
     var form = $(this);
+    editAreaPolygon.close();
     $.ajax({
       url: form.attr('action'),
       type: form.attr('method'),
       data: form.serialize()+'&polygonPath='+ JSON.stringify(tempAreaPolygon.getPath())
     })
     .done(function(area) {
-      console.log(`公司信息${form.attr('method')}成功`);
+      console.log(`部门信息${form.attr('method')}成功`);
       console.log(area);
+      tempAreaPolygon.setPath(null);      
       var path = JSON.parse(area.polygonPath).map(function(value, index) {
         return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
       });
