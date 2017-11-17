@@ -1,6 +1,6 @@
 $(function() {
   $('form').attr('autocomplete', 'off');
-  var areaIndex;
+  var areaIndex, areaItem;
   var editAreaPolygon;
   editCompanyPolygon = new AMap.PolyEditor(map,companyPolygon); // 接着把绘制的多边形变成可编辑状态
   // 定义地图
@@ -67,6 +67,8 @@ $(function() {
   $('.companyBox').on('click', '.editCompany', function(ev) {
     ev.preventDefault();
     $('#updateCompany').toggle();
+    $('#updateCompany input:eq(0)').val($('.companyShow').find('span:eq(0)').text());
+    $('#updateCompany input:eq(1)').val($('.companyShow').find('span:eq(1)').text());
     // 编辑公司范围按钮
     $('.companyBox').on('click', '.updatePolygon', function(ev) {
       map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
@@ -199,26 +201,28 @@ $(function() {
   // 编辑部门消息按钮
   $('.companyBox').on('click', '.editArea', function(ev) {
     ev.preventDefault(); // 阻止默认链接跳转事件
-    var areaItem = ev.target.closest('h5')
+    areaItem = ev.target.closest('h5')
     $('#updateArea').toggle(); //打开更新表单
     $('#updateArea').attr('action', `api/company/areas/${areaItem.id}`); // action赋值
+    $('#updateArea input:eq(0)').val($(areaItem).find('span:eq(0)').text());
+    $('#updateArea input:eq(1)').val($(areaItem).find('span:eq(1)').text());
+  });
 
-    // 编辑公司范围按钮
-    $('.areaBox').on('click', '.updatePolygon', function(areaId) {
-      areaIndex = $('.areaBox h5').index(areaItem); // area当前索引
-      map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
-      editAreaPolygon = new AMap.PolyEditor(map,companyPolygon.areas[areaIndex]); // 接着把绘制的多边形变成可编辑状态
+  // 编辑公司范围按钮
+  $('.areaBox').on('click', '.updatePolygon', function(areaId) {
+    areaIndex = $('.areaBox h5').index(areaItem); // area当前索引
+    map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
+    editAreaPolygon = new AMap.PolyEditor(map,companyPolygon.areas[areaIndex]); // 接着把绘制的多边形变成可编辑状态
+    editAreaPolygon.open();
+    $('.buttonBox').show();
+    // 添加编辑事件按钮事件
+    AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
       editAreaPolygon.open();
-      $('.buttonBox').show();
-      // 添加编辑事件按钮事件
-      AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
-        editAreaPolygon.open();
-      }, false);
-      // 添加结束编辑事件按钮事件
-      AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
-        editAreaPolygon.close();
-      }, false);
-    });
+    }, false);
+    // 添加结束编辑事件按钮事件
+    AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
+      editAreaPolygon.close();
+    }, false);
   });
 
   // 查-异步请求公司数据，在地图上绘制
