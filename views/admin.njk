@@ -20,12 +20,14 @@
         <a href="api/company/{{company.id}}" class="deleteItem">del</a>
       </h3>
       <form action="api/company" method="POST" id="createCompany" style="display:none">
+        <label>公司新建</label>
         <input type="text" name="name">
         <input type="text" name="info">
         <input type="button" value="添加范围" class="createPolygon">
         <input type="submit" value="新建">
       </form>
       <form action="api/company/{{ company.id }}" method="PUT" id="updateCompany" style="display:none">
+        <label>公司修改</label>
         <input type="text" name="name">
         <input type="text" name="info">
         <input type="button" value="编辑范围" class="updatePolygon">
@@ -35,23 +37,25 @@
 
     <div class="areaBox" style="display:none">
       <form action="api/company/{{ company.id }}/areas" method="POST" id="createArea">
+        <label>部门新建</label>
         <input type="text" name="name">
         <input type="text" name="info">
-        <input type="button" value="添加范围">
+        <input type="button" value="添加范围" class="createPolygon">
         <input type="submit" value="新建">
       </form>
-      <form action="api/company/:id/areas" method="PUT" id="updateArea">
+      <form action="api/company/areas/" method="PUT" id="updateArea" style="display:none">
+        <label>部门修改</label>
         <input type="text" name="name">
         <input type="text" name="info">
-        <input type="button" value="编辑范围">
+        <input type="button" value="编辑范围" class="updatePolygon">
         <input type="submit" value="修改">
       </form>
       {% for area in areas %}
       <h5 class="areaShow" id={{ area.id }}>
         <span>{{ area.name }}</span>
         <span>{{ area.info }}</span>
-        <a href="">edit</a>
-        <a href="">del</a>
+        <a href="" class="editArea">edit</a>
+        <a href="api/company/areas/{{area.id}}" class="delete">del</a>
       </h5>
       {% endfor %}
     </div>

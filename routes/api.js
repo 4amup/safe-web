@@ -73,38 +73,8 @@ router.get('/company', function (req, res, next) {
   })
 });
 
-// 查公司对应的区域信息
-router.get('/company/areas', function (req, res, next) {
-  console.log(`api查询公司下属的部门信息...`);
-  Company.findOne()
-  .then(function (company) {
-    if(company){
-      company.getAreas()
-      .then(function (areas) {
-        res.send(areas);
-      })
-    } else {
-      res.send(null);
-    }
-  })
-})
-
-// 增加对应公司的区域信息
-router.post('/company/:id/areas', function (req, res, next) {
-  req.body.companyId = req.params.id; // 设置关联
-  Area.create(req.body)
-  .then(function(area) {
-    res.send(area);
-  });
-});
-
-
-router.put('/company/:id/areas/:id', function (req, res, next) {
-})
-
 // 修改公司信息
 router.put('/company/:id', function(req, res, next) {
-  // req.body.companyId = req.params.id;
   Company.findById(req.params.id)
   .then(function(company) {
     company.update(req.body, {where: {id: company.id}})
@@ -119,12 +89,60 @@ router.delete('/company/:id', function(req, res, next) {
   console.log(`api删除公司信息...`);
   Company.destroy({where: {id: req.params.id}})
   .then(() => {
-    res.send(`delete`)
+    res.send(`delete company`);
   })
   .catch((err) => {
-    console.log(err)
+    console.log(err);
+  });
+});
+
+// 查公司对应的区域信息
+router.get('/company/areas', function (req, res, next) {
+  console.log(`api查询公司下属的部门信息...`);
+  Company.findOne()
+  .then(function (company) {
+    if(company){
+      company.getAreas()
+      .then(function (areas) {
+        res.send(areas);
+      })
+    } else {
+      res.send(null);
+    }
   })
-})
+});
+
+// 增加区域信息
+router.post('/company/:id/areas', function (req, res, next) {
+  req.body.companyId = req.params.id; // 设置关联
+  Area.create(req.body)
+  .then(function(area) {
+    res.send(area);
+  });
+});
+
+// 修改区域信息
+router.put('/company/areas/:id', function (req, res, next) {
+  Area.findById(req.params.id)
+  .then(function(area) {
+    area.update(req.body, {where: {id: area.id}})
+    .then(function(area) {
+      res.send(area);
+    });
+  });
+});
+
+// 删除区域信息
+router.delete('/company/areas/:id', function(req, res, next) {
+  console.log(`api删除部门信息...`);
+  Area.destroy({where: {id: req.params.id}})
+  .then(() => {
+    res.send(`delete area`);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+});
 
 
 module.exports = router;
