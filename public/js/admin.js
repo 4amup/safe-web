@@ -1,4 +1,5 @@
 $(function() {
+  $('form').attr('autocomplete', 'off');
   var areaIndex;
   var editAreaPolygon;
   editCompanyPolygon = new AMap.PolyEditor(map,companyPolygon); // 接着把绘制的多边形变成可编辑状态
@@ -282,7 +283,7 @@ $(function() {
       <span>${ area.name }</span>
       <span>${ area.info }</span>
       <a href="" class="editArea">edit</a>
-      <a href="">del</a>
+      <a href="api/company/areas/${area.id}" class="delete">del</a>
       `);
       $('.areaBox').append(h5);
       $('#createArea input[type="text"]').val(null);
@@ -297,6 +298,7 @@ $(function() {
   // 改-ajax异步提交区域
   $('#updateArea').submit(function(ev) {
     ev.preventDefault(); // 取消默认的提交事件，使用ajax提交表单
+    editAreaPolygon.close();
     var form = $(this);
     var areaPatn = companyPolygon.areas[areaIndex].getPath().map(function(value, index) {
       return [value.lng, value.lat];
@@ -313,7 +315,7 @@ $(function() {
       companyPolygon.areas[areaIndex].setPath(path);
       // 前端显示刚上传的数据。
       $(`.areaShow:eq(${areaIndex}) span:eq(0)`).text(area.name);
-      $(`.areaShow:eq(${areaIndex}) span:eq(0)`).text(area.info);
+      $(`.areaShow:eq(${areaIndex}) span:eq(1)`).text(area.info);
       map.setMapStyle('amap://styles/normal'); // 恢复地图正常样式
       $('.buttonBox').hide();
       $('#updateArea').hide();
@@ -335,8 +337,6 @@ $(function() {
       companyPolygon.areas.splice(areaIndex, 1); // 删除指定索引位置的元素
 
       $(`.areaShow:eq(${areaIndex})`).remove();
-      $(`.areaShow:eq(${areaIndex}) span:eq(0)`).text(null);
-      $(`.areaShow:eq(${areaIndex}) span:eq(1)`).text(null);
       $('.buttonBox').hide();
       $('#updateArea').hide();
     })

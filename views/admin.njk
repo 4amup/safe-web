@@ -43,13 +43,7 @@
         <input type="button" value="添加范围" class="createPolygon">
         <input type="submit" value="新建">
       </form>
-      <form action="api/company/areas/" method="PUT" id="updateArea" style="display:none">
-        <label>部门修改</label>
-        <input type="text" name="name">
-        <input type="text" name="info">
-        <input type="button" value="编辑范围" class="updatePolygon">
-        <input type="submit" value="修改">
-      </form>
+
       {% for area in areas %}
       <h5 class="areaShow" id={{ area.id }}>
         <span>{{ area.name }}</span>
@@ -58,6 +52,14 @@
         <a href="api/company/areas/{{area.id}}" class="delete">del</a>
       </h5>
       {% endfor %}
+
+      <form action="api/company/areas/" method="PUT" id="updateArea" style="display:none">
+        <label>部门修改</label>
+        <input type="text" name="name">
+        <input type="text" name="info">
+        <input type="button" value="编辑范围" class="updatePolygon">
+        <input type="submit" value="修改">
+      </form>
     </div>
   </div>
   <div class="mapBox">
