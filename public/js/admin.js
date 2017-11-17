@@ -285,6 +285,7 @@ $(function() {
       <a href="">del</a>
       `);
       $('.areaBox').append(h5);
+      $('#createArea input[type="text"]').val(null);
       map.setMapStyle('amap://styles/normal'); // 恢复地图正常样式
       $('.buttonBox').hide();
     })
@@ -320,10 +321,11 @@ $(function() {
   });
   // 删除数据
   $('.areaBox').on('click', '.areaShow a.delete', function(ev) {
-    var item = $(ev.target);
+    var item = $(ev.target).parent('h5');
+    areaIndex = $('.areaBox h5').index(item);
     ev.preventDefault();
     $.ajax({
-      url: item.attr('href'),
+      url: $(ev.target).attr('href'),
       type: 'DELETE'
     })
     .done(function(data) {
@@ -332,14 +334,14 @@ $(function() {
       companyPolygon.areas[areaIndex].setPath(null);
       companyPolygon.areas.splice(areaIndex, 1); // 删除指定索引位置的元素
 
-      $(`.areaShow:eq(${areaIndex}`).remove();
+      $(`.areaShow:eq(${areaIndex})`).remove();
       $(`.areaShow:eq(${areaIndex}) span:eq(0)`).text(null);
-      $(`.areaShow:eq(${areaIndex}) span:eq(0)`).text(null);
+      $(`.areaShow:eq(${areaIndex}) span:eq(1)`).text(null);
       $('.buttonBox').hide();
       $('#updateArea').hide();
     })
     .fail(function() {
-      console.log('公司信息DELETE失败');
+      console.log('部门信息DELETE失败');
     });
   });
 })
