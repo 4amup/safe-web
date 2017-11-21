@@ -1,8 +1,7 @@
 $(function() {
   $('form').attr('autocomplete', 'off');
   var areaIndex, areaItem;
-  var editAreaPolygon;
-  editCompanyPolygon = new AMap.PolyEditor(map,companyPolygon); // 接着把绘制的多边形变成可编辑状态
+ // 接着把绘制的多边形变成可编辑状态
   // 定义地图
   var map = new AMap.Map('map', {
       center: [126.683507, 45.713941],

@@ -1,8 +1,10 @@
+{% extends "layout.njk" %}
 {% block cssFiles %}
 <link rel="stylesheet" href="css/index.css">
 {% endblock %}
+{% block jsFiles %}
 <script src="http://webapi.amap.com/maps?v=1.4.1&key=c5da74a5a86f1b5b119e5dd939bf49d0&plugin=AMap.PolyEditor,AMap.MouseTool"></script>
-<link rel="stylesheet" href="css/index.css">
+<script src="vendors/exif.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -32,15 +34,9 @@
       </p>
 
       <p>
-        <label for="select">定位点：</label>
-        <select id="department">
+        <label for="area">定位点：</label>
+        <select name="areaLocation" id="area">
           <option>选择单位</option>
-        </select>
-        <select id="workshop">
-          <option>选择厂房</option>
-        </select>
-        <select>
-          <option>选择区域</option>
         </select>
       </p>
 
@@ -73,6 +69,5 @@
     </form>
   </div>
 </div>
-<script src="vendors/exif.js"></script>
-<script src="js/index.js"></script>
+<script src="js/admin.js"></script>
 {% endblock %}
