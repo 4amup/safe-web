@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="css/index.css">
 {% endblock %}
 {% block jsFiles %}
-<script src="http://webapi.amap.com/maps?v=1.4.1&key=c5da74a5a86f1b5b119e5dd939bf49d0&plugin=AMap.PolyEditor,AMap.MouseTool"></script>
+<script src="http://webapi.amap.com/maps?v=1.4.1&key=c5da74a5a86f1b5b119e5dd939bf49d0"></script>
 <script src="vendors/exif.js"></script>
 {% endblock %}
 
@@ -19,55 +19,51 @@
       {% endfor %}
     </ul>
   </div>
-  <div id="map" style="min-width:600px; min-height:600px"></div>
-  <div id="formbox">
+  <div id="map"></div>
+  <div id="formBox">
     <form action="/api" method="post" enctype="multipart/form-data" id="form">
-
-      <p id="troubleBox">
-        <label for="upImage">上传图片：</label>
-        <input id="upImage" type="file" accept="image/*" name="upImage" />
-      </p>
-
-      <p>
-        <label for="location">定位点：</label>
-        <input type="text" name="location" id="troubleLocation"></input>
-      </p>
-
-      <p>
-        <label for="area">定位点：</label>
-        <select name="areaLocation" id="area">
+      <div>
+        <label>问题图片：</label>
+        <input type="file" name="troubleImg" accept="image/*"/>
+      </div>
+      <div>
+        <label>拍摄时间：</label>
+        <input type="date" name="TroubleDate">
+        <input type="time" name="troubleTime">
+      </div>
+      <div>
+        <label>定位点：</label>
+        <input type="text" name="TroubleLocation"></input>
+      </div>
+      <div>
+        <label>定位点：</label>
+        <select name="troubleArea" id="area">
           <option>选择单位</option>
         </select>
-      </p>
-
-      <p>
-        <label for="description">问题描述：</label>
-        <input type="text" name="description" id="troubleDescription">
-      </p>
-      <p>
-        <label for="status">是否整改</label>
-        <select name="status" id="status">
-          <option value="false">待整改</option>
-          <option value="true">已整改</option>
-        </select>
-      </p>
-
-      <p id="reformBox">
-        <label for="upReform">整改上传：</label>
-        <input id="upReform" type="file" accept="image/*" name="upReform" />
-      </p>
-
-      <p>
-        <label for="datetime">拍摄时间：</label>
-        <input type="date" name="dateInput" id="dateInput">
-        <input type="time" name="dateInput" id="timeInput">
-      </p>
-
-      <p>
+      </div>
+      <div>
+        <label>问题描述：</label>
+        <input type="text" name="troubleDescription">
+      </div>
+      <div>
+        <input type="checkbox" name="renovationStatus" class="mui-switch" value="on">
+        <span>未整改</span>
+      </div>
+      <div class="renovationBox" style="display:none">
+        <p>
+          <label>整改图片：</label>
+          <input type="file" name="renovationImg" accept="image/*"/>
+        </p>
+        <p>
+          <label>整改措施：</label>
+          <input type="text" name="renovationText"/>
+        </p>
+      </div>
+      <div>
         <input type="submit" value="提交">
-      </p>
+      </div>
     </form>
   </div>
 </div>
-<script src="js/admin.js"></script>
+<script src="js/index.js"></script>
 {% endblock %}
