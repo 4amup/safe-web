@@ -22,42 +22,44 @@
   <div id="map"></div>
   <div id="formBox">
     <form action="/api" method="post" enctype="multipart/form-data" id="form">
-      <div>
+      <p>
         <label>问题图片：</label>
         <input type="file" name="troubleImg" accept="image/*"/>
-      </div>
-      <div>
+      </p>
+      <p>
         <label>拍摄时间：</label>
-        <input type="date" name="TroubleDate">
+        <input type="date" name="troubleDate">
         <input type="time" name="troubleTime">
-      </div>
-      <div>
-        <label>定位点：</label>
-        <input type="text" name="TroubleLocation"></input>
-      </div>
-      <div>
+      </p>
+      <p>
         <label>定位点：</label>
         <select name="troubleArea" id="area">
           <option>选择单位</option>
         </select>
-      </div>
-      <div>
+      </p>
+      <p>
         <label>问题描述：</label>
         <input type="text" name="troubleDescription">
-      </div>
-      <div>
+      </p>
+      <p>
         <input type="checkbox" name="renovationStatus" class="mui-switch" value="on">
         <span>未整改</span>
-      </div>
+      </p>
       <div class="renovationBox" style="display:none">
         <p>
           <label>整改图片：</label>
           <input type="file" name="renovationImg" accept="image/*"/>
         </p>
         <p>
+          <label>整改时间：</label>
+          <input type="date" name="renovationDate">
+          <input type="time" name="renovationTime">
+        </p>
+        <p>
           <label>整改措施：</label>
           <input type="text" name="renovationText"/>
         </p>
+
       </div>
       <div>
         <input type="submit" value="提交">
