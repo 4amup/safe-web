@@ -12,7 +12,7 @@ $(function () {
 
   // 定义公司范围，随后通过ajax绘制后异步显示地图
   var map = new AMap.Map('map', {
-    center: [126.683507, 45.713941],
+    center: [126.677706, 45.714858],
     zoom: 16,
     rotateEnable: true,
     resizeEnable: true,
@@ -74,6 +74,7 @@ $(function () {
         fillOpacity: 0.35,
         id: value.id
       });
+      $('select[name="troubleArea"]').append($('<option></option').text(value.name));
       companyPolygon.areas.push(areaPolygon);
     });
   })
@@ -117,13 +118,13 @@ $(function () {
       if (_gpsLat && _gpsLng) { // 如果有经纬度，将经纬度信息换算成小数模式后，写入定位输入框内
         var Lat = _gpsLat[0] + (_gpsLat[1]+_gpsLat[2]/60)/60;
         var Lng = _gpsLng[0] + (_gpsLng[1]+_gpsLng[2]/60)/60;
-        // tempTroubleMarker.setPosition([126.678824, 45.711818]);
+        // 使用坐标转行工具将gps坐标转换成高德坐标
         AMap.convertFrom(Lng+','+Lat, 'gps', function(status, result) {
           console.log(status);
-          console.log(result);
+          var location = [result.locations[0].lng, result.locations[0].lat];
+          tempTroubleMarker.setPosition(location);
+          tempTroubleMarker.setMap(map);
         });
-        tempTroubleMarker.setPosition(location);
-        tempTroubleMarker.setMap(map);
       } else {
         // to-do
         // 将来可以添加到页面提示信息栏目
