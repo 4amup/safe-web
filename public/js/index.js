@@ -23,12 +23,12 @@ $(function () {
 
   // 定义临时marker
   var tempTroubleMarker = new AMap.Marker({
-    icon: new AMap.Icon({
-        size: new AMap.Size(36, 36),  //图标大小
-        image: "../images/new.png",
-        imageOffset: new AMap.Pixel(0, 5),
-        imageSize: new AMap.Size(20, 20)
-    }),
+    // icon: new AMap.Icon({
+    //     size: new AMap.Size(36, 36),  //图标大小
+    //     image: "../images/new.png",
+    //     imageOffset: new AMap.Pixel(0, 5),
+    //     imageSize: new AMap.Size(20, 20)
+    // }),
     // animation: 'AMAP_ANIMATION_BOUNCE',
     cursor: 'move',
     // draggable: true,
@@ -92,6 +92,7 @@ $(function () {
         tempTroubleMarker.setPosition(e.lnglat);
         tempTroubleMarker.setMap(map);
         map.setCenter(e.lnglat);
+        map.setZoom(17);
       });
       companyPolygon.areas.push(areaPolygon);
     });
@@ -145,7 +146,7 @@ $(function () {
             var location = [result.locations[0].lng, result.locations[0].lat];
             tempTroubleMarker.setPosition(resetLocation(location));
             tempTroubleMarker.setMap(map);
-            map.setZoom(18);
+            map.setZoom(15);
             map.setCenter(resetLocation(location));
           });
         }
@@ -160,7 +161,7 @@ $(function () {
   map.on('click', function(e) {
     tempTroubleMarker.setPosition(resetLocation(e.lnglat));
     tempTroubleMarker.setMap(map);
-    map.setZoom(18);
+    map.setZoom(17);
     map.setCenter(resetLocation(e.lnglat));
     $('select option').removeAttr('selected');
     $(`select option:contains("未定义地点")`).attr('selected', 'selected');
@@ -188,6 +189,7 @@ $(function () {
     if(areaName === '未定义地点') {
       tempTroubleMarker.setPosition(center);
       tempTroubleMarker.setMap(map);
+      map.setZoom(17);
       map.setCenter(center);
     }
     companyPolygon.areas.forEach(function(value, index) {
@@ -196,6 +198,7 @@ $(function () {
         tempTroubleMarker.setPosition(polygonCenter(value));
         tempTroubleMarker.setMap(map);
         map.setCenter(polygonCenter(value));
+        map.setZoom(17);
       }
     });
   });
