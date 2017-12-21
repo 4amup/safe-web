@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
       troubles.push(trouble);
     }
     // 将处理后的数据传输到前端页面
-    res.render('index', { title: '开发中的首页', troubles: troubles});
+    res.render('index', { title: '安全隐患追踪系统（Hidden Danger Tracker System）', troubles: troubles});
   })
 
 });

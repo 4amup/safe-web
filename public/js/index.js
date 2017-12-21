@@ -158,6 +158,7 @@ $(function () {
     });
   });
 
+  // 监听点击操作，添加标记marker
   map.on('click', function(e) {
     tempTroubleMarker.setPosition(resetLocation(e.lnglat));
     tempTroubleMarker.setMap(map);

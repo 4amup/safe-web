@@ -22,6 +22,7 @@
 #reformBox {
   display: none;
 }
+
 .mui-switch {
   width: 52px;
   height: 31px;
@@ -62,4 +63,23 @@
 }
 .mui-switch:checked:before {
   left: 21px;
+}
+
+#formBox textarea {
+  resize: none;
+  overflow: hidden;
+  outline-style:none;
+  height: 3em;
+  width: 100%;
+}
+.icon {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+}
+.icon.location {
+  background-image: url('../images/location_icon.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
