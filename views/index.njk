@@ -27,7 +27,7 @@
           <textarea name="troubleDescription" placeholder="请在此处描述问题隐患..."></textarea>
         </div>
         <div>
-          <input type="file" name="troubleImg" accept="image/*"/>
+          <input type="file" name="troubleImg" accept="image/*" multiple="multiple">
         </div>
         <div>
           <input type="date" name="troubleDate">
@@ -36,7 +36,7 @@
         <div>
           <i class="icon location"></i>
           <select name="troubleArea" id="area">
-            <option>未定义地点</option>
+            <option>地点未定义</option>
           </select>
         </div>
       </div>
@@ -49,7 +49,7 @@
 
       <div class="renovationBox" style="display:none">
         <div>
-          <textarea name="renovationText" rows="3" cols="20" placeholder="请在此处描述整改措施..." resize="none" overflow: auto></textarea>
+          <textarea name="renovationText" rows="3" cols="20" placeholder="请在此处描述整改措施..."></textarea>
         </div>
         <div>
           <input type="file" name="renovationImg" accept="image/*"/>

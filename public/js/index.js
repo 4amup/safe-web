@@ -84,12 +84,13 @@ $(function () {
         name: value.name
       });
       $('select[name="troubleArea"]').append($('<option></option').text(value.name));
-      // 绑定事件，自动识别单位信息
+      // 绑定事件，自动识别单位位置信息
       areaPolygon.on('click', function(e) {
         var text = e.target.getExtData().name;
         $('select option').removeAttr('selected');
         $(`select option:contains(${text})`).attr('selected', 'selected');
         tempTroubleMarker.setPosition(e.lnglat);
+        tempTroubleMarker.setAnimation('AMAP_ANIMATION_NONE');
         tempTroubleMarker.setMap(map);
         map.setCenter(e.lnglat);
         map.setZoom(17);
@@ -103,11 +104,15 @@ $(function () {
 
   // 上传前得到上传文件信息，读取exif的时间和定位信息，然后改变相应的表单内容
   $('input[type="file"]').on('change', function(e){ // 监听fileInput文件上传框的内容改变事件
-    var dateInput = $(e.target).parent().next().find('input[type="date"]');
-    var timeInput = dateInput.next();
-    var _file = e.target.files[0]; // 原始文件信息
+    var files = e.target.files;
+    var firstFile = files[0]; // 根据第一个文件信息来定时间和位置
 
-    EXIF.getData(_file, function(){
+    // 先将照片信息取出来，显示到前端页面
+    EXIF.getData(firstFile, function(){
+      // input选择
+      var dateInput = $(e.target).parent().next().find('input[type="date"]');
+      var timeInput = dateInput.next();
+
       var _datetime = EXIF.getTag(this, 'DateTime'); // exif时间信息
       var _date, _time;
       // 前端显示时间
@@ -138,34 +143,55 @@ $(function () {
         var Lat = _gpsLat[0] + (_gpsLat[1]+_gpsLat[2]/60)/60;
         var Lng = _gpsLng[0] + (_gpsLng[1]+_gpsLng[2]/60)/60;
 
-        // 如果还没有由用户标记位置，则由gps信息定位位置，否则保留用户定义的位置
-        if(!tempTroubleMarker.getPosition()) {
-          // 使用坐标转行工具将gps坐标转换成高德坐标
-          AMap.convertFrom(Lng+','+Lat, 'gps', function(status, result) {
-            console.log(status);
-            var location = [result.locations[0].lng, result.locations[0].lat];
-            tempTroubleMarker.setPosition(resetLocation(location));
-            tempTroubleMarker.setMap(map);
-            map.setZoom(15);
-            map.setCenter(resetLocation(location));
-          });
-        }
+        // 每次重新上传图片，都重新刷新位置标记
+        AMap.convertFrom(Lng+','+Lat, 'gps', function(status, result) {// 使用坐标转行工具将gps坐标转换成高德坐标
+          console.log(status);
+          var location = [result.locations[0].lng, result.locations[0].lat];
+          tempTroubleMarker.setPosition(resetLocation(location));
+          tempTroubleMarker.setMap(map);
+          tempTroubleMarker.setAnimation('AMAP_ANIMATION_BOUNCE');
+          map.setZoom(17);
+          map.setCenter(resetLocation(location));
+          $('select option').removeAttr('selected');
+          $(`select option:contains("地点未定义")`).attr('selected', 'selected');
+          // 自动识别是哪个单位的区域，如果不在各定义单位，自动显示未定义地点
+          companyPolygon.areas.every(function(value, index) { // 这里使用every是因为可以自由跳出循环，forEach不行
+            if(value.contains(location)) {
+              var text = value.getExtData().name;
+              $('select option').removeAttr('selected');
+              $(`select option:contains(${text})`).attr('selected', 'selected');
+              tempTroubleMarker.setAnimation('AMAP_ANIMATION_NONE');
+              return false;
+            }
+            return true;
+          })
+        });
       } else {
         // to-do
-        // 将来可以添加到页面提示信息栏目
+        // 自动聚焦到区域选择
+        tempTroubleMarker.setMap(map);
+        tempTroubleMarker.setPosition(center);
+        tempTroubleMarker.setAnimation('AMAP_ANIMATION_BOUNCE');
+        $('select option').removeAttr('selected');
+        $(`select option:contains("地点未定义")`).attr('selected', 'selected');
+        $('select[name="troubleArea"]').focus();
         console.log('照片无gps信息，请手动在地图上点击，添加位置信息');
       }
     });
+
+    // 自动ajax上传
+    $.ajax()
   });
 
-  // 监听点击操作，添加标记marker
+  // 全地图监听点击操作，添加标记marker
   map.on('click', function(e) {
     tempTroubleMarker.setPosition(resetLocation(e.lnglat));
     tempTroubleMarker.setMap(map);
-    map.setZoom(17);
+    tempTroubleMarker.setAnimation('AMAP_ANIMATION_NONE');
+    map.setZoom(15);
     map.setCenter(resetLocation(e.lnglat));
     $('select option').removeAttr('selected');
-    $(`select option:contains("未定义地点")`).attr('selected', 'selected');
+    $(`select option:contains("地点未定义")`).attr('selected', 'selected');
   });
 
   // 工具函数，判断点是否在公司范围内
@@ -204,7 +230,7 @@ $(function () {
     });
   });
 
-  // 多边形中心公式
+  // 多边形中心公式，主动点选单位后，自动将marker放到单位的中心点
   function polygonCenter (polygon) {
     var array = polygon.getPath()
     var lng = 0
