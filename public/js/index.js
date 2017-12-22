@@ -275,14 +275,13 @@ $(function () {
   $('#form').submit(function(e) {
     e.preventDefault();
     var form = $(this);
-    var troubleMarkerPosition = tempTroubleMarker.getPosition().map(function(value, index) {
-      return [value.lng, value.lat];
-    });
+    var troubleMarkerPosition = tempTroubleMarker.getPosition();
+    troubleMarkerPosition = JSON.stringify([troubleMarkerPosition.lng, troubleMarkerPosition.lat]);
 
     $.ajax({
       url:form.attr('action'),
       type: form.attr('method'),
-      data: form.serialize() + 'Markerposition' + JSON.stringify(troubleMarkerPosition)
+      data: form.serialize() + 'Markerposition' + troubleMarkerPosition
     })
   })
 });
