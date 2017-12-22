@@ -89,3 +89,18 @@ input:focus, select:focus, textarea:focus{
   background-size: cover;
   background-repeat: no-repeat;
 }
+.images {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.images img, .images input {
+  width: 4em;
+  height: 4em;
+}
+.images input {
+  background-image: url('../images/upload_image.png');
+  background-position: center;
+  background-size: cover;
+}

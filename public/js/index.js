@@ -179,8 +179,34 @@ $(function () {
       }
     });
 
+    var formData = new FormData();
+    for(var i=0; i<files.length; i++) {
+      formData.append(`images`, files[i]);
+    }
     // 自动ajax上传
-    $.ajax()
+    $.ajax({
+      url:'api/images',
+      type: 'POST',
+      data: formData,
+      async: false,
+      cache: false,
+      contentType: false,
+      processData: false
+    })
+    .done(function(files) {
+      var images = $('.images');
+      files = files.map(function(value, index) {
+        value.path = value.path.replace('public', '');
+        return value;
+      });
+      files.forEach(function(value, index) {
+        var image = $(`<image src='${value.path}'/>`);
+        images.append(image);
+      });
+    })
+    .fail(function() {
+      alert('上传图片失败');
+    });
   });
 
   // 全地图监听点击操作，添加标记marker
