@@ -27,7 +27,9 @@
           <textarea name="troubleDescription" placeholder="请在此处描述问题隐患..."></textarea>
         </div>
         <div class="images">
-          <input type="file" name="troubleImg" accept="image/*" multiple="multiple">
+          <div>
+              <input type="file" name="troubleImg" accept="image/*" multiple="multiple">
+          </div>
         </div>
         <div>
           <input type="date" name="troubleDate">
@@ -51,8 +53,10 @@
         <div>
           <textarea name="renovationText" rows="3" cols="20" placeholder="请在此处描述整改措施..."></textarea>
         </div>
-        <div>
-          <input type="file" name="renovationImg" accept="image/*"/>
+        <div class="images">
+          <div>
+            <input type="file" name="renovationImg" accept="image/*" multiple="multiple">
+          </div>
         </div>
         <div>
           <input type="date" name="renovationDate">

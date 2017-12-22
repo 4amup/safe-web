@@ -1,3 +1,8 @@
+div {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 input, select, textarea{
   outline: none;
 }
@@ -95,11 +100,15 @@ input:focus, select:focus, textarea:focus{
   justify-content: flex-start;
   flex-wrap: wrap;
 }
-.images img, .images input {
+.images img, .images div, .images div input {
   width: 4em;
   height: 4em;
 }
-.images input {
+.images div input{
+  opacity:0;
+  cursor: pointer;
+}
+.images div {
   background-image: url('../images/upload_image.png');
   background-position: center;
   background-size: cover;
