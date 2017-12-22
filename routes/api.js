@@ -44,8 +44,15 @@ router.get('/', function (req, res, next) {
   })
 });
 
-// 首页提交数据
-// 解析post请求，将解析内容写入数据库
+// ajax接收首页问题上传
+router.post('/', function(req, res, next) {
+  Trouble.create(req.body)
+  .then(function(trouble) {
+    res.send('创建问题成功')
+  });
+})
+
+// 接收图片的ajax上传
 router.post('/images',upload.array('images', 9), function(req, res, next) {
   res.send(req.files);
 });

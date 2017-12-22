@@ -130,11 +130,9 @@ $(function () {
       if (_datetime) { // 将有时间信息的照片的时间输入框设为不可编辑
         _datetime = _datetime.split(' ');
         _date = _datetime[0].split(':').join('-');
-        _time = _datetime[1];
+        _time = _datetime[1].substring(0,5);
         dateInput.val(_date);
         timeInput.val(_time);
-        dateInput.attr('disabled','disabled');
-        timeInput.attr('disabled','disabled');
       }
 
       // 如果是问题提交，则取gps信息，如果是整改，不提取gps信息
@@ -275,13 +273,39 @@ $(function () {
   $('#form').submit(function(e) {
     e.preventDefault();
     var form = $(this);
+    var addObject = '&Markerposition=';
     var troubleMarkerPosition = tempTroubleMarker.getPosition();
     troubleMarkerPosition = JSON.stringify([troubleMarkerPosition.lng, troubleMarkerPosition.lat]);
+    addObject += troubleMarkerPosition;
+    
+    // 路径集合
+    var troubleImagesPath = [];
+    var renovationImagesPath = [];
+
+    $('.troubleBox .images img').each(function(index, elem) {
+      troubleImagesPath.push(elem.src);
+    });
+
+    $('.renovationBox .images img').each(function(index, elem) {
+      renovationImagesPath.push(elem.src);
+    });
+
+    troubleImagesPath = '&troubleImagesPath=' + JSON.stringify(troubleImagesPath);
+    renovationImagesPath = '&renovationImagesPath=' + JSON.stringify(renovationImagesPath);
+
+    addObject += troubleImagesPath;
+    addObject += renovationImagesPath;
 
     $.ajax({
       url:form.attr('action'),
       type: form.attr('method'),
-      data: form.serialize() + 'Markerposition' + troubleMarkerPosition
+      data: form.serialize() + addObject
+    })
+    .done(function(msg) {
+      alert(msg);
+    })
+    .fail(function() {
+      alert('上传问题失败！');
     })
   })
 });

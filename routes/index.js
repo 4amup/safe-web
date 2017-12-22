@@ -5,9 +5,7 @@ var Trouble = model.Trouble;
 
 // 首页get请求
 router.get('/', function(req, res, next) {
-  Trouble.findAll({
-    attributes: ['id', 'imageDescription', 'imagePath', 'Lng', 'Lat']
-  })
+  Trouble.findAll()
   .then(troubles => {
     if (troubles.length) {
       // troubles

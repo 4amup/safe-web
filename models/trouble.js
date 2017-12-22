@@ -33,6 +33,10 @@ module.exports = db.defineModel('trouble', {
     comment: '整改时间',
     allowNull: true
   },
+  renovationStatus: {
+    type: db.STRING,
+    comment: '问题状态，是否整改'
+  },
   // 除表单中的属性，自定义的部分属性
   Markerposition: {
     type: db.STRING,
