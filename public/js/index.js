@@ -31,6 +31,8 @@ $(function () {
     // layers: [new AMap.TileLayer.Satellite()],
   });
 
+  var markers = [];
+
   // 定义临时marker
   var tempTroubleMarker = new AMap.Marker({
     // icon: new AMap.Icon({
@@ -55,7 +57,29 @@ $(function () {
     fillOpacity: 0.35,
     bubble: true,
   });
+
   companyPolygon.areas = [];
+  // 异步请求问题数据，并在地图渲染
+  $.ajax({
+    url: 'api/',
+    type: 'GET',
+    dataType: 'json'
+  })
+  .done(function(troubles) {
+    troubles.forEach(function(value, index) {
+      var marker = new AMap.Marker({
+        position: JSON.parse(value.Markerposition),
+        extData: {
+          id: value.id
+        }
+      });
+      marker.setMap(map);
+      markers.push(marker)
+    })
+  })
+  .fail(function() {
+    console.log('服务器暂无保存的问题')
+  })
 
   // 异步请求公司数据，在地图上渲染路径
   $.ajax({
@@ -301,11 +325,16 @@ $(function () {
       type: form.attr('method'),
       data: form.serialize() + addObject
     })
-    .done(function(msg) {
-      alert(msg);
+    .done(function(trouble) {
+      var marker = new AMap.Marker({
+        position: JSON.parse(trouble.Markerposition)
+      });
+      marker.setMap(map);
+      $('#troubleList').prepend($(`<li>${trouble.troubleDescription}</li>`));
+      alert('提交问题成功！');
     })
     .fail(function() {
-      alert('上传问题失败！');
+      alert('提交问题失败！');
     })
   })
 });

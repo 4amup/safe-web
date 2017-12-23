@@ -21,34 +21,18 @@ var upload = multer({ storage: storage }); // 规定文件储存位置
 router.get('/', function (req, res, next) {
   // 数据库中查询出内容
 
-  Trouble.findAll({
-    attributes: ['id', 'imageDescription', 'imagePath', 'Lng', 'Lat']
-  })
+  Trouble.findAll()
   .then(troubles => {
-    if (troubles.length) {
-      // troubles
-      console.log(`共查询到${troubles.length}条问题，API数据提供正常`);
-    } else {
-      console.log('数据库查询结果为空，显示默认内容');
-      // 默认数据格式
-      var trouble = {
-        imageDescription: '无数据，显示默认内容',
-        imagePath: 'example/example.jpg',
-        Lng: 45.716503,
-        Lat: 126.678114
-      }
-      troubles.push(trouble);
-    }
     // 将处理后的数据传输到前端页面
     res.send(troubles);
-  })
+  });
 });
 
 // ajax接收首页问题上传
 router.post('/', function(req, res, next) {
   Trouble.create(req.body)
   .then(function(trouble) {
-    res.send('创建问题成功')
+    res.send(trouble);
   });
 })
 
