@@ -17,7 +17,7 @@ $(function () {
   var time = `${hours}:${minutes}`;
   $('input[type="date"]').val(date);
   $('input[type="time"]').val(time);
-  console.log('照片无时间信息，添加当前时间');
+  console.log('问题发生事件初始化为当前时间');
 
   var center = [126.677706, 45.714858];
   // 定义公司范围，随后通过ajax绘制后异步显示地图
