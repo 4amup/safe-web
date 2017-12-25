@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% block content %}
 <h1>{{ title }}</h1>
+<h2>问题概况</h2>
 <p>{{ trouble.troubleDescription }}</p>
 <p>{{ trouble.troubleArea }}</p>
 <p>{{ trouble.troubleDate }}</p>
@@ -8,4 +9,28 @@
 {% for img in trouble.troubleImagesPath %}
 <img src={{ img }}>
 {% endfor %}
+{% if trouble.renovationStatus == 'on' %}
+<h2>整改概况</h2>
+{% for img in trouble.renovationImagesPath %}
+<img src={{ img }}>
+{% endfor %}
+{% else %}
+    <form action="/api" method="post" enctype="multipart/form-data" id="form">
+    <div>
+        <textarea name="renovationText" rows="3" cols="20" placeholder="请在此处描述整改措施..."></textarea>
+    </div>
+    <div class="images">
+        <div>
+        <input type="file" name="renovationImg" accept="image/*" multiple="multiple">
+        </div>
+    </div>
+    <div>
+        <input type="date" name="renovationDate">
+        <input type="time" name="renovationTime">
+    </div>
+      <div>
+        <input type="submit" value="提交">
+      </div>
+    </form>
+{% endif %}
 {% endblock %}

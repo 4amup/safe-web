@@ -35,7 +35,9 @@ module.exports = db.defineModel('trouble', {
   },
   renovationStatus: {
     type: db.STRING,
-    comment: '问题状态，是否整改'
+    comment: '问题状态，是否整改',
+    allowNull: true,
+    defaultValue: 'false'
   },
   // 除表单中的属性，自定义的部分属性
   Markerposition: {
