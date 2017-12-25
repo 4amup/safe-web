@@ -59,6 +59,7 @@ $(function () {
   });
 
   companyPolygon.areas = [];
+
   // 异步请求问题数据，并在地图渲染
   $.ajax({
     url: 'api/',
@@ -70,11 +71,24 @@ $(function () {
       var marker = new AMap.Marker({
         position: JSON.parse(value.Markerposition),
         extData: {
-          id: value.id
+          id: value.id,
         }
       });
       marker.setMap(map);
-      markers.push(marker)
+
+      var info = [];
+      info.push(value.troubleArea);
+      info.push(`<img style="width:250px; height:150px" src="${JSON.parse(value.troubleImagesPath)[0]}">`);
+      info.push(`<a href="trouble/${value.id}">查看详情</a>`);
+      var infoWindow = new AMap.InfoWindow({
+        content: info.join("<br/>"),  //使用默认信息窗体框样式，显示信息内容
+        size: new AMap.Size(300, 220)
+      });
+
+      marker.on('click', function() {
+        infoWindow.open(map, JSON.parse(value.Markerposition));
+      });
+      markers.push(marker);
     })
   })
   .fail(function() {
@@ -170,7 +184,6 @@ $(function () {
 
           // 每次重新上传图片，都重新刷新位置标记
           AMap.convertFrom(Lng+','+Lat, 'gps', function(status, result) {// 使用坐标转行工具将gps坐标转换成高德坐标
-            console.log(status);
             var location = [result.locations[0].lng, result.locations[0].lat];
             tempTroubleMarker.setPosition(resetLocation(location));
             tempTroubleMarker.setMap(map);
@@ -301,7 +314,7 @@ $(function () {
     var troubleMarkerPosition = tempTroubleMarker.getPosition();
     troubleMarkerPosition = JSON.stringify([troubleMarkerPosition.lng, troubleMarkerPosition.lat]);
     addObject += troubleMarkerPosition;
-    
+
     // 路径集合
     var troubleImagesPath = [];
     var renovationImagesPath = [];
@@ -330,7 +343,7 @@ $(function () {
         position: JSON.parse(trouble.Markerposition)
       });
       marker.setMap(map);
-      $('#troubleList').prepend($(`<li>${trouble.troubleDescription}</li>`));
+      $('#troubleList').prepend($(`<li><a href="/trouble/${trouble.id}">${trouble.troubleDescription}</a></li>`));
       alert('提交问题成功！');
     })
     .fail(function() {

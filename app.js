@@ -12,6 +12,7 @@ var users = require('./routes/users');
 var api = require('./routes/api');
 var admin = require('./routes/admin');
 var reglog = require('./routes/reglog');
+var trouble = require('./routes/trouble');
 
 var app = express();
 
@@ -36,7 +37,7 @@ app.use('/users', users);
 app.use('/', reglog);
 app.use('/api', api);
 app.use('/admin', admin);
-
+app.use('/trouble', trouble);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

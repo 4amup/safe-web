@@ -13,9 +13,9 @@
   <div id="troublesBox">
     <ul id="troubleList">
       {% for trouble in troubles %}
-      <li>{{ trouble.troubleDescription }}</li>
-      {% else %}
-        <li>无内容，渲染错误</li>
+      <li>
+        <a href="/trouble/{{trouble.id}}">{{ trouble.troubleDescription }}</a>
+      </li>
       {% endfor %}
     </ul>
   </div>
