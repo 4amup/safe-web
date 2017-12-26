@@ -5,13 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var nunjucks = require('nunjucks');
+var session = require('express-session');
 
 // 引入路由文件
 var index = require('./routes/index');
 var users = require('./routes/users');
 var api = require('./routes/api');
 var admin = require('./routes/admin');
-var reglog = require('./routes/reglog');
+var acount = require('./routes/acount');
 var trouble = require('./routes/trouble');
 
 var app = express();
@@ -30,11 +31,15 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+  secret: 'test',
+  cookie: {maxAge: 1000 * 60 * 5} // 过期时间五分钟，session依赖于cookie
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/', reglog);
+app.use('/', acount);
 app.use('/api', api);
 app.use('/admin', admin);
 app.use('/trouble', trouble);

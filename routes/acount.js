@@ -12,6 +12,7 @@ router.post('/register', function(req, res, next) {
   User.create(req.body)
   .then(user => {
     console.log(`已经将${user}数据添加到数据库中`);
+    console.log('注册成功，将跳转到登录页...');
     res.redirect('/login');
   });
 });
@@ -26,6 +27,7 @@ router.get('/login', function (req, res, next) {
 router.post('/login', function (req, res, next) {
   var email = req.body.email;
   var password = req.body.password;
+  res.redirect('/');
 })
 
 module.exports = router;
