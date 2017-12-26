@@ -1,9 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+}
 body {
-  padding: 50px;
+  /* padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
 a {
+  display: block;
   color: #00B7FF;
 }
 
@@ -12,4 +16,38 @@ h1 {
 }
 img {
   width: 200px;
+}
+
+nav {
+  background: lightslategrey;
+  height: 60px;
+  padding: 0 30px;
+  width: auto;
+}
+nav a {
+  display: inline-block;
+  height: 100%;
+}
+nav .logo img{
+  width: 60px;
+  height: 60px;
+}
+nav ul {
+  float: right;
+  height: 100%;
+  font-size: 12px;
+}
+nav ul li {
+  display: inline-block;
+  height: inherit;
+  margin: 0 5px;
+}
+nav ul a {
+  color: #ffffff;
+  display: inline-block;
+  height: 100%;
+  /*垂直居中的办法就是line-height*/
+  line-height: 60px;
+  text-decoration: none;
+  margin: auto 0;
 }

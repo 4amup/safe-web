@@ -11,6 +11,19 @@
   <title>{{ title }}</title>
 </head>
 <body>
+  {% block header %}
+<nav>
+  <a class="logo" href="/">
+    <img src="/images/logo.png" alt="logo">
+  </a>
+  <ul>
+    <li><a href="#">链接二</a></li>
+    <li><a href="#">链接三</a></li>
+    <li><a href="#">链接四</a></li>
+    <li><a href="/admin">管理员</a></li>
+  </ul>
+</nav>
+{% endblock %}
   {% block content %}
   内容模块默认显示内容
   {% endblock %}
