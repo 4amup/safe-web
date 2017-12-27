@@ -11,18 +11,7 @@
   <title>{{ title }}</title>
 </head>
 <body>
-  {% block header %}
-<nav>
-  <a class="logo" href="/">
-    <img src="/images/logo.png" alt="logo">
-  </a>
-  <ul>
-    <li><a href="/register">注册</a></li>
-    <li><a href="/login">登录</a></li>
-    <li><a href="/admin">管理员</a></li>
-  </ul>
-</nav>
-{% endblock %}
+  {% include './parts/navbar.njk' %}
   {% block content %}
   内容模块默认显示内容
   {% endblock %}

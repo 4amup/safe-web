@@ -12,7 +12,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var api = require('./routes/api');
 var admin = require('./routes/admin');
-var acount = require('./routes/acount');
+var account = require('./routes/account');
 var trouble = require('./routes/trouble');
 
 var app = express();
@@ -36,33 +36,17 @@ app.use(session({
   cookie: {maxAge: 1000 * 60 * 5} // 过期时间五分钟，session依赖于cookie
 }));
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(passport.initialize());
-// app.use(passport.session());
 
-// 自定义中间件
-// app.use(require('./lib/user')) // 自定义了一个通过session给页面传递user变量的中间件
-// session
-// app.use(function (req, res, next) {
-//   if (!req.session.views) {
-//     req.session.views = {}
-//   }
+app.use(require('./lib/user'));
 
-//   // get the url pathname
-//   var pathname = parseurl(req).pathname
-
-//   // count the views
-//   req.session.views[pathname] = (req.session.views[pathname] || 0) + 1
-
-//   next()
-// })
-
-
+//路由
 app.use('/', index);
 app.use('/users', users);
-app.use('/', acount);
+app.use('/', account);
 app.use('/api', api);
 app.use('/admin', admin);
 app.use('/trouble', trouble);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

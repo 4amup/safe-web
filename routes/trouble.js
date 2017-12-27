@@ -10,7 +10,8 @@ router.get('/:trouble_id', function(req, res, next) {
     trouble.renovationImagesPath = JSON.parse(trouble.renovationImagesPath);
     res.render('trouble', {
       title: trouble.troubleDescription,
-      trouble: trouble
+      trouble: trouble,
+      locals: res.locals
     });
   });
 });

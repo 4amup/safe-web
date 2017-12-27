@@ -1,0 +1,16 @@
+
+<nav>
+  <a class="logo" href="/">
+    <img src="/images/logo.png" alt="logo">
+  </a>
+  <ul>
+    {% if (locals.user) %}
+    <li><a href="#">{{locals.user.name}}</a></li>
+    <li><a href="/logout">注销登录</a></li>
+    {% else %}
+    <li><a href="/register">注册</a></li>
+    <li><a href="/login">登录</a></li>
+    {% endif %}
+    <li><a href="/admin">管理员</a></li>
+  </ul>
+</nav>

@@ -8,7 +8,11 @@ router.get('/', function(req, res, next) {
   Trouble.findAll()
   .then(troubles => {
     // 将处理后的数据传输到前端页面
-    res.render('index', { title: '安全隐患追踪系统', troubles: troubles});
+    res.render('index', {
+      title: '安全隐患追踪系统',
+      troubles: troubles,
+      locals: res.locals
+    });
   });
 });
 
