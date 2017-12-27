@@ -36,6 +36,26 @@ app.use(session({
   cookie: {maxAge: 1000 * 60 * 5} // 过期时间五分钟，session依赖于cookie
 }));
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use(passport.initialize());
+// app.use(passport.session());
+
+// 自定义中间件
+// app.use(require('./lib/user')) // 自定义了一个通过session给页面传递user变量的中间件
+// session
+// app.use(function (req, res, next) {
+//   if (!req.session.views) {
+//     req.session.views = {}
+//   }
+
+//   // get the url pathname
+//   var pathname = parseurl(req).pathname
+
+//   // count the views
+//   req.session.views[pathname] = (req.session.views[pathname] || 0) + 1
+
+//   next()
+// })
+
 
 app.use('/', index);
 app.use('/users', users);
