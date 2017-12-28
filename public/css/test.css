@@ -1,0 +1,112 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* base css */
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #EBEBEB;
+  min-height: 300px;
+}
+a {
+  display: block;
+  text-decoration: none;
+  color: #00B7FF;
+}
+ul, li {
+  list-style: none;
+}
+
+/* 导航栏 */
+nav {
+  background: lightslategrey;
+  height: 60px;
+  padding: 0 30px;
+  width: auto;
+}
+nav a {
+  display: inline-block;
+  height: 100%;
+}
+nav .logo img{
+  width: 60px;
+  height: 60px;
+}
+nav ul {
+  float: right;
+  height: 100%;
+  font-size: 12px;
+}
+nav ul li {
+  display: inline-block;
+  height: inherit;
+  margin: 0 5px;
+}
+nav ul a {
+  color: #ffffff;
+  display: inline-block;
+  height: 100%;
+  line-height: 60px;  /*垂直居中的办法就是line-height*/
+  text-decoration: none;
+  margin: auto 0;
+}
+
+/* container区域开始 */
+.container {
+  width: 1000px;
+  margin: 15px auto;
+  min-height: 100px;
+  background-color: burlywood;
+}
+
+/* detail左侧区域开始 */
+.container .detail_left {
+  width: 704px;
+  margin-right: 16px;
+  position: relative;
+  min-height: 50px;
+  float: left;
+  background-color: aqua;
+}
+.container .detail_left .detail_info {
+  width: 100%;
+  background-color: aliceblue;
+}
+.container .detail_left .detail_info .detail_title {
+	padding: 20px 20px;
+	font-size: 24px;
+	font-weight: 400;
+}
+.container .detail_left .detail_info .detail_specific {
+	margin-top: 10px;
+	margin-left: 20px;
+	overflow: hidden;
+	padding-bottom: 14px;
+}
+.detail_pic {
+	float: left;
+}
+
+.detail_pic img {
+	width: 278px;
+	height: 214px;
+}
+
+.detail_description {
+	height: 214px;
+	position: relative;
+	float: left;
+	margin-left: 12px;
+}
+/* detail左侧区域结束 */
+
+/* detail右侧区域开始 */
+.container .detail_right {
+  width: 280px;
+  position: relative;
+  min-height: 50px;
+  float: right;
+  background-color: aqua;
+}
+/* container区域结束 */
