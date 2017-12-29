@@ -7,7 +7,7 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 a {
-  display: block;
+  text-decoration: none;
   color: #00B7FF;
 }
 
@@ -51,3 +51,31 @@ nav ul a {
   text-decoration: none;
   margin: auto 0;
 }
+
+/* footer部分开始 */
+.footer {
+  position: absolute;
+  bottom: 0;
+  background-color: bisque;
+  width: 100%;
+	margin: 0px auto;
+	font-size: 12px;
+	text-align: center;
+}
+.footer p {
+	line-height: 20px;
+}
+.footer .links {
+	margin-top: 28px;
+	color: #A4A4A4;
+}
+.footer .links a {
+	padding-left: 5px;
+	padding-right: 5px;
+	color: #A4A4A4;
+}
+.footer .declare {
+	margin-top: 5px;
+	margin-bottom: 13px;
+}
+/* footer部分结束 */
