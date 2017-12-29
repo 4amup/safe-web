@@ -13,8 +13,8 @@
 ~~[腾讯地图api](http://bbs.map.qq.com/thread-8859-1-1.html)，[百度地图电子围栏开发](http://www.cnblogs.com/dongh/p/6589503.html)~~
 使用高德地图的多边形覆盖物完美解决，相比于腾讯更加精确范围。
 * [x] setCompany页面，为特定权限用户添加功能-自己划定自己管理的区域，即一个[多边形覆盖物](http://lbs.qq.com/javascript_v2/doc/polygon.html)（电子围栏）；
-* [x]setDepartment页面，划线将自己单位存好，确定后上传数据至后端
-* [x]setArea页面，划线将自己单位的小区域存好，确定后上传数据至后端
+* [x] setDepartment页面，划线将自己单位存好，确定后上传数据至后端
+* [x] setArea页面，划线将自己单位的小区域存好，确定后上传数据至后端
 * [ ] 哪块隐患大，问题多，定位相关区域后，提示普通用户，使用热力图api
 * [ ] 添加隐患评论功能
 ## 使用场景分析
