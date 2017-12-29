@@ -35,11 +35,10 @@ $(function () {
 
   // 定义临时marker
   var tempTroubleMarker = new AMap.Marker({
-    // animation: 'AMAP_ANIMATION_BOUNCE',
     cursor: 'move',
     icon: new AMap.Icon({
       size: new AMap.Size(36, 36),  //图标大小
-      image: "images/todo_brand.png",
+      image: "images/todo.gif",
       imageOffset: new AMap.Pixel(-8, 2),
       imageSize: new AMap.Size(36, 36)
     })
@@ -202,7 +201,6 @@ $(function () {
             var location = [result.locations[0].lng, result.locations[0].lat];
             tempTroubleMarker.setPosition(resetLocation(location));
             tempTroubleMarker.setMap(map);
-            tempTroubleMarker.setAnimation('AMAP_ANIMATION_BOUNCE');
             map.setZoom(17);
             map.setCenter(resetLocation(location));
             $('select option').removeAttr('selected');
@@ -225,7 +223,6 @@ $(function () {
           // 自动聚焦到区域选择
           tempTroubleMarker.setMap(map);
           tempTroubleMarker.setPosition(center);
-          tempTroubleMarker.setAnimation('AMAP_ANIMATION_BOUNCE');
           $('select option').removeAttr('selected');
           $(`select option:contains("地点未定义")`).attr('selected', 'selected');
           $('select[name="troubleArea"]').focus();
