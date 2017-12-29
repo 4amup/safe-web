@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+  <title>基本地图展示</title>
+  <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+  <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+  <script src="http://webapi.amap.com/maps?v=1.4.1&amp;key=da39f372043eb0cbed8885f2ab67c515"></script>      <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+</head>
+<body>
+<div id="container"></div>
+
+<script>
+  var center = [116.397428, 39.90923];
+  var map = new AMap.Map('container', {
+    resizeEnable: true,
+    zoom:18,
+    center: center
+  });
+  var init_marker = new AMap.Marker({
+    map: map,
+    position: center
+  });
+  var help_marker = new AMap.Marker({
+    map: map,
+    position: center,
+    icon: new AMap.Icon({
+      size: new AMap.Size(36, 36),  //图标大小
+      image: "../public/images/red_brand.png",
+      imageOffset: new AMap.Pixel(-8, 2)
+    })
+  })
+</script>
+</body>
+</html>
