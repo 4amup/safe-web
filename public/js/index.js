@@ -35,14 +35,14 @@ $(function () {
 
   // 定义临时marker
   var tempTroubleMarker = new AMap.Marker({
-    // icon: new AMap.Icon({
-    //     size: new AMap.Size(36, 36),  //图标大小
-    //     image: "../images/new.png",
-    //     imageOffset: new AMap.Pixel(0, 5),
-    //     imageSize: new AMap.Size(20, 20)
-    // }),
     // animation: 'AMAP_ANIMATION_BOUNCE',
     cursor: 'move',
+    icon: new AMap.Icon({
+      size: new AMap.Size(36, 36),  //图标大小
+      image: "images/todo_brand.png",
+      imageOffset: new AMap.Pixel(-8, 2),
+      imageSize: new AMap.Size(36, 36)
+    })
     // draggable: true,
     // raiseOnDrag: true
   });
@@ -70,10 +70,25 @@ $(function () {
     troubles.forEach(function(value, index) {
       var marker = new AMap.Marker({
         position: JSON.parse(value.Markerposition),
+        icon: new AMap.Icon({
+          size: new AMap.Size(36, 36),  //图标大小
+          image: "images/red_brand.png",
+          // imageOffset: new AMap.Pixel(-8, 2)
+          imageOffset: new AMap.Pixel(-8, 2),
+          imageSize: new AMap.Size(36, 36)
+        }),
         extData: {
           id: value.id,
         }
       });
+      if (value.renovationStatus === 'on') {
+        marker.setIcon(new AMap.Icon({
+          size: new AMap.Size(36, 36),  //图标大小
+          image: "images/green_brand.png",
+          imageOffset: new AMap.Pixel(-8, 2),
+          imageSize: new AMap.Size(36, 36)
+        }))
+      }
       marker.setMap(map);
 
       var info = [];
@@ -202,6 +217,7 @@ $(function () {
                 return false;
               }
               return true;
+              console.log('定位图标各家单位都不是');
             })
           });
         } else {
@@ -271,6 +287,7 @@ $(function () {
     if(companyPolygon.contains(l)) {
       return l;
     } else {
+      console.log('超出公司范围，将定位点重置为center')
       return center;
     }
   }
@@ -345,6 +362,7 @@ $(function () {
       marker.setMap(map);
       $('#troubleList').prepend($(`<li><a href="/trouble/${trouble.id}">${trouble.troubleDescription}</a></li>`));
       alert('提交问题成功！');
+      tempTroubleMarker.setMap(null); // 提交问题成功后，将原先的tempTroubleMarker删掉
     })
     .fail(function() {
       alert('提交问题失败！');

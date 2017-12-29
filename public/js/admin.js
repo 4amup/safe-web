@@ -1,6 +1,7 @@
 $(function() {
   $('form').attr('autocomplete', 'off');
   var areaIndex, areaItem;
+  var editTempPolygon;
  // 接着把绘制的多边形变成可编辑状态
   // 定义地图
   var map = new AMap.Map('map', {
@@ -11,9 +12,11 @@ $(function() {
       // showBuildingBlock: true,
       // layers: [new AMap.TileLayer.Satellite()],
   });
-  var tempPolygon = new AMap.Polygon({
+
+  // 点击增加时，地图上加上一个特殊颜色的polygon
+  var addPolygon = new AMap.Polygon({
     map: map,
-    strokeColor: "#33eeff",
+    strokeColor: "#d55d5c",
     strokeOpacity: 1,
     strokeWeight: 2,
     fillColor: "#f5dbe3",
@@ -42,15 +45,14 @@ $(function() {
     // 添加按钮组
     $('.buttonBox').show();
   });
-
   AMap.event.addListener(mouseTool,'draw',function(e){ // 监听鼠标画完事件
     var tempPath = e.obj.getPath();
     tempPath = tempPath.map(function(value, index) {
       return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
     });
     mouseTool.close(true); //画完后把画的图擦除
-    tempPolygon.setPath(tempPath);
-    editTempPolygon = new AMap.PolyEditor(map,tempPolygon); // 接着把绘制的多边形变成可编辑状态
+    addPolygon.setPath(tempPath);
+    editTempPolygon = new AMap.PolyEditor(map,addPolygon); // 接着把绘制的多边形变成可编辑状态
     editTempPolygon.open();
 
     // 添加编辑事件按钮事件
@@ -69,11 +71,10 @@ $(function() {
     $('#updateCompany').toggle();
     $('#updateCompany input:eq(0)').val($('.companyShow').find('span:eq(0)').text());
     $('#updateCompany input:eq(1)').val($('.companyShow').find('span:eq(1)').text());
-  });
-
-  // 编辑公司范围按钮
-  $('.companyBox').on('click', '#updateCompany .updatePolygon', function(ev) {
     map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
+    companyPolygon.setOptions({
+      strokeStyle: 'dashed'
+    })
     editCompanyPolygon = new AMap.PolyEditor(map,companyPolygon); // 接着把绘制的多边形变成可编辑状态
     editCompanyPolygon.open();
     $('.buttonBox').show();
@@ -86,6 +87,65 @@ $(function() {
       editCompanyPolygon.close();
     }, false);
   });
+
+  // 编辑部门消息按钮
+  $('.companyBox').on('click', '.editArea', function(ev) {
+    ev.preventDefault(); // 阻止默认链接跳转事件
+    areaItem = ev.target.closest('h5')
+    $('#updateArea').toggle(); //开关更新表单
+    $('#updateArea').attr('action', `api/company/areas/${areaItem.id}`); // action赋值
+    $('#updateArea input:eq(0)').val($(areaItem).find('span:eq(0)').text());
+    $('#updateArea input:eq(1)').val($(areaItem).find('span:eq(1)').text());
+
+    // 自动弹出编辑范围
+    areaIndex = $('.areaBox h5').index(areaItem); // area当前索引
+    map.setMapStyle('amap://styles/blue'); // 设置地图特殊样式，提示可以开始划范围了
+    editAreaPolygon = new AMap.PolyEditor(map,companyPolygon.areas[areaIndex]); // 接着把绘制的多边形变成可编辑状态
+    editAreaPolygon.open();
+    $('.buttonBox').show();
+    // 添加编辑事件按钮事件
+    AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
+      editAreaPolygon.open();
+    }, false);
+    // 添加结束编辑事件按钮事件
+    AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
+      editAreaPolygon.close();
+    }, false);
+  });
+
+  // // 编辑公司范围按钮
+  // $('.companyBox').on('click', '#updateCompany .updatePolygon', function(ev) {
+  //   map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
+  //   editCompanyPolygon = new AMap.PolyEditor(map,companyPolygon); // 接着把绘制的多边形变成可编辑状态
+  //   editCompanyPolygon.open();
+  //   $('.buttonBox').show();
+  //   // 添加编辑事件按钮事件
+  //   AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
+  //     editCompanyPolygon.open();
+  //   }, false);
+  //   // 添加结束编辑事件按钮事件
+  //   AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
+  //     editCompanyPolygon.close();
+  //   }, false);
+  // });
+
+  // // 编辑部门范围按钮
+  // $('.areaBox').on('click', '.updatePolygon', function(areaId) {
+  //   areaIndex = $('.areaBox h5').index(areaItem); // area当前索引
+  //   map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
+  //   editAreaPolygon = new AMap.PolyEditor(map,companyPolygon.areas[areaIndex]); // 接着把绘制的多边形变成可编辑状态
+  //   editAreaPolygon.open();
+  //   $('.buttonBox').show();
+  //   // 添加编辑事件按钮事件
+  //   AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
+  //     editAreaPolygon.open();
+  //   }, false);
+  //   // 添加结束编辑事件按钮事件
+  //   AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
+  //     editAreaPolygon.close();
+  //   }, false);
+  // });
+
 
   // 查-异步请求公司数据，在地图上绘制
   $.ajax({
@@ -198,35 +258,7 @@ $(function() {
     });
   });
 
-
-  // 编辑部门消息按钮
-  $('.companyBox').on('click', '.editArea', function(ev) {
-    ev.preventDefault(); // 阻止默认链接跳转事件
-    areaItem = ev.target.closest('h5')
-    $('#updateArea').toggle(); //打开更新表单
-    $('#updateArea').attr('action', `api/company/areas/${areaItem.id}`); // action赋值
-    $('#updateArea input:eq(0)').val($(areaItem).find('span:eq(0)').text());
-    $('#updateArea input:eq(1)').val($(areaItem).find('span:eq(1)').text());
-  });
-
-  // 编辑公司范围按钮
-  $('.areaBox').on('click', '.updatePolygon', function(areaId) {
-    areaIndex = $('.areaBox h5').index(areaItem); // area当前索引
-    map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
-    editAreaPolygon = new AMap.PolyEditor(map,companyPolygon.areas[areaIndex]); // 接着把绘制的多边形变成可编辑状态
-    editAreaPolygon.open();
-    $('.buttonBox').show();
-    // 添加编辑事件按钮事件
-    AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
-      editAreaPolygon.open();
-    }, false);
-    // 添加结束编辑事件按钮事件
-    AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
-      editAreaPolygon.close();
-    }, false);
-  });
-
-  // 查-异步请求公司数据，在地图上绘制
+  // 查-异步请求部门数据，在地图上绘制
   $.ajax({
     url: '/api/company/areas',
     type: 'GET',
@@ -278,7 +310,8 @@ $(function() {
         strokeWeight: 1,
         fillColor: "#f5dbe3",
         fillOpacity: 0.35,
-        id: area.id
+        id: area.id,
+        name: area.name
       });
       companyPolygon.areas.push(areaPolygon);
       // 前端显示刚上传的数据。

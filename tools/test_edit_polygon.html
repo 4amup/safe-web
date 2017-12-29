@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>测试编辑多边形</title>
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+    <script src="http://webapi.amap.com/maps?v=1.4.1&key=c5da74a5a86f1b5b119e5dd939bf49d0&plugin=AMap.PolyEditor,AMap.MouseTool"></script>
+</head>
+<body>
+<div id="container"></div>
+<div class="button-group">
+  <input type="button" class="button" value="开始编辑多边形" onClick="editor.startEditPolygon()"/>
+  <input type="button" class="button" value="结束编辑多边形" onClick="editor.closeEditPolygon()"/>
+</div>
+<script>
+    var editor = {};
+    var map = new AMap.Map("container", {
+        resizeEnable: true,
+        center: [116.403322, 39.900255],//地图中心点
+        zoom: 13 //地图显示的缩放级别
+    });
+    //在地图上绘制折线
+    editor._polygon=(function(){
+        var arr = [ //构建多边形经纬度坐标数组
+        [116.403322,39.920255],
+        [116.410703,39.897555],
+        [116.402292,39.892353],
+        [116.389846,39.891365]
+        ]
+        return new AMap.Polygon({
+            map: map,
+            path: arr,
+            strokeColor: "#0000ff",
+            strokeOpacity: 1,
+            strokeWeight: 3,
+            fillColor: "#f5deb3",
+            fillOpacity: 0.35
+        });
+    })();
+    map.setFitView();
+    editor._polygonEditor= new AMap.PolyEditor(map, editor._polygon);
+
+
+    editor.startEditPolygon=function(){
+        editor._polygonEditor.open();
+    }
+    editor.closeEditPolygon=function(){
+        editor._polygonEditor.close();
+    }
+
+</script>
+</body>
+</html>
