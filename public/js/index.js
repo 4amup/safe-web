@@ -354,7 +354,13 @@ $(function () {
     })
     .done(function(trouble) {
       var marker = new AMap.Marker({
-        position: JSON.parse(trouble.Markerposition)
+        position: JSON.parse(trouble.Markerposition),
+        icon: new AMap.Icon({
+          size: new AMap.Size(36, 36),  //图标大小
+          image: (trouble.renovationStatus == 'on') ? "images/green_brand.png" : "images/red_brand.png",
+          imageOffset: new AMap.Pixel(-8, 2),
+          imageSize: new AMap.Size(36, 36)
+        })    
       });
       marker.setMap(map);
       $('#troubleList').prepend($(`<li><a href="/trouble/${trouble.id}">${trouble.troubleDescription}</a></li>`));

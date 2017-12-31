@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>测试编辑多边形</title>
+</head>
+<body>
+    <h2>测试编辑多边形，解决无小圆点的bug</h2>
+<div id="container"></div>
+<div class="button-group">
+  <input type="button" class="button" value="开始编辑多边形" onClick="editor.startEditPolygon()"/>
+  <input type="button" class="button" value="结束编辑多边形" onClick="editor.closeEditPolygon()"/>
+</div>
+<script src="http://webapi.amap.com/maps?v=1.4.3&key=da39f372043eb0cbed8885f2ab67c515"></script>
+<script type="text/javascript">
+    var map = new AMap.Map('container', {
+       center:[117.000923,36.675807],
+       zoom:11
+    });
+
+    AMap.plugin('AMap.ToolBar',function(){
+       var toolbar = new AMap.ToolBar();
+       map.addControl(toolbar)
+    })
+</script>
+</body>
+</html>
