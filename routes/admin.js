@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   Company.findOne()
   .then(function (company) {
     if(company === null) {
-      res.render('admin', {title: '项目初始化', company: null, area: null});
+      res.render('admin', {title: '初始化'});
     } else {
       company.getAreas()
       .then(function (areas) {
