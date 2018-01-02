@@ -2,45 +2,55 @@
 {% extends "layout.njk" %}
 {# 首页自定义样式文件 #}
 {% block cssFiles %}
-<link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/admin.css">
 {% endblock %}
 {% block jsFiles %}
-<script src="http://webapi.amap.com/maps?v=1.4.3&key=da39f372043eb0cbed8885f2ab67c515&plugin=AMap.PolyEditor,AMap.MouseTool"></script>
+  <script src="http://webapi.amap.com/maps?v=1.4.3&key=da39f372043eb0cbed8885f2ab67c515&plugin=AMap.PolyEditor,AMap.MouseTool"></script>
+  <script src="js/admin.js"></script>
 {% endblock %}
 
 {% block content %}
 <h2>{{ title }}</h2>
 <div class="container">
+  <div class="tips">
+    <p>状态提示</p>
+  </div>
   <div class="companyBox">
     <div class="companyShow" id="{{ company.id }}">
-      <h3  style="display:none">
+      <h3 style="display:none">
         <span>{{ company.name }}</span>
         <span>{{ company.info }}</span>
-        <a href="" class="editCompany">edit</a>
-        <a href="api/company/{{company.id}}" class="deleteItem">del</a>
+        <a class="editCompany">编辑</a>
+        <a href="api/company/{{company.id}}" class="deleteItem">删除</a>
       </h3>
+      <div class="control_add" style="display:none">
+        <span>公司新建</span>
+        <button class="addForm">新建</button>
+        <button class="cancelForm">取消</button>
+      </div>
       <form action="api/company" method="POST" id="createCompany" style="display:none">
         <label>公司新建</label>
         <input type="text" name="name">
         <input type="text" name="info">
-        <input type="button" value="添加范围" class="createPolygon">
-        <input type="submit" value="新建">
+        <input type="submit" value="提交">
       </form>
       <form action="api/company/{{ company.id }}" method="PUT" id="updateCompany" style="display:none">
         <label>公司修改</label>
         <input type="text" name="name">
         <input type="text" name="info">
-        <input type="button" value="编辑范围" class="updatePolygon">
         <input type="submit" value="修改">
       </form>
     </div>
-
     <div class="areaBox" style="display:none">
-      <form action="api/company/{{ company.id }}/areas" method="POST" id="createArea">
+      <div class="control_add">
+        <span>部门新建</span>
+        <button class="addForm">新建</button>
+        <button class="cancelForm">取消</button>
+      </div>
+      <form action="api/company/{{ company.id }}/areas" method="POST" id="createArea" style="display:none">
         <label>部门新建</label>
         <input type="text" name="name">
         <input type="text" name="info">
-        <input type="button" value="添加范围" class="createPolygon">
         <input type="submit" value="新建">
       </form>
 
@@ -57,7 +67,6 @@
         <label>部门修改</label>
         <input type="text" name="name">
         <input type="text" name="info">
-        <input type="button" value="编辑范围" class="updatePolygon">
         <input type="submit" value="修改">
       </form>
     </div>
@@ -67,8 +76,7 @@
       <input type="button" id="editPolygon" value="编辑">
       <input type="button" id="overPolygon" value="结束编辑">
     </div>
-    <div id="map"></div>
+    <div id="map" style="height:500px"></div>
   </div>
 </div>
-<script src="js/admin.js"></script>
 {% endblock %}

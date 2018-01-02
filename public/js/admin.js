@@ -1,69 +1,81 @@
 $(function() {
+  // 第一部分初始化设置
+  var tips = $('.tips p');
   $('form').attr('autocomplete', 'off');
-  var areaIndex, areaItem;
-  var editTempPolygon;
- // 接着把绘制的多边形变成可编辑状态
-  // 定义地图
-  var map = new AMap.Map('map', {
-      center: [126.683507, 45.713941],
-      zoom: 16,
-      rotateEnable: true,
-      resizeEnable: true,
-      // showBuildingBlock: true,
-      // layers: [new AMap.TileLayer.Satellite()],
+
+  var map = new AMap.Map('map', { // 初始化地图
+    center: [126.683507, 45.713941],
+    zoom: 16,
   });
 
-  // 点击增加时，地图上加上一个特殊颜色的polygon
-  var addPolygon = new AMap.Polygon({
+  var tempPolygon = new AMap.Polygon({ // 初始化编辑状态的polygon
     map: map,
-    strokeColor: "#d55d5c",
+    strokeColor: "#d55d5c", // 配置线条颜色
     strokeOpacity: 1,
-    strokeWeight: 2,
-    fillColor: "#f5dbe3",
+    strokeWeight: 1,
+    fillColor: "#f5dbe3", // 配置填充色
     fillOpacity: 0.35,
-    strokeStyle: 'dashed'
+    strokeStyle: 'dashed', // 配置线条样式
   });
-  // 加载鼠标绘制多边形插件
-  var mouseTool = new AMap.MouseTool(map); //在地图中添加MouseTool插件
-  map.plugin(mouseTool);
 
-  // 定义公司
-  var companyPolygon = new AMap.Polygon({
+  var companyPolygon = new AMap.Polygon({   // 初始化公司
     map: map,
     strokeColor: "#0000ff",
     strokeOpacity: 1,
     strokeWeight: 1,
     fillColor: "#f5deb3",
     fillOpacity: 0.35,
-  });
-  companyPolygon.areas = [];
+    });
+  companyPolygon.areas = []; // 初始化公司下的部门区域
 
-  // 增加公司范围按钮
-  $('.companyBox').on('click', '.createPolygon', function() {
-    map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
-    mouseTool.polygon();
-    // 添加按钮组
-    $('.buttonBox').show();
-  });
-  AMap.event.addListener(mouseTool,'draw',function(e){ // 监听鼠标画完事件
+  var mouseTool = new AMap.MouseTool(map); //在地图中添加MouseTool插件
+  map.plugin(mouseTool);
+
+  var editingPolygon;// 编辑状态下的polygon
+
+  AMap.event.addListener(mouseTool,'draw',function(e){ // 画完范围后自动启用编辑状态
     var tempPath = e.obj.getPath();
     tempPath = tempPath.map(function(value, index) {
-      return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
+        return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
     });
     mouseTool.close(true); //画完后把画的图擦除
-    addPolygon.setPath(tempPath);
-    editTempPolygon = new AMap.PolyEditor(map,addPolygon); // 接着把绘制的多边形变成可编辑状态
-    editTempPolygon.open();
+    tempPolygon.setPath(tempPath);
+    editingPolygon = new AMap.PolyEditor(map,tempPolygon); // 接着把绘制的多边形变成可编辑状态
+    editingPolygon.open();
 
     // 添加编辑事件按钮事件
     AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
-      editTempPolygon.open();
+      editingPolygon.open();
     }, false);
     // 添加结束编辑事件按钮事件
     AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
-      editTempPolygon.close();
+      editingPolygon.close();
     }, false);
   });
+
+  // 功能化按钮事件绑定
+  $('.companyBox').on('click', '.addForm:button', function(ev) {
+    var addForm = $(ev.target).parent().next('form[id^="create"]');
+    addForm.show(); //显示增加表单
+
+    map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
+    mouseTool.polygon(); //开始绘制
+    $('.buttonBox').show(); //地图按钮组显示
+  });
+
+  $('.companyBox').on('click', '.cancelForm:button', function(ev) {
+    var addForm = $(ev.target).parent().next('form[id^="create"]');
+    addForm.hide();
+
+    map.setMapStyle('amap://styles/normal');
+    if(editingPolygon) {
+      editingPolygon.close();
+    }
+    tempPolygon.setMap(null);
+    $('.buttonBox').hide(); //地图按钮组显示
+  });
+
+
 
   // 编辑公司信息按钮
   $('.companyBox').on('click', '.editCompany', function(ev) {
@@ -113,40 +125,6 @@ $(function() {
     }, false);
   });
 
-  // // 编辑公司范围按钮
-  // $('.companyBox').on('click', '#updateCompany .updatePolygon', function(ev) {
-  //   map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
-  //   editCompanyPolygon = new AMap.PolyEditor(map,companyPolygon); // 接着把绘制的多边形变成可编辑状态
-  //   editCompanyPolygon.open();
-  //   $('.buttonBox').show();
-  //   // 添加编辑事件按钮事件
-  //   AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
-  //     editCompanyPolygon.open();
-  //   }, false);
-  //   // 添加结束编辑事件按钮事件
-  //   AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
-  //     editCompanyPolygon.close();
-  //   }, false);
-  // });
-
-  // // 编辑部门范围按钮
-  // $('.areaBox').on('click', '.updatePolygon', function(areaId) {
-  //   areaIndex = $('.areaBox h5').index(areaItem); // area当前索引
-  //   map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
-  //   editAreaPolygon = new AMap.PolyEditor(map,companyPolygon.areas[areaIndex]); // 接着把绘制的多边形变成可编辑状态
-  //   editAreaPolygon.open();
-  //   $('.buttonBox').show();
-  //   // 添加编辑事件按钮事件
-  //   AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
-  //     editAreaPolygon.open();
-  //   }, false);
-  //   // 添加结束编辑事件按钮事件
-  //   AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
-  //     editAreaPolygon.close();
-  //   }, false);
-  // });
-
-
   // 查-异步请求公司数据，在地图上绘制
   $.ajax({
     url: '/api/company',
@@ -163,14 +141,17 @@ $(function() {
   })
   .fail(function() {
     console.log('公司数据未上传');
-    $('#createCompany').show();
+    $('.companyBox .control_add').show();
   });
 
   // 增-ajax异步提交
   $('#createCompany').submit(function(ev) {
-    editTempPolygon.close();
+
     ev.preventDefault(); // 取消默认的提交事件，使用ajax提交表单
     var form = $(this);
+    if(!check(form)) {
+      return;
+    }
     var companyPath = tempPolygon.getPath().map(function(value, index) {
       return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
     });
@@ -181,13 +162,13 @@ $(function() {
     })
     .done(function(company) {
       console.log(`公司信息${form.attr('method')}成功`);
-      console.log(company);
       tempPolygon.setPath(null);
-      companyPolygon.id = company.id;
-      // 前端显示刚上传的数据。
+      companyPolygon.setExtData({id:company.id});
+      // 前端显示刚上传的数据
       $('.companyShow h3').show();
       $('.areaBox').show();
       $('#createCompany').hide();
+      $('.control_add:first-child').hide();
       $('.companyBox span:eq(0)').text(company.name);
       $('.companyBox span:eq(1)').text(company.info);
       $('.companyBox a:eq(1)').attr('href', `api/company/${company.id}`);
@@ -250,8 +231,8 @@ $(function() {
       $('.companyBox span:eq(0)').text(null);
       $('.companyBox span:eq(1)').text(null);
       $('.buttonBox').hide();
-      $('#createCompany').show();
       $('#updateCompany').hide();
+      $('.companyBox .control_add').show();
     })
     .fail(function() {
       console.log('公司信息DELETE失败');
@@ -382,4 +363,26 @@ $(function() {
       console.log('部门信息DELETE失败');
     });
   });
+
+  // 功能函数部分--------------------------
+  // 检查函数
+  function check (obj) {
+    var children =  obj.find('input[type!="submit"]');
+    for(var i=0; i<children.length; i++) {
+      var child = children[i];
+      if(child.value === '') {
+        child.focus();
+        tips.text(`${child.name}不能为空!`);
+        return false;
+      }
+    }
+
+    if(tempPolygon.getPath().length === 0) {
+      tips.text('请在地图上绘制范围后，再提交')
+      return false;
+    }
+
+    return true;
+    console.log('范围提交信息验证通过...')
+  }
 })
