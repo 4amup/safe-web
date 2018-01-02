@@ -3,7 +3,6 @@
   padding: 0;
 }
 body {
-  /* padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 a {
@@ -13,9 +12,6 @@ a {
 
 h1 {
   text-align: center;
-}
-img {
-  width: 200px;
 }
 
 nav {
@@ -46,13 +42,11 @@ nav ul a {
   color: #ffffff;
   display: inline-block;
   height: 100%;
-  /*垂直居中的办法就是line-height*/
   line-height: 60px;
   text-decoration: none;
   margin: auto 0;
 }
 
-/* footer部分开始 */
 .footer {
   position: absolute;
   bottom: 0;
@@ -78,4 +72,3 @@ nav ul a {
 	margin-top: 5px;
 	margin-bottom: 13px;
 }
-/* footer部分结束 */
