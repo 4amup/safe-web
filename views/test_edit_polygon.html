@@ -4,26 +4,62 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <script src="http://webapi.amap.com/maps?v=1.4.3&key=da39f372043eb0cbed8885f2ab67c515&plugin=AMap.PolyEditor,AMap.MouseTool"></script>
     <title>测试编辑多边形</title>
 </head>
 <body>
     <h2>测试编辑多边形，解决无小圆点的bug</h2>
-<div id="container"></div>
-<div class="button-group">
-  <input type="button" class="button" value="开始编辑多边形" onClick="editor.startEditPolygon()"/>
-  <input type="button" class="button" value="结束编辑多边形" onClick="editor.closeEditPolygon()"/>
+<div id="container">
+    <div class="button-group">
+        <input type="button" class="button" value="开始创建多边形" onClick="editor.startAddPolygon()">
+        <input type="button" id="editPolygon" value="开始编辑多边形"/>
+        <input type="button" id="overPolygon" value="结束编辑多边形"/>
+    </div>
+    <div id="map" style="height:500px"></div>
 </div>
-<script src="http://webapi.amap.com/maps?v=1.4.3&key=da39f372043eb0cbed8885f2ab67c515"></script>
 <script type="text/javascript">
-    var map = new AMap.Map('container', {
-       center:[117.000923,36.675807],
-       zoom:11
+    var editor = {};
+    editor.startAddPolygon = function() {
+        mouseTool.polygon(); //开始绘制
+    }
+    var map = new AMap.Map('map', { // 初始化地图
+        center: [126.683507, 45.713941],
+        zoom: 16,
+      });
+
+      var tempPolygon = new AMap.Polygon({ // 初始化编辑状态的polygon
+        map: map,
+        strokeColor: "#d55d5c", // 配置线条颜色
+        strokeOpacity: 1,
+        strokeWeight: 1,
+        fillColor: "#f5dbe3", // 配置填充色
+        fillOpacity: 0.35,
+        strokeStyle: 'dashed', // 配置线条样式
+      });
+
+    var mouseTool = new AMap.MouseTool(map); //在地图中添加MouseTool插件
+    map.plugin(mouseTool);
+
+    AMap.event.addListener(mouseTool,'draw',function(e){ // 画完范围后自动启用编辑状态
+        var tempPath = e.obj.getPath();
+        tempPath = tempPath.map(function(value, index) {
+            return [value.lng, value.lat]; // polygonPath的高级数据，转换成简单的数组形式
+        });
+        mouseTool.close(true); //画完后把画的图擦除
+        tempPolygon.setPath(tempPath);
+        tempPolygon = new AMap.PolyEditor(map,tempPolygon); // 接着把绘制的多边形变成可编辑状态
+        tempPolygon.open();
+
+        // 添加编辑事件按钮事件
+        AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
+        tempPolygon.open();
+        }, false);
+        // 添加结束编辑事件按钮事件
+        AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
+        tempPolygon.close();
+        }, false);
     });
 
-    AMap.plugin('AMap.ToolBar',function(){
-       var toolbar = new AMap.ToolBar();
-       map.addControl(toolbar)
-    })
 </script>
 </body>
 </html>
