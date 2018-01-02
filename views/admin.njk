@@ -20,7 +20,8 @@
       <h3 style="display:none">
         <span>{{ company.name }}</span>
         <span>{{ company.info }}</span>
-        <a class="editCompany">编辑</a>
+        <a href="#" class="editPolygon">编辑</a>
+        <a href="#" class="cancelPolygon">取消</a>
         <a href="api/company/{{company.id}}" class="deleteItem">删除</a>
       </h3>
       <div class="control_add" style="display:none">
@@ -55,12 +56,13 @@
       </form>
 
       {% for area in areas %}
-      <h5 class="areaShow" id={{ area.id }}>
+      <h3 class="areaShow" id={{ area.id }}>
         <span>{{ area.name }}</span>
         <span>{{ area.info }}</span>
-        <a href="" class="editArea">edit</a>
-        <a href="api/company/areas/{{area.id}}" class="delete">del</a>
-      </h5>
+        <a href="#" class="editPolygon">编辑</a>
+        <a href="#" class="cancelPolygon">取消</a>
+        <a href="api/company/areas/{{area.id}}" class="delete">删除</a>
+      </h3>
       {% endfor %}
 
       <form action="api/company/areas/" method="PUT" id="updateArea" style="display:none">
@@ -73,8 +75,8 @@
   </div>
   <div class="mapBox">
     <div class="buttonBox" style="display: none">
-      <input type="button" id="editPolygon" value="编辑">
-      <input type="button" id="overPolygon" value="结束编辑">
+      <input type="button" id="editPolygonButton" value="编辑">
+      <input type="button" id="overPolygonButton" value="结束编辑">
     </div>
     <div id="map" style="height:500px"></div>
   </div>
