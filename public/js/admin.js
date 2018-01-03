@@ -16,6 +16,7 @@ $(function() {
     fillColor: "#f5dbe3", // 配置填充色
     fillOpacity: 0.35,
     strokeStyle: 'dashed', // 配置线条样式
+    id: null
   });
 
   var companyPolygon = new AMap.Polygon({   // 初始化公司
@@ -58,34 +59,34 @@ $(function() {
   $('.companyBox').on('click', '.addForm:button', function(ev) {
     var addForm = $(ev.target).parent().next('form[id^="create"]');
     addForm.show(); //显示增加表单
-
     map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
+
     mouseTool.polygon(); //开始绘制
     $('.buttonBox').show(); //地图按钮组显示
   });
-  
+
   //取消新建范围
   $('.companyBox').on('click', '.cancelForm:button', function(ev) {
     var addForm = $(ev.target).parent().next('form[id^="create"]');
     addForm.hide();
-
+    $('.buttonBox').hide(); //地图按钮组显示
     map.setMapStyle('amap://styles/normal');
+
     if(editingPolygon) {
       editingPolygon.close();
     }
     if(tempPolygon.getPath().length !== 0) {
       tempPolygon.setPath(null);
     }
-    $('.buttonBox').hide(); //地图按钮组显示
   });
 
   //编辑现有范围
   $('.companyBox').on('click', '.editPolygon', function(ev) {
     ev.preventDefault();
-    var editForm = $(ev.target).parent().nextAll('form[id^="update"]');
-
+    var editForm = $(ev.target).parent().prevAll('form[id^="update"]');
     editForm.show();
     map.setMapStyle('amap://styles/grey'); // 设置地图特殊样式，提示可以开始划范围了
+    $('.buttonBox').show();
 
     // 将原文copy到修改的表单中
     var info = $(ev.target).prev();
@@ -94,26 +95,29 @@ $(function() {
     editForm.children('input[type="text"]:eq(1)').val(info.text());
 
     // 通过id让将目标的polygon变成可编辑状态
-    var targetPolygon;
     var polygonId = $(ev.target).parent().attr('id');
-    if (companyPolygon.getExtData('id') === polygonId) {    
-      companyPolygon.setOptions({
-        strokeStyle: 'dashed'
-      });
-      targetPolygon = companyPolygon;
+    // 如果当前修改的polygon是公司的，就将targetPolygon设为公司
+    // 否则，找到当前的area，并将其设为targetPolygon
+    if (companyPolygon.getExtData().id === polygonId) {
+      tempPolygon = companyPolygon;
+      editForm.attr('action', `api/company/${polygonId}`);
     }else {
-      companyPolygon.areas.forEach(function(value, index) {
-        if(value.getExtData('id') === polygonId) {
-          value.setOptions({
-            strokeStyle: 'dashed'
-          });
-          targetPolygon = value;
+      var areas = companyPolygon.areas;
+      //开始循环
+      for(var i=0; i<areas.length; i++) {
+        var area = areas[i];
+        if(area.getExtData().id === polygonId) {
+          tempPolygon = area;
+          editForm.attr('action', `api/company/areas/${polygonId}`);
+          break;
         }
-      })
-    }
-    editingPolygon = new AMap.PolyEditor(map,targetPolygon); // 接着把绘制的多边形变成可编辑状态
+      }
+    };
+
+    tempPolygon.id = polygonId;
+
+    editingPolygon = new AMap.PolyEditor(map,tempPolygon); // 接着把绘制的多边形变成可编辑状态
     editingPolygon.open();
-    $('.buttonBox').show();
     // 添加编辑事件按钮事件
     AMap.event.addDomListener(document.getElementById('editPolygonButton'), 'click', function() {
       editingPolygon.open();
@@ -125,31 +129,13 @@ $(function() {
   });
 
   // 取消编辑现有范围
-
-
-  // 编辑部门消息按钮
-  $('.companyBox').on('click', '.editArea', function(ev) {
-    ev.preventDefault(); // 阻止默认链接跳转事件
-    areaItem = ev.target.closest('h5')
-    $('#updateArea').toggle(); //开关更新表单
-    $('#updateArea').attr('action', `api/company/areas/${areaItem.id}`); // action赋值
-    $('#updateArea input:eq(0)').val($(areaItem).find('span:eq(0)').text());
-    $('#updateArea input:eq(1)').val($(areaItem).find('span:eq(1)').text());
-
-    // 自动弹出编辑范围
-    areaIndex = $('.areaBox h5').index(areaItem); // area当前索引
-    map.setMapStyle('amap://styles/blue'); // 设置地图特殊样式，提示可以开始划范围了
-    editingPolygon = new AMap.PolyEditor(map,companyPolygon.areas[areaIndex]); // 接着把绘制的多边形变成可编辑状态
-    editingPolygon.open();
-    $('.buttonBox').show();
-    // 添加编辑事件按钮事件
-    AMap.event.addDomListener(document.getElementById('editPolygon'), 'click', function() {
-      editingPolygon.open();
-    }, false);
-    // 添加结束编辑事件按钮事件
-    AMap.event.addDomListener(document.getElementById('overPolygon'), 'click', function() {
-      editingPolygon.close();
-    }, false);
+  $('.companyBox').on('click', '.cancelPolygon', function(ev) {
+    ev.preventDefault();
+    var editForm = $(ev.target).parent().prevAll('form[id^="update"]');
+    editForm.hide();
+    map.setMapStyle('amap://styles/normal'); // 设置地图特殊样式，提示可以开始
+    editingPolygon.close();
+    $('.buttonBox').hide();
   });
 
   // 查-异步请求公司数据，在地图上绘制
@@ -162,8 +148,10 @@ $(function() {
     $('.companyShow h3').show();
     $('.areaBox').show();
     var path = JSON.parse(company.polygonPath);
-    companyPolygon.id = company.id; // 将id赋给多边形
-    $('.companyBox').attr('id', company.id);
+    companyPolygon.setExtData({
+      id: company.id,
+      name: company.name
+    })
     companyPolygon.setPath(path); // 根据path将company的多边形显示在地图上。
   })
   .fail(function() {
@@ -190,13 +178,16 @@ $(function() {
     .done(function(company) {
       console.log(`公司信息${form.attr('method')}成功`);
       tempPolygon.setPath(null);
-      companyPolygon.setExtData({id:company.id});
+      companyPolygon.setExtData({
+        id:company.id,
+        name:company.name
+      });
       // 前端显示刚上传的数据
       $('.companyShow h3').show();
       $('.companyShow h3').attr('id', company.id);
       $('.areaBox').show();
       $('#createCompany').hide();
-      $('.control_add:first-child').hide();
+      $('.companyShow h3').next('.control_add').hide();
       $('.companyBox span:eq(0)').text(company.name);
       $('.companyBox span:eq(1)').text(company.info);
       $('.companyBox a:eq(1)').attr('href', `api/company/${company.id}`);
@@ -213,9 +204,9 @@ $(function() {
   $('#updateCompany').submit(function(ev) {
     ev.preventDefault(); // 取消默认的提交事件，使用ajax提交表单
     var form = $(this);
-    var companyPath = companyPolygon.getPath().map(function(value, index) {
+    var companyPath = tempPolygon.getPath().map(function(value, index) {
       return [value.lng, value.lat];
-    })
+    });
     $.ajax({
       url: form.attr('action'),
       type: form.attr('method'),
@@ -288,8 +279,9 @@ $(function() {
         fillColor: "#f5dbe3",
         fillOpacity: 0.35,
       });
-      areaPolygon.strokeStyle({
-        id: value.id
+      areaPolygon.setExtData({
+        id: value.id,
+        name: value.name
       })
       companyPolygon.areas.push(areaPolygon);
     });
@@ -315,7 +307,6 @@ $(function() {
     })
     .done(function(area) {
       console.log(`部门信息${form.attr('method')}成功`);
-      console.log(area);
       tempPolygon.setPath(null);
       var path = JSON.parse(area.polygonPath);
       var areaPolygon = new AMap.Polygon({
@@ -356,9 +347,10 @@ $(function() {
   // 改-ajax异步提交区域
   $('#updateArea').submit(function(ev) {
     ev.preventDefault(); // 取消默认的提交事件，使用ajax提交表单
-    editAreaPolygon.close();
+    editingPolygon.close();
     var form = $(this);
-    var areaPatn = companyPolygon.areas[areaIndex].getPath().map(function(value, index) {
+
+    var areaPatn = tempPolygon.getPath().map(function(value, index) {
       return [value.lng, value.lat];
     })
     $.ajax({
@@ -368,12 +360,13 @@ $(function() {
     })
     .done(function(area) {
       console.log(`部门信息${form.attr('method')}成功`);
-      console.log(area);
       var path = JSON.parse(area.polygonPath);
-      companyPolygon.areas[areaIndex].setPath(path);
+      var id = area.id;
       // 前端显示刚上传的数据。
-      $(`.areaShow:eq(${areaIndex}) span:eq(0)`).text(area.name);
-      $(`.areaShow:eq(${areaIndex}) span:eq(1)`).text(area.info);
+      var areaShow = $('.areaBox').find(`#${id}`);
+      areaShow.children('span:eq(0)').text(area.name);
+      areaShow.children('span:eq(1)').text(area.info);
+
       map.setMapStyle('amap://styles/normal'); // 恢复地图正常样式
       $('.buttonBox').hide();
       $('#updateArea').hide();
@@ -381,20 +374,19 @@ $(function() {
   });
   // 删除数据
   $('.areaBox').on('click', '.areaShow a.delete', function(ev) {
-    var item = $(ev.target).parent('h5');
-    areaIndex = $('.areaBox h5').index(item);
+    var item = $(ev.target).parent('h3');
+    areaIndex = $('.areaBox h3').index(item);
     ev.preventDefault();
     $.ajax({
       url: $(ev.target).attr('href'),
       type: 'DELETE'
     })
     .done(function(data) {
-      console.log(data);
       console.log('部门信息DELETE成功');
       companyPolygon.areas[areaIndex].setPath(null);
       companyPolygon.areas.splice(areaIndex, 1); // 删除指定索引位置的元素
 
-      $(`.areaShow:eq(${areaIndex})`).remove();
+      item.remove();
       $('.buttonBox').hide();
       $('#updateArea').hide();
     })
