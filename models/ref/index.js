@@ -1,5 +1,5 @@
 // 从属关系
-var db = require('../../db');
+var model = require('../../model')
 
 var Company  = require('../Company')
 var Department  = require('../Department')
@@ -20,4 +20,6 @@ Factory.belongsTo(Company);
 Area.belongsTo(Department);
 User.belongsTo(Department);
 
-db.sequelize.sync();
+model.sequelize.sync('false');
+
+console.log('关系创建完成');

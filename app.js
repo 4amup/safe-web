@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var nunjucks = require('nunjucks');
 var session = require('express-session');
-
+var model = require('./model')
 // 引入路由文件
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -49,8 +49,6 @@ app.use('/admin', admin);
 app.use('/trouble', trouble);
 app.use('/test', test);
 
-
-require('./models/ref/index');
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
