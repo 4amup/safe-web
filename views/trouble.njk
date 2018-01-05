@@ -1,36 +1,278 @@
 {% extends "layout.njk" %}
+{% block cssFiles %}
+  <link rel="stylesheet" href="/css/trouble.css">
+{% endblock %}
+{% block jsFiles %}
+  <script src="http://webapi.amap.com/maps?v=1.4.3&key=da39f372043eb0cbed8885f2ab67c515"></script>
+{% endblock %}
 {% block content %}
 <h1>{{ title }}</h1>
-<h2>问题概况</h2>
-<p>{{ trouble.troubleDescription }}</p>
-<p>{{ trouble.troubleArea }}</p>
-<p>{{ trouble.troubleDate }}</p>
-<p>{{ trouble.troubleTime }}</p>
-{% for img in trouble.troubleImagesPath %}
-<img src={{ img }}>
-{% endfor %}
-{% if trouble.renovationStatus == 'on' %}
-<h2>整改概况</h2>
-{% for img in trouble.renovationImagesPath %}
-<img src={{ img }}>
-{% endfor %}
-{% else %}
-    <form action="/api" method="post" enctype="multipart/form-data" id="form">
-    <div>
-        <textarea name="renovationText" rows="3" cols="20" placeholder="请在此处描述整改措施..."></textarea>
+<div class="container">
+  <!-- 左侧部分 -->
+  <div class="detail_left">
+    <div class="detail_info">
+      <h4 class="detail_title">{{trouble.name}}</h4>
+      <div class="detail_specific">
+          <div class="detail_pic">
+            <img src="/example/example.jpg">
+          </div>
+          <div class="detail_description">
+            <p class="tag">
+              <span class="tag_1">标签：</span>
+              <span class="tag_2">6S；习惯性违章；考核</span>
+            </p>
+            <p class="location">
+              <span class="tag_1">位置：</span>
+              <span class="tag_2">{{trouble.troubleArea}}</span>
+            </p>
+          </div>
+      </div>
     </div>
-    <div class="images">
-        <div>
-        <input type="file" name="renovationImg" accept="image/*" multiple="multiple">
+    <!-- 图片 -->
+    <div class="detail_preview">
+      <div class="title">
+        <div class="title_1">问题图片</div>
+        <a class="title_2" href="#modal">
+          <i class="iconfont icon-thlarge"></i>显示全部
+        </a>
+        <div style="clear: both;"></div>
+      </div>
+      <div class="display">
+        <div class="left"><i class="iconfont icon-chevronleft"></i></div>
+
+        <div class="display_wrap">
+          <ul>
+            {% for img in trouble.troubleImagesPath %}
+            <li>
+                <img src={{ img }}>
+            </li>
+            {% endfor %}
+          </ul>
         </div>
+        <div class="right"><i class="iconfont icon-chevronright"></i></div>
+      </div>
     </div>
-    <div>
-        <input type="date" name="renovationDate">
-        <input type="time" name="renovationTime">
+    {# 以下是整改图片预览 #}
+    {% if trouble.renovationStatus == 'on' %}
+    <div class="detail_preview">
+      <div class="title">
+        <div class="title_1">整改图片</div>
+        <a class="title_2" href="#modal">
+          <i class="iconfont icon-thlarge"></i>显示全部
+        </a>
+      <div style="clear: both;"></div>
     </div>
+
+      <div class="display">
+        <div class="left"><i class="iconfont icon-chevronleft"></i></div>
+
+        <div class="display_wrap">
+          <ul>
+            {% for img in trouble.renovationImagesPath %}
+            <li>
+                <img src={{ img }}>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="right"><i class="iconfont icon-chevronright"></i></div>
+      </div>
+    </div>
+  {% else %}
+  <div class="detail_preview">
+    <form action="/api" method="post" enctype="multipart/form-data" id="form">
+      <div>
+          <textarea name="renovationText" rows="3" cols="20" placeholder="请在此处描述整改措施..."></textarea>
+      </div>
+      <div class="images">
+          <div>
+          <input type="file" name="renovationImg" accept="image/*" multiple="multiple">
+          </div>
+      </div>
+      <div>
+          <input type="date" name="renovationDate">
+          <input type="time" name="renovationTime">
+      </div>
       <div>
         <input type="submit" value="提交">
       </div>
     </form>
-{% endif %}
+  </div>
+  {% endif %}
+  </div>
+
+  <!-- 右侧部分 -->
+  <div class="detail_right">
+    <div class="detail_mapview">
+      <div class="mapview">
+        <div id="mapContainer"></div>
+      </div>
+    </div>
+    <div class="detail_nearby">
+      <div class="nearby_title">
+        附近的问题
+      </div>
+      <div>
+        <div class="addre">
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+          <div>
+            <span class="icon-marker">
+              <i class="icon-font"></i>
+            </span>
+            <span class="top-title">
+              重容分厂·七厂房·二跨·喷砂机旁
+            </span>
+            <span class="distance">
+              <span>148.55</span>米
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var troublePosition = [{{ trouble.Markerposition }}];
+  var map = new AMap.Map('mapContainer', {
+    resizeEnable: true,
+    zoom: 18,
+    center: troublePosition
+  });
+  var marker = new AMap.Marker({
+    map: map,
+    position: troublePosition,
+  })
+</script>
 {% endblock %}

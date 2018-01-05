@@ -1,0 +1,259 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* base css */
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #EBEBEB;
+  min-height: 300px;
+}
+a {
+  text-decoration: none;
+  color: #00B7FF;
+}
+ul, li {
+  list-style: none;
+}
+
+/* 导航栏 */
+nav {
+  background: lightslategrey;
+  height: 60px;
+  padding: 0 30px;
+  width: auto;
+}
+nav a {
+  display: inline-block;
+  height: 100%;
+}
+nav .logo img{
+  width: 60px;
+  height: 60px;
+}
+nav ul {
+  float: right;
+  height: 100%;
+  font-size: 12px;
+}
+nav ul li {
+  display: inline-block;
+  height: inherit;
+  margin: 0 5px;
+}
+nav ul a {
+  color: #ffffff;
+  display: inline-block;
+  height: 100%;
+  line-height: 60px;  /*垂直居中的办法就是line-height*/
+  text-decoration: none;
+  margin: auto 0;
+}
+
+/* container区域开始 */
+.container {
+  width: 1000px;
+  margin: 15px auto;
+  min-height: 100px;
+  /* background-color: burlywood; */
+}
+
+/* detail左侧区域开始 */
+.container .detail_left {
+  width: 704px;
+  margin-right: 16px;
+  position: relative;
+  min-height: 50px;
+  float: left;
+}
+/* detail_info开始 */
+.container .detail_left .detail_info {
+  width: 100%;
+  background: #FFFFFF;
+}
+.container .detail_left .detail_info .detail_title {
+	padding: 20px 20px;
+	font-size: 24px;
+	font-weight: 400;
+}
+.container .detail_left .detail_info .detail_specific {
+	margin-top: 10px;
+	margin-left: 20px;
+	overflow: hidden;
+	padding-bottom: 14px;
+}
+.detail_pic {
+	float: left;
+}
+.detail_pic img {
+	width: 278px;
+	height: 214px;
+}
+.detail_description {
+	height: 214px;
+	position: relative;
+	float: left;
+	margin-left: 12px;
+}
+/* detail_info结束 */
+.detail_preview {
+	width: 100%;
+	height: 180px;
+	margin-top: 16px;
+	background: #FFFFFF;
+	position: relative;
+}
+.detail_preview .title {
+  display: block;
+	margin-left: 20px;
+	margin-right: 20px;
+	border-bottom: 1px solid #E5E5E5;
+}
+.detail_preview .title .title_1 {
+	float: left;
+	padding: 15px 0px;
+}
+.detail_preview .title .title_2 {
+	float: right;
+	padding: 15px 0px;
+	cursor: pointer;
+	color: #646464;
+}
+.detail_preview .icon-thlarge {
+	margin-top: 2px;
+	margin-right: 7px;
+}
+.detail_preview .display {
+	margin-top: 20px;
+	position: relative;
+}
+.detail_preview .display_wrap {
+	height: 90px;
+	width: 650px;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	overflow: hidden;
+}
+.display_wrap img {
+	width: 125px;
+	height: 90px;
+}
+.display ul {
+	margin-left: -3px;
+	width: 9950px;
+	position: absolute;
+}
+.display ul li {
+	float: left;
+	padding-left: 5px;
+	cursor: pointer;
+}
+.display ul li img {
+	width: 125px;
+	height: 90px;
+}
+.detail_preview .display .left {
+	position: absolute;
+	left: 8px;
+	top: 40%;
+	color: #646464;
+	cursor: pointer;
+}
+.detail_preview .display .right {
+	position: absolute;
+	right: 8px;
+	top: 40%;
+	color: #646464;
+	cursor: pointer;
+}
+/* detail_preview开始 */
+
+/* detail_preview结束 */
+
+/* detail左侧区域结束 */
+
+/* detail右侧区域开始 */
+.container .detail_right {
+  margin-left: 720px;
+  min-height: 50px;
+  /* background-color: aqua; */
+}
+.container .detail_mapview {
+	height: 280px;
+	background: #fff;
+	position: relative;
+}
+.detail_right .mapview {
+  height: 280px;
+  /* border-bottom: 1px solid #E6E6E6; */
+  text-align: center;
+  padding-top: 10px;
+}
+.detail_right .mapview #mapContainer {
+	width: 260px;
+	height: 260px;
+	margin-left: 10px;
+}
+
+/* .detail_nearby开始 */
+.detail_right .detail_nearby {
+	margin-top: 15px;
+	background: #fff;
+  position: relative;
+  height: 410px;
+  overflow: auto;
+}
+.detail_nearby .nearby_title {
+	height: 40px;
+	padding-left: 20px;
+	line-height: 40px;
+	border-bottom: 1px solid #E5E5E5;
+	color: #000;
+	font-weight: bold;
+	font-size: 14px;
+}
+.detail_nearby .addre > div {
+	position: relative;
+	width: 240px;
+	margin: 10px 20px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #E5E5E5;
+}
+.detail_nearby .addre .top-title {
+  font-size: 12px;
+  font-weight: bold;
+}
+.distance > span {
+	color: #307CC1;
+	font-size: 12px;
+}
+/* .detail_nearby结束 */
+/* detail右侧结束 */
+/* container区域结束 */
+
+/* footer部分开始 */
+.footer {
+	width: 1000px;
+	margin: 0px auto;
+	font-size: 12px;
+	text-align: center;
+}
+.footer p {
+	line-height: 20px;
+}
+.footer .links {
+	margin-top: 28px;
+	color: #A4A4A4;
+}
+.footer .links a {
+	padding-left: 5px;
+	padding-right: 5px;
+	color: #A4A4A4;
+}
+.footer .declare {
+	margin-top: 5px;
+	margin-bottom: 13px;
+}
+/* footer部分结束 */
