@@ -14,5 +14,13 @@ module.exports = db.defineModel('user', {
   name: {
     type: db.STRING(100),
     comment: '用户名'
+  },
+  role: {
+    type: db.STRING(100),
+    comment: '用户角色，即普通员工，安全员，分厂厂长，高层领导'
+  },
+  cellphone: {
+    type: db.STRING(100),
+    comment: '手机号'
   }
 });

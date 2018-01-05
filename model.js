@@ -17,8 +17,3 @@ for (var f of js_files) {
   var name = f.substring(0, f.length - 3);
   module.exports[name] = require(__dirname + '/models/' + f);
 }
-
-module.exports.Area.belongsTo(module.exports.Company);
-module.exports.Company.hasMany(module.exports.Area);
-
-db.sequelize.sync();
