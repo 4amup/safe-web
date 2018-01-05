@@ -103,8 +103,11 @@ $(function () {
         size: new AMap.Size(300, 220)
       });
 
-      marker.on('click', function() {
+      marker.on('mouseover', function() {
         infoWindow.open(map, JSON.parse(value.Markerposition));
+      });
+      marker.on('mouseout', function() {
+        infoWindow.close(map, JSON.parse(value.Markerposition));
       });
       markers.push(marker);
     })

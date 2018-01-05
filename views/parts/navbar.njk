@@ -5,7 +5,7 @@
   <ul>
     {% if (locals.user) %}
     <li><a href="/users/{{locals.user.id}}">{{locals.user.name}}</a></li>
-    <li><a href="/logout">注销登录</a></li>
+    <li><a href="/logout">注销</a></li>
     {% else %}
     <li><a href="/register">注册</a></li>
     <li><a href="/login">登录</a></li>
