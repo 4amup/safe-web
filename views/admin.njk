@@ -6,37 +6,38 @@
 {% endblock %}
 {% block jsFiles %}
   <script src="http://webapi.amap.com/maps?v=1.4.3&key=da39f372043eb0cbed8885f2ab67c515&plugin=AMap.PolyEditor,AMap.MouseTool"></script>
+  <script src="vendors/echarts.min.js"></script>
   <script src="js/admin.js"></script>
 {% endblock %}
 
 {% block content %}
 <h2>{{ title }}</h2>
+<div class="tips">
+  <p>状态提示</p>
+</div>
 <div class="container">
-  <div class="tips">
-    <p>状态提示</p>
-  </div>
-  <div class="companyBox">
+  <!-- 存放厂区关系图 -->
+  <div id="tree"></div>
+
+  {# <div class="companyBox">
     <div class="companyShow">
       <div class="control_add" style="display:none">
-        <span>公司新建</span>
+        <span>厂区新建</span>
         <button class="addForm">新建</button>
         <button class="cancelForm">取消</button>
       </div>
       <form action="api/company" method="POST" id="createCompany" style="display:none">
-        <label>公司新建</label>
+        <label>厂区新建</label>
         <input type="text" name="name">
-        <input type="text" name="info">
         <input type="submit" value="提交">
       </form>
       <form action="api/company/{{ company.id }}" method="PUT" id="updateCompany" style="display:none">
-        <label>公司修改</label>
+        <label>厂区修改</label>
         <input type="text" name="name">
-        <input type="text" name="info">
         <input type="submit" value="修改">
       </form>
       <h3  id="{{ company.id }}" style="display:none">
         <span>{{ company.name }}</span>
-        <span>{{ company.info }}</span>
         <a href="#" class="editPolygon">编辑</a>
         <a href="#" class="cancelPolygon">取消</a>
         <a href="api/company/{{company.id}}" class="deleteItem">删除</a>
@@ -44,39 +45,36 @@
     </div>
     <div class="areaBox" style="display:none">
       <div class="control_add">
-        <span>部门新建</span>
+        <span>厂房新建</span>
         <button class="addForm">新建</button>
         <button class="cancelForm">取消</button>
       </div>
       <form action="api/company/{{ company.id }}/areas" method="POST" id="createArea" style="display:none">
-        <label>部门新建</label>
+        <label>厂房新建</label>
         <input type="text" name="name">
-        <input type="text" name="info">
         <input type="submit" value="新建">
       </form>
       <form action="api/company/areas/" method="PUT" id="updateArea" style="display:none">
-        <label>部门修改</label>
+        <label>厂房修改</label>
         <input type="text" name="name">
-        <input type="text" name="info">
         <input type="submit" value="修改">
       </form>
       {% for area in areas %}
       <h3 class="areaShow" id={{ area.id }}>
         <span>{{ area.name }}</span>
-        <span>{{ area.info }}</span>
         <a href="#" class="editPolygon">编辑</a>
         <a href="#" class="cancelPolygon">取消</a>
         <a href="api/company/areas/{{area.id}}" class="delete">删除</a>
       </h3>
       {% endfor %}
     </div>
-  </div>
+  </div> #}
   <div class="mapBox">
     <div class="buttonBox" style="display: none">
       <input type="button" id="editPolygonButton" value="编辑">
       <input type="button" id="overPolygonButton" value="结束编辑">
     </div>
-    <div id="map" style="height:500px"></div>
+    <div id="map" style="height:100%"></div>
   </div>
 </div>
 {% endblock %}

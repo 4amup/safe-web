@@ -1,5 +1,85 @@
 $(function() {
   // 第一部分初始化设置
+  // 使用echarts显示关系图
+  var myChart = echarts.init(document.getElementById('tree'));
+  // 指定图表的配置项和数据
+  var data = {
+    "name": "flare",
+    "children": [
+        {
+            "name": "flex",
+            "children": [
+                {"name": "FlareVis", "value": 4116}
+            ]
+        },
+        {
+            "name": "scale",
+            "children": [
+                {"name": "IScaleMap", "value": 2105},
+                {"name": "LinearScale", "value": 1316},
+                {"name": "LogScale", "value": 3151},
+                {"name": "OrdinalScale", "value": 3770},
+                {"name": "QuantileScale", "value": 2435},
+                {"name": "QuantitativeScale", "value": 4839},
+                {"name": "RootScale", "value": 1756},
+                {"name": "Scale", "value": 4268},
+                {"name": "ScaleType", "value": 1821},
+                {"name": "TimeScale", "value": 5833}
+           ]
+        },
+        {
+            "name": "display",
+            "children": [
+                {"name": "DirtySprite", "value": 8833}
+           ]
+        }
+    ]
+  };
+  myChart.setOption(option = {
+    backgroundColor: '#fcf9f2',
+    tooltip: {
+        trigger: 'item',
+        triggerOn: 'mousemove'
+    },
+    series: [
+        {
+            type: 'tree',
+
+            data: [data],
+
+            top: '1%',
+            left: '7%',
+            bottom: '1%',
+            right: '20%',
+
+            symbolSize: 7,
+
+            label: {
+                normal: {
+                    position: 'left',
+                    verticalAlign: 'middle',
+                    align: 'right',
+                    fontSize: 9
+                }
+            },
+
+            leaves: {
+                label: {
+                    normal: {
+                        position: 'right',
+                        verticalAlign: 'middle',
+                        align: 'left'
+                    }
+                }
+            },
+
+            expandAndCollapse: true,
+            animationDuration: 550,
+            animationDurationUpdate: 750
+        }
+    ]
+});
+  // 初始化信息提示
   var tips = $('.tips p');
   $('form').attr('autocomplete', 'off');
 
