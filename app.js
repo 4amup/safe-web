@@ -49,6 +49,8 @@ app.use('/admin', admin);
 app.use('/trouble', trouble);
 app.use('/test', test);
 
+require('./models/ref/index');
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

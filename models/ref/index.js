@@ -1,12 +1,12 @@
 // 从属关系
 var model = require('../../model')
 
-var Company  = require('../Company')
-var Department  = require('../Department')
-var Factory  = require('../Factory')
-var Stride  = require('../Stride')
-var Area  = require('../Area')
-var User = require('../User')
+var Company  = model.Company;
+var Department  = model.Department;
+var Factory = model.Factory;
+var Stride = model.Stride;
+var Area  = model.Area;
+var User = model.User;
 
 Company.hasMany(Department);
 Department.belongsTo(Company);
@@ -20,6 +20,6 @@ Factory.belongsTo(Company);
 Area.belongsTo(Department);
 User.belongsTo(Department);
 
-model.sequelize.sync('false');
+model.sequelize.sync();
 
 console.log('关系创建完成');
