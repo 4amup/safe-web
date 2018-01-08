@@ -4,81 +4,84 @@ $(function() {
   var myChart = echarts.init(document.getElementById('tree'));
   // 指定图表的配置项和数据
   var data = {
-    "name": "flare",
+    "name": "锅炉厂厂区",
     "children": [
-        {
-            "name": "flex",
-            "children": [
-                {"name": "FlareVis", "value": 4116}
-            ]
-        },
-        {
-            "name": "scale",
-            "children": [
-                {"name": "IScaleMap", "value": 2105},
-                {"name": "LinearScale", "value": 1316},
-                {"name": "LogScale", "value": 3151},
-                {"name": "OrdinalScale", "value": 3770},
-                {"name": "QuantileScale", "value": 2435},
-                {"name": "QuantitativeScale", "value": 4839},
-                {"name": "RootScale", "value": 1756},
-                {"name": "Scale", "value": 4268},
-                {"name": "ScaleType", "value": 1821},
-                {"name": "TimeScale", "value": 5833}
-           ]
-        },
-        {
-            "name": "display",
-            "children": [
-                {"name": "DirtySprite", "value": 8833}
-           ]
-        }
+      {
+        "name": "一厂房",
+        "children": [
+          {"name": "三跨", "value": 4116},
+          {"name": "二跨", "value": 4116},
+          {"name": "四跨", "value": 4116},
+          {"name": "五跨", "value": 4116},
+          {"name": "七跨", "value": 4116},
+          {"name": "三跨", "value": 4116},
+        ]
+      },
+      {
+        "name": "四厂房",
+        "children": [
+            {"name": "两跨", "value": 2105},
+            {"name": "五跨", "value": 1316},
+            {"name": "七跨", "value": 3151},
+            {"name": "八跨", "value": 3770},
+            {"name": "六跨", "value": 2435},
+            {"name": "一跨", "value": 4839},
+            {"name": "二跨", "value": 1756},
+          ]
+      },
+      {
+        "name": "十一厂房",
+        "children": [
+          {"name": "一跨", "value": 8833},
+          {"name": "二跨", "value": 8833}
+        ]
+      }
     ]
   };
   myChart.setOption(option = {
     backgroundColor: '#fcf9f2',
     tooltip: {
-        trigger: 'item',
-        triggerOn: 'mousemove'
+      trigger: 'item',
+      triggerOn: 'mousemove'
     },
     series: [
-        {
-            type: 'tree',
+      {
+        type: 'tree',
 
-            data: [data],
+        data: [data],
 
-            top: '1%',
-            left: '7%',
-            bottom: '1%',
-            right: '20%',
+        top: '1%',
+        left: '7%',
+        bottom: '1%',
+        right: '20%',
 
-            symbolSize: 7,
+        symbolSize: 7,
 
+        label: {
+            normal: {
+              position: 'left',
+              verticalAlign: 'middle',
+              align: 'right',
+              fontSize: 9
+            }
+        },
+
+        leaves: {
             label: {
-                normal: {
-                    position: 'left',
-                    verticalAlign: 'middle',
-                    align: 'right',
-                    fontSize: 9
-                }
-            },
+              normal: {
+                position: 'right',
+                verticalAlign: 'middle',
+                align: 'left'
+              }
+            }
+        },
 
-            leaves: {
-                label: {
-                    normal: {
-                        position: 'right',
-                        verticalAlign: 'middle',
-                        align: 'left'
-                    }
-                }
-            },
-
-            expandAndCollapse: true,
-            animationDuration: 550,
-            animationDurationUpdate: 750
-        }
+        expandAndCollapse: true,
+        animationDuration: 550,
+        animationDurationUpdate: 750
+      }
     ]
-});
+  });
   // 初始化信息提示
   var tips = $('.tips p');
   $('form').attr('autocomplete', 'off');
