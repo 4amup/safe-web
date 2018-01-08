@@ -3,39 +3,160 @@ $(function() {
   // 使用echarts显示关系图
   var myChart = echarts.init(document.getElementById('tree'));
   // 指定图表的配置项和数据
-  var data = {
-    "name": "锅炉厂厂区",
+  var data1 = {
+    "name": "一厂房",
     "children": [
       {
-        "name": "一厂房",
+        "name": "一跨",
         "children": [
-          {"name": "三跨", "value": 4116},
-          {"name": "二跨", "value": 4116},
-          {"name": "四跨", "value": 4116},
-          {"name": "五跨", "value": 4116},
-          {"name": "七跨", "value": 4116},
-          {"name": "三跨", "value": 4116},
+          {"name": "机加区域", "value": 4116},
+          {"name": "倒角区域", "value": 4116},
+          {"name": "弯管区域", "value": 4116},
         ]
       },
       {
-        "name": "四厂房",
+        "name": "二跨",
         "children": [
-            {"name": "两跨", "value": 2105},
-            {"name": "五跨", "value": 1316},
-            {"name": "七跨", "value": 3151},
-            {"name": "八跨", "value": 3770},
-            {"name": "六跨", "value": 2435},
-            {"name": "一跨", "value": 4839},
-            {"name": "二跨", "value": 1756},
+            {"name": "油包区", "value": 2105},
+            {"name": "电焊区", "value": 1316},
+            {"name": "自动焊区", "value": 3151},
+            {"name": "包装区", "value": 3770},
+            {"name": "堆放区", "value": 2435},
           ]
       },
       {
-        "name": "十一厂房",
+        "name": "四跨",
         "children": [
-          {"name": "一跨", "value": 8833},
-          {"name": "二跨", "value": 8833}
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "电焊区", "value": 1316},
+          {"name": "自动焊区", "value": 3151},
+          {"name": "包装区", "value": 3770},
+          {"name": "堆放区", "value": 2435},
+      ]
+      },
+      {
+        "name": "四跨",
+        "children": [
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "电焊区", "value": 1316},
+          {"name": "自动焊区", "value": 3151},
+          {"name": "包装区", "value": 3770},
         ]
-      }
+      },
+      {
+        "name": "五跨",
+        "children": [
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "电焊区", "value": 1316},
+          {"name": "自动焊区", "value": 3151},
+          {"name": "包装区", "value": 3770},
+        ]
+      },
+      {
+        "name": "六跨",
+        "children": [
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+        ]
+      },
+      {
+        "name": "七跨",
+        "children": [
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+        ]
+      },
+      {
+        "name": "八跨",
+        "children": [
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833}
+        ]
+      },
+    ]
+  };
+  var data2 = {
+    "name": "二厂房",
+    "children": [
+      {
+        "name": "四跨",
+        "children": [
+          {"name": "机加区域", "value": 4116},
+          {"name": "倒角区域", "value": 4116},
+          {"name": "弯管区域", "value": 4116},
+        ]
+      },
+      {
+        "name": "二跨",
+        "children": [
+            {"name": "油包区", "value": 2105},
+            {"name": "电焊区", "value": 1316},
+            {"name": "自动焊区", "value": 3151},
+            {"name": "包装区", "value": 3770},
+            {"name": "堆放区", "value": 2435},
+          ]
+      },
+      {
+        "name": "四跨",
+        "children": [
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "电焊区", "value": 1316},
+          {"name": "自动焊区", "value": 3151},
+          {"name": "包装区", "value": 3770},
+          {"name": "堆放区", "value": 2435},
+      ]
+      },
+      {
+        "name": "四跨",
+        "children": [
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "电焊区", "value": 1316},
+          {"name": "自动焊区", "value": 3151},
+          {"name": "包装区", "value": 3770},
+        ]
+      },
+      {
+        "name": "五跨",
+        "children": [
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "电焊区", "value": 1316},
+          {"name": "自动焊区", "value": 3151},
+          {"name": "包装区", "value": 3770},
+        ]
+      },
+      {
+        "name": "七跨",
+        "children": [
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+          {"name": "深孔钻区", "value": 8833},
+          {"name": "机加区域", "value": 8833},
+        ]
+      },
     ]
   };
   myChart.setOption(option = {
@@ -44,15 +165,30 @@ $(function() {
       trigger: 'item',
       triggerOn: 'mousemove'
     },
+    legend: {
+      top: '1%',
+      left: '3%',
+      orient: 'horizontal',
+      data: [{
+        name: '一厂房',
+        icon: 'rectangle'
+      },
+      {
+        name: '二厂房',
+        icon: 'rectangle'
+      }],
+      borderColor: '#c23531'
+    },
     series: [
       {
         type: 'tree',
+        name: '一厂房',
 
-        data: [data],
+        data: [data1],
 
-        top: '1%',
-        left: '7%',
-        bottom: '1%',
+        top: '3%',
+        left: '15%',
+        bottom: '50%',
         right: '20%',
 
         symbolSize: 7,
@@ -62,7 +198,7 @@ $(function() {
               position: 'left',
               verticalAlign: 'middle',
               align: 'right',
-              fontSize: 9
+              fontSize: 10
             }
         },
 
@@ -77,6 +213,44 @@ $(function() {
         },
 
         expandAndCollapse: true,
+        initialTreeDepth: 1,
+        animationDuration: 550,
+        animationDurationUpdate: 750
+      },
+      {
+        type: 'tree',
+        name: '二厂房',
+
+        data: [data2],
+
+        top: '50%',
+        left: '15%',
+        bottom: '2%',
+        right: '20%',
+
+        symbolSize: 7,
+
+        label: {
+            normal: {
+              position: 'left',
+              verticalAlign: 'middle',
+              align: 'right',
+              fontSize: 10
+            }
+        },
+
+        leaves: {
+            label: {
+              normal: {
+                position: 'right',
+                verticalAlign: 'middle',
+                align: 'left'
+              }
+            }
+        },
+
+        expandAndCollapse: true,
+        initialTreeDepth: 1,
         animationDuration: 550,
         animationDurationUpdate: 750
       }

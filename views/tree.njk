@@ -1,0 +1,61 @@
+{# 先在前端实现数据格式，在做这个超级管理员页面 #}
+{% extends "layout.njk" %}
+{# 首页自定义样式文件 #}
+{% block cssFiles %}
+  <link rel="stylesheet" href="/css/tree.css">
+{% endblock %}
+{% block jsFiles %}
+  <script src="/js/tree.js"></script>
+{% endblock %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+<div class="container">
+  <div class="tree">
+    <div class="first">
+      <title>厂区</title>
+      <div class="content">
+        <div class="flex-box">
+          <title>你好</title>
+          <div class="content">
+            <div class="flex-box">
+              <title>我是</title>
+              <div class="content"></div>
+            </div>
+            <div class="flex-box">
+              <title>fdsa</title>
+              <div class="content"></div>
+            </div>
+            <div class="flex-box">
+              <title>fsdafdsa</title>
+              <div class="content"></div>
+            </div>
+          </div>
+        </div>
+        <div class="flex-box">
+          <title>你好</title>
+          <div></div>
+        </div>
+        <div class="flex-box">
+          <title>你好</title>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <form class="control-panel">
+    <input type="button" id="btn-before" value="前序遍历">
+    <input type="button" id="btn-behind" value="后序遍历">
+    <div>
+      <input type="text" name="inp-search" id="inp-search">
+      <input type="button" id="btn-search" value="查询">
+    </div>
+    <div>
+      <input type="button" id="btn-delete" value="删除">
+      <input type="text" name="inp-addtxt" id="inp-addtxt">
+      <input type="button" id="btn-add" value="添加">
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% include './parts/footer.njk' %}

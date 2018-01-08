@@ -7,7 +7,7 @@ var Area = model.Area;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log('首页查询公司信息...')
+  console.log('首页查询公司信息...');
   Company.findOne()
   .then(function (company) {
     if(company === null) {
@@ -23,5 +23,10 @@ router.get('/', function(req, res, next) {
     console.log(err);
   })
 });
+
+router.get('/tree', function(req, res, next) {
+  console.log('组织关系图···');
+  res.render('tree', {title: '厂房分布图'})
+})
 
 module.exports = router;
