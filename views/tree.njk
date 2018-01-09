@@ -12,48 +12,63 @@
 <h2>{{ title }}</h2>
 <div class="container">
   <div class="tree">
-    <div class="first">
-      <title>厂区</title>
-      <div class="content">
-        <div class="flex-box">
-          <title>你好</title>
-          <div class="content">
-            <div class="flex-box">
-              <title>我是</title>
-              <div class="content"></div>
-            </div>
-            <div class="flex-box">
-              <title>fdsa</title>
-              <div class="content"></div>
-            </div>
-            <div class="flex-box">
-              <title>fsdafdsa</title>
-              <div class="content"></div>
-            </div>
-          </div>
-        </div>
-        <div class="flex-box">
-          <title>你好</title>
-          <div></div>
-        </div>
-        <div class="flex-box">
-          <title>你好</title>
-          <div></div>
-        </div>
+    <div class="first-layer">一厂房
+      <div class="second-layer">一跨
+        <div class="third-layer">焊接区域</div>
+        <div class="third-layer">倒角区域</div>
+        <div class="third-layer">装配区域</div>
+        <div class="third-layer">组装区域</div>
+      </div>
+      <div class="second-layer">二跨
+        <div class="third-layer">机加区域</div>
+        <div class="third-layer">浇筑区域</div>
+        <div class="third-layer">机加区域</div>
+      </div>
+      <div class="second-layer">三跨</div>
+      <div class="second-layer">四跨</div>
+      <div class="second-layer">五跨</div>
+      <div class="second-layer">六跨</div>
+      <div class="second-layer">七跨</div>
+    </div>
+    <div class="first-layer">二厂房
+      <div class="second-layer">一跨
+        <div class="third-layer">存放区</div>
+        <div class="third-layer">恢复区</div>
+      </div>
+      <div class="second-layer">二跨
+        <div class="third-layer">放区</div>
+        <div class="third-layer">复区</div>
+        <div class="third-layer">复区</div>
+        <div class="third-layer">复区</div>
       </div>
     </div>
+    <div class="first-layer">四厂房
+      <div class="second-layer">一跨
+        <div class="third-layer">存放区</div>
+        <div class="third-layer">恢复区</div>
+      </div>
+      <div class="second-layer">二跨
+        <div class="third-layer">放区</div>
+        <div class="third-layer">复区</div>
+        <div class="third-layer">复区</div>
+        <div class="third-layer">复区</div>
+      </div>
+      <div class="second-layer">三跨
+        <div class="third-layer">放区</div>
+        <div class="third-layer">复区</div>
+      </div>
+    </div>
+    <div class="first-layer">五厂房</div>
   </div>
   <form class="control-panel">
-    <input type="button" id="btn-before" value="前序遍历">
-    <input type="button" id="btn-behind" value="后序遍历">
+    <input type="button" id="btn-delete" value="删除">
     <div>
-      <input type="text" name="inp-search" id="inp-search">
-      <input type="button" id="btn-search" value="查询">
+      <input type="text" name="add-layer">
+      <input type="button" id="btn-add" value="添加">  
     </div>
     <div>
-      <input type="button" id="btn-delete" value="删除">
-      <input type="text" name="inp-addtxt" id="inp-addtxt">
-      <input type="button" id="btn-add" value="添加">
+      <input type="text" name="update-layer">
+      <input type="button" id="btn-update" value="修改">
     </div>
   </form>
 </div>

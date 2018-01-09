@@ -5,71 +5,51 @@
   margin-right: 16px;
   min-height: 50px;
   background: #fcf9f2;
-}
-.tree title {
-  display: block;
-  width: 100%;
-}
-.tree .first {
-  height: auto;
-}
-.flex-box {
   display: flex;
-  flex-flow: column nowrap;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
-.flex-box title {
-  background: gray;
-}
-.flex-box div {
-  width: 100%;
-}
-.content {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
-  align-items: center;
-  background: #fff;
+/* .first-layer, .second-layer, .third-layer { */
+  .tree div {
+  border: 1px #000 solid;
   margin: 5px;
   padding: 5px;
-  height: 30%;
-  border: 3px solid #000;
-  border-radius: 4px;
-  color: #000;
-  cursor: pointer;
 }
-
 .control-panel {
   float: right;
   min-height: 50px;
-  height: 700px;
   width: 134px;
   display: flex;
   flex-flow: column;
   justify-content: center;
   align-items: center;
+  background: #fcf9f2;
 }
 .control-panel div {
   height: 60px;
   width: 100%;
-  line-height: 30px;
-  margin-top: 5px;
+  line-height: 60px;
+  text-align: center;
 }
 .control-panel input[type="button"] {
-  display: block;
-  margin-top: 5px;
-  width: 100%;
+  display: inline-block;
+  width: 50%;
   height: 30px;
   line-height: 30px;
-  background: #fcf9f2;
-  border-radius: 5px;
+  background: #b0e11e;
+  border: none;
 }
 .control-panel input[type="text"] {
-  display: block;
+  display: inline-block;
   height: 30px;
   line-height: 30px;
+  width: 45%;
+  border: none;
+}
+#btn-delete {
   width: 100%;
 }
-
 .select{
   background: #b0e11e;
 }
