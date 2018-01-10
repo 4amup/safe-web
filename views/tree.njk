@@ -12,59 +12,85 @@
 <h2>{{ title }}</h2>
 <div class="container">
   <div class="tree">
-    <div class="first-layer">一厂房
-      <div class="second-layer">一跨
-        <div class="third-layer">焊接区域</div>
-        <div class="third-layer">倒角区域</div>
-        <div class="third-layer">装配区域</div>
-        <div class="third-layer">组装区域</div>
+    <h5 class="tips">点击此区域可取消当前区域的选择</h5>
+    <div class="layer-0">
+      <h4>厂区</h4>
+      <div class="layer-1">
+        <h4>一厂房</h4>
+        <div class="layer-2">
+          <h4>一跨</h4>
+          <div class="layer-3">焊接区域</div>
+          <div class="layer-3">倒角区域</div>
+          <div class="layer-3">装配区域</div>
+          <div class="layer-3">组装区域</div>
+        </div>
+        <div class="layer-2">
+          <h4>二跨</h4>
+          <div class="layer-3">机加区域</div>
+          <div class="layer-3">浇筑区域</div>
+          <div class="layer-3">机加区域</div>
+        </div>
+        <div class="layer-2">
+          <h4>三跨</h4>
+        </div>
+        <div class="layer-2">
+          <h4>四跨</h4>
+        </div>
+        <div class="layer-2">
+          <h4>五跨</h4>
+        </div>
+        <div class="layer-2">
+          <h4>六跨</h4>
+        </div>
+        <div class="layer-2">
+          <h4>七跨</h4>
+        </div>
       </div>
-      <div class="second-layer">二跨
-        <div class="third-layer">机加区域</div>
-        <div class="third-layer">浇筑区域</div>
-        <div class="third-layer">机加区域</div>
+      <div class="layer-1">
+        <h4>二厂房</h4>
+        <div class="layer-2">
+          <h4>一跨</h4>
+          <div class="layer-3">存放区</div>
+          <div class="layer-3">恢复区</div>
+        </div>
+        <div class="layer-2">
+          <h4>二跨</h4>
+          <div class="layer-3">放区</div>
+          <div class="layer-3">复区</div>
+          <div class="layer-3">复区</div>
+          <div class="layer-3">复区</div>
+        </div>
       </div>
-      <div class="second-layer">三跨</div>
-      <div class="second-layer">四跨</div>
-      <div class="second-layer">五跨</div>
-      <div class="second-layer">六跨</div>
-      <div class="second-layer">七跨</div>
+      <div class="layer-1">
+        <h4>四厂房</h4>
+        <div class="layer-2">
+          <h4>一跨</h4>
+          <div class="layer-3">存放区</div>
+          <div class="layer-3">恢复区</div>
+        </div>
+        <div class="layer-2">
+          <h4>二跨</h4>
+          <div class="layer-3">放区</div>
+          <div class="layer-3">复区</div>
+          <div class="layer-3">复区</div>
+          <div class="layer-3">复区</div>
+        </div>
+        <div class="layer-2">
+          <h4>三跨</h4>
+          <div class="layer-3">放区</div>
+          <div class="layer-3">复区</div>
+        </div>
+      </div>
+      <div class="layer-1">
+        <h4>五厂房</h4>
+      </div>
     </div>
-    <div class="first-layer">二厂房
-      <div class="second-layer">一跨
-        <div class="third-layer">存放区</div>
-        <div class="third-layer">恢复区</div>
-      </div>
-      <div class="second-layer">二跨
-        <div class="third-layer">放区</div>
-        <div class="third-layer">复区</div>
-        <div class="third-layer">复区</div>
-        <div class="third-layer">复区</div>
-      </div>
-    </div>
-    <div class="first-layer">四厂房
-      <div class="second-layer">一跨
-        <div class="third-layer">存放区</div>
-        <div class="third-layer">恢复区</div>
-      </div>
-      <div class="second-layer">二跨
-        <div class="third-layer">放区</div>
-        <div class="third-layer">复区</div>
-        <div class="third-layer">复区</div>
-        <div class="third-layer">复区</div>
-      </div>
-      <div class="second-layer">三跨
-        <div class="third-layer">放区</div>
-        <div class="third-layer">复区</div>
-      </div>
-    </div>
-    <div class="first-layer">五厂房</div>
   </div>
   <form class="control-panel">
     <input type="button" id="btn-delete" value="删除">
     <div>
       <input type="text" name="add-layer">
-      <input type="button" id="btn-add" value="添加">  
+      <input type="button" id="btn-add" value="添加">
     </div>
     <div>
       <input type="text" name="update-layer">

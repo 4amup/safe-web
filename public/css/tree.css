@@ -5,13 +5,34 @@
   margin-right: 16px;
   min-height: 50px;
   background: #fcf9f2;
+}
+.tree .tips {
+  text-align: center;
+}
+.tree h4 {
+  text-align: center;
+}
+.tree .layer-0>h4 {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  font-size: 20px;
+  height: 25px;
+  line-height: 25px;
+}
+/* .first-layer, .second-layer, .third-layer { */
+.tree .layer-0 {
+  position: relative;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
+  align-content: stretch;
+  align-items: stretch;
+  margin: 50px;
+  padding-top: 50px;
 }
-/* .first-layer, .second-layer, .third-layer { */
-  .tree div {
+.tree div {
   border: 1px #000 solid;
   margin: 5px;
   padding: 5px;
