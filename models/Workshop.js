@@ -7,6 +7,7 @@ module.exports = db.defineModel('workshop', {
   },
   polygonPath: {
     type: db.TEXT(),
+    allowNull: true,
     comment: '路径点集合，json格式'
   }
 });

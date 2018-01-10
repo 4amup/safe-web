@@ -3,6 +3,10 @@ var router = express.Router();
 var model = require('../model');
 var Trouble = model.Trouble;
 var Company = model.Company;
+var Factory = model.Factory;
+var Department = model.Department;
+var Workshop = model.Workshop;
+var Stride = model.Stride;
 var Area = model.Area;
 // 文件上传中间件配置
 var multer = require('multer');
@@ -41,6 +45,13 @@ router.post('/images',upload.array('images', 9), function(req, res, next) {
   res.send(req.files);
 });
 
+// 增加厂区信息
+router.post('/factory', function(req, res, next) {
+  Factory.create(req.body)
+  .then(function(factory) {
+    res.send(factory);
+  });
+})
 // 增加公司信息
 router.post('/company', function (req, res, next) {
   Company.create(req.body)

@@ -22,11 +22,26 @@ $(function() {
       alert('请先选择当前节点');
       return;
     };
-
     // 判断当前所属层级
     var layerNumber = target.attr('class').replace(/[^0-9]/ig,"") - 0;
 
-    var text = button.prev();
+    var url = '/api';
+
+    switch(layerNumber) {
+      case 0:
+        url += '/factory';
+        break;
+      case 1:
+        url += '/factory/:Fid/workshop';
+        break;
+      case 2:
+        url += '/factory/:Fid/workshop/:Wid/stride';
+        break;
+      case 3:
+        url += '/factory/:Fid/workshop/:Wid/stride/:Sid/area'
+    }
+
+    var text = button.prev(); // 文字输入框内容
     switch(button.attr('id')) {
       case 'btn-delete':
         target.remove();
@@ -36,10 +51,20 @@ $(function() {
           alert('请先写入内容');
           return false;
         }
-        var child =  $(`<div><h4>${text.val()}</h4></div>`).addClass(`layer-${layerNumber+1}`);
-        target.append(child);
-        text.val(null);
-        text.focus();
+        $.post(url, {name: text.val()})
+        .done(function(data) {
+          console.log(data);
+          var child =  $(`<div><h4>${data.name}</h4></div>`);
+          child.addClass(`layer-${layerNumber+1}`);
+          child.attr('id', data.id);
+          target.append(child);
+          text.val(null);
+          text.focus();
+  
+        })
+        .fail(function() {
+          console.log('上传失败')
+        })
         break;
       case 'btn-update':
         if(!text.val()) {
