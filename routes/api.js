@@ -8,6 +8,26 @@ var Department = model.Department;
 var Workshop = model.Workshop;
 var Stride = model.Stride;
 var Area = model.Area;
+
+// 建立组织树的json数据
+// function Leaf(name,id,children){
+//   var o = new Object();
+//   o.name = name;
+//   o.id = id;
+//   o.children = children;
+//   return o;
+// }
+// var json = {
+//   "name": "一厂房",
+//   "id": null,
+//   "children": null
+// }
+// Factory.findAll()
+// .then(function(factorys) {
+//   Leaf.
+//   json.children = factorys;
+// })
+
 // 文件上传中间件配置
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -45,13 +65,6 @@ router.post('/images',upload.array('images', 9), function(req, res, next) {
   res.send(req.files);
 });
 
-// 增加厂区信息
-router.post('/factory', function(req, res, next) {
-  Factory.create(req.body)
-  .then(function(factory) {
-    res.send(factory);
-  });
-})
 // 增加公司信息
 router.post('/company', function (req, res, next) {
   Company.create(req.body)
@@ -140,5 +153,41 @@ router.delete('/company/areas/:id', function(req, res, next) {
   });
 });
 
+// 增加厂区信息
+router.post('/factory', function(req, res, next) {
+  Factory.create(req.body)
+  .then(function(factory) {
+    console.log(`建立了ID为${factory.id}的厂区`);
+    res.send(factory);
+  });
+})
+router.get('/tree', function(req, res, next) {
+
+})
+// 增加厂房信息
+router.post('/factory/:id/workshop', function(req, res, next) {
+  console.log(`建立ID为${req.params.id}厂区下的厂房`);
+  req.body.factoryId = req.params.id;
+  Workshop.create(req.body)
+  .then(function(workshop) {
+    res.send(workshop);
+  });
+});
+router.post('/workshop/:id/stride', function(req, res, next) {
+  console.log(`建立ID为${req.params.id}厂房下的跨`);
+  req.body.workshopId = req.params.id;
+  Stride.create(req.body)
+  .then(function(stride) {
+    res.send(stride);
+  });
+});
+router.post('/stride/:id/area', function(req, res, next) {
+  console.log(`建立ID为${req.params.id}跨下的区域`);
+  req.body.strideId = req.params.id;
+  Area.create(req.body)
+  .then(function(area) {
+    res.send(area);
+  });
+});
 
 module.exports = router;

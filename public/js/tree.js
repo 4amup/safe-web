@@ -24,21 +24,22 @@ $(function() {
     };
     // 判断当前所属层级
     var layerNumber = target.attr('class').replace(/[^0-9]/ig,"") - 0;
+    var layerId = target.attr('id');
 
-    var url = '/api';
+    var url = '/api'; // 初始化上传url
 
     switch(layerNumber) {
       case 0:
         url += '/factory';
         break;
       case 1:
-        url += '/factory/:Fid/workshop';
+        url += `/factory/${layerId}/workshop`;
         break;
       case 2:
-        url += '/factory/:Fid/workshop/:Wid/stride';
+        url += `/workshop/${layerId}/stride`;
         break;
       case 3:
-        url += '/factory/:Fid/workshop/:Wid/stride/:Sid/area'
+        url += `/stride/${layerId}/area`;
     }
 
     var text = button.prev(); // 文字输入框内容
@@ -60,7 +61,7 @@ $(function() {
           target.append(child);
           text.val(null);
           text.focus();
-  
+
         })
         .fail(function() {
           console.log('上传失败')

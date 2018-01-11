@@ -4,7 +4,6 @@ var db = require('../db');
 module.exports = db.defineModel('factory', {
   name: {
     type: db.STRING(100),
-    unique: true,
     comment: '厂区名'
   },
   polygonPath: {
