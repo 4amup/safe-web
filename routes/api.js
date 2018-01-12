@@ -10,24 +10,123 @@ var Stride = model.Stride;
 var Area = model.Area;
 
 // 建立组织树的json数据
-// function Leaf(name,id,children){
-//   var o = new Object();
-//   o.name = name;
-//   o.id = id;
-//   o.children = children;
-//   return o;
-// }
-// var json = {
-//   "name": "一厂房",
-//   "id": null,
-//   "children": null
-// }
-// Factory.findAll()
-// .then(function(factorys) {
-//   Leaf.
-//   json.children = factorys;
-// })
+var json = {
+  name: "init",
+  id: null,
+  // children: []
+};
+Factory.findAll({
+  attributes: ['name', 'id']
+})
+.then(function(factorys) {
 
+  json.children = factorys.map(function(value, index) {
+    return {
+      name: value.name,
+      // id: value.id,
+      // children: []
+    }
+  });
+
+  // for(var fi=0; fi<factorys.length; fi++) {
+  //   var f = factorys[fi];
+  //   f.getWorkshops()
+  //   .then(function(workshops) {
+  //     json.children[fi].children = workshops.map(function(value, index) {
+  //       return {
+  //         name: value.name,
+  //         id: value.id,
+  //         children: []
+  //       }
+  //     });
+
+  //     // 二层
+  //     for(var wi=0; wi<workshops.length; wi++) {
+  //       var w = workshops[wi];
+  //       w.getStrides()
+  //       .then(function(strides) {
+  //         json.children[fi].children[wi].children = strides.map(function(value, index) {
+  //           return {
+  //             name: vlaue.name,
+  //             id: value.id,
+  //             children: []
+  //           }
+  //         })
+  //       })
+  //     }
+  //   });
+  // }
+
+  factorys.forEach(function(value, findex) {
+    var f = value;
+    f.getWorkshops()
+    .then(function(workshops) {
+      json.children[findex].children = workshops.map(function(value, index) {
+        return {
+          name: value.name,
+          // id: value.id,
+          children: []
+        }
+      });
+
+      workshops.forEach(function(value, windex) {
+        var w = value;
+        w.getStrides()
+        .then(function(strides) {
+          json.children[findex].children[windex].children = strides.map(function(value, index) {
+            return {
+              name: value.name,
+              // id: value.id,
+            }
+          });
+
+          strides.forEach(function(value, sindex) {
+            var s = value;
+            s.getAreas()
+            .then(function(areas) {
+              json.children[findex].children[windex].children[sindex].children = areas.map(function(value, index) {
+                return {
+                  name: value.name,
+                  // id: value.id
+                }
+              })
+            })
+          })
+        });
+      })
+    });
+  });
+
+});
+
+// 添加一个调试json的路由
+router.get('/json', function(req, res, next) {
+  res.send(json);
+})
+
+// Area.findAll({
+//   attributes: ['name', 'id', 'strideId']
+// })
+// .then(function(areas) {
+//   console.log(areas);
+//   var strideId;
+//   var children = [];
+//   for(var i=0; i<areas.length; i++) {
+//     var area = areas[i];
+//     if(area!==strideId) {
+//       var stride;
+//       Stride.findById(strideId, {
+//         attributes: ['name', 'id']
+//       })
+//       .then(function(stride) {
+//         stride = stride;
+//       })
+//       children.push()
+//     } else {
+//       children
+//     }
+//   }
+// })
 // 文件上传中间件配置
 var multer = require('multer');
 var storage = multer.diskStorage({

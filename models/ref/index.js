@@ -4,6 +4,7 @@ var model = require('../../model')
 var Company  = model.Company;
 var Department  = model.Department;
 var Factory = model.Factory;
+var Workshop = model.Workshop;
 var Stride = model.Stride;
 var Area  = model.Area;
 var User = model.User;
@@ -11,12 +12,14 @@ var User = model.User;
 Company.hasMany(Department);
 Department.belongsTo(Company);
 
-Factory.hasMany(Stride);
+Factory.hasMany(Workshop);
+Workshop.hasMany(Stride);
 Stride.hasMany(Area);
 Area.belongsTo(Stride);
-Stride.belongsTo(Factory);
-Factory.belongsTo(Company);
+Stride.belongsTo(Workshop);
+Workshop.belongsTo(Factory);
 
+Factory.belongsTo(Company);
 Area.belongsTo(Department);
 User.belongsTo(Department);
 
