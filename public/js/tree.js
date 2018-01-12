@@ -2,6 +2,18 @@ $(function() {
   var tree = $('.tree');
   var target = null;
 
+  $.get('/api/json',function(json) {
+    console.log(json);
+    var factorys = json.children;
+
+    factorys.forEach(function(value, index) {
+      var title = $('<h4></h4>').text(value.name);
+      var fNode = $(`<div></div>`).addClass('layer-1').attr("id", value.id);
+      fNode.append(title);
+      $('.layer-0').append(fNode);
+    });
+  });
+
   tree.on('click', 'div', function (event) {
     event.stopPropagation();
     var div = $(this);

@@ -15,6 +15,8 @@ var json = {
   id: null,
   // children: []
 };
+
+// 构造树图的json数据
 Factory.findAll({
   attributes: ['name', 'id']
 })
@@ -23,39 +25,9 @@ Factory.findAll({
   json.children = factorys.map(function(value, index) {
     return {
       name: value.name,
-      // id: value.id,
-      // children: []
+      id: value.id,
     }
   });
-
-  // for(var fi=0; fi<factorys.length; fi++) {
-  //   var f = factorys[fi];
-  //   f.getWorkshops()
-  //   .then(function(workshops) {
-  //     json.children[fi].children = workshops.map(function(value, index) {
-  //       return {
-  //         name: value.name,
-  //         id: value.id,
-  //         children: []
-  //       }
-  //     });
-
-  //     // 二层
-  //     for(var wi=0; wi<workshops.length; wi++) {
-  //       var w = workshops[wi];
-  //       w.getStrides()
-  //       .then(function(strides) {
-  //         json.children[fi].children[wi].children = strides.map(function(value, index) {
-  //           return {
-  //             name: vlaue.name,
-  //             id: value.id,
-  //             children: []
-  //           }
-  //         })
-  //       })
-  //     }
-  //   });
-  // }
 
   factorys.forEach(function(value, findex) {
     var f = value;
@@ -64,8 +36,7 @@ Factory.findAll({
       json.children[findex].children = workshops.map(function(value, index) {
         return {
           name: value.name,
-          // id: value.id,
-          children: []
+          id: value.id,
         }
       });
 
@@ -76,7 +47,7 @@ Factory.findAll({
           json.children[findex].children[windex].children = strides.map(function(value, index) {
             return {
               name: value.name,
-              // id: value.id,
+              id: value.id,
             }
           });
 
@@ -87,7 +58,7 @@ Factory.findAll({
               json.children[findex].children[windex].children[sindex].children = areas.map(function(value, index) {
                 return {
                   name: value.name,
-                  // id: value.id
+                  id: value.id
                 }
               })
             })
@@ -102,31 +73,8 @@ Factory.findAll({
 // 添加一个调试json的路由
 router.get('/json', function(req, res, next) {
   res.send(json);
-})
+});
 
-// Area.findAll({
-//   attributes: ['name', 'id', 'strideId']
-// })
-// .then(function(areas) {
-//   console.log(areas);
-//   var strideId;
-//   var children = [];
-//   for(var i=0; i<areas.length; i++) {
-//     var area = areas[i];
-//     if(area!==strideId) {
-//       var stride;
-//       Stride.findById(strideId, {
-//         attributes: ['name', 'id']
-//       })
-//       .then(function(stride) {
-//         stride = stride;
-//       })
-//       children.push()
-//     } else {
-//       children
-//     }
-//   }
-// })
 // 文件上传中间件配置
 var multer = require('multer');
 var storage = multer.diskStorage({
