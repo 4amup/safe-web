@@ -5,12 +5,44 @@ $(function() {
   $.get('/api/json',function(json) {
     console.log(json);
     var factorys = json.children;
-
+    
+    // 根据数据在前端渲染出盒子们
     factorys.forEach(function(value, index) {
-      var title = $('<h4></h4>').text(value.name);
-      var fNode = $(`<div></div>`).addClass('layer-1').attr("id", value.id);
-      fNode.append(title);
-      $('.layer-0').append(fNode);
+      var factory = value;
+      var fnode = $(`<div></div>`).addClass('layer-1').attr("id", factory.id);
+      var ftitle = $('<h4></h4>').text(factory.name);
+      fnode.append(ftitle);
+
+      // 厂房层
+      var workshops = factory.children;
+      workshops.forEach(function(value, index) {
+        var workshop = value;
+        var wnode = $('<div></div>').addClass('layer-2').attr('id', workshop.id);
+        var wtitle = $('<h4></h4>').text(workshop.name);
+        wnode.append(wtitle);
+
+        // 跨层
+        var strides = workshop.children;
+        strides.forEach(function(value, index) {
+          var stride = value;
+          var snode = $('<div></div>').addClass('layer-3').attr('id', stride.id);
+          var stitle = $('<h4></h4>').text(stride.name);
+          snode.append(stitle);
+
+          // 区域层
+          var areas = stride.children;
+          areas.forEach(function(value, index) {
+            var area = value;
+            var anode = $('<div></div>').addClass('layer-4').attr('id', area.id);
+            var atitle = $('<h4></h4>').text(area.name);
+            anode.append(atitle);
+            snode.append(anode);
+          });
+          wnode.append(snode);
+        });
+        fnode.append(wnode);
+      });
+      $('.layer-0').append(fnode);
     });
   });
 
@@ -20,12 +52,16 @@ $(function() {
     $('.tree div').removeClass('select');
     div.addClass('select');
     target = div;
+    $('input[name="add-layer"]').focus(); // 自动聚焦到添加文本框中
+    $('input[name="update-layer"]').val(div.children('h4').text());
   });
 
+  // 取消当前节点的选择
   $('.tree').on('click', function(event) {
     event.stopPropagation();
     $('.tree div').removeClass('select');
     target = null;
+    $('input[name="update-layer"]').val(null);
   });
 
   $('.control-panel').on('click', 'input[type="button"]', function(event) {
@@ -42,31 +78,48 @@ $(function() {
 
     switch(layerNumber) {
       case 0:
-        url += '/factory';
+        url += `/factory`;
         break;
       case 1:
-        url += `/factory/${layerId}/workshop`;
+        url += `/factory/${layerId}`;
         break;
       case 2:
-        url += `/workshop/${layerId}/stride`;
+        url += `/workshop/${layerId}`;
         break;
       case 3:
-        url += `/stride/${layerId}/area`;
+        url += `/stride/${layerId}`;
+        break;
+      case 4:
+        url += `/area/${layerId}`
     }
 
     var text = button.prev(); // 文字输入框内容
     switch(button.attr('id')) {
       case 'btn-delete':
-        target.remove();
+        $.ajax({
+          url: url,
+          type: 'DELETE',
+        })
+        .done(function(data) {
+          console.log(data);
+          target.remove();
+        })
+        .fail(function() {
+          console.log('修改当前节点失败')
+        })
         break;
-      case 'btn-add':
+      case 'btn-add': // 添加节点（层级）ajax和前端
         if(!text.val()) {
           alert('请先写入内容');
           return false;
-        }
-        $.post(url, {name: text.val()})
+        };
+        if(layerNumber<0 || layerNumber>3) {
+          alert('当前节点不能添加子节点');
+          return false;
+        };
+        $.post(url, {name: text.val()}) // 异步上传
         .done(function(data) {
-          console.log(data);
+          console.log('增加子节点成功');
           var child =  $(`<div><h4>${data.name}</h4></div>`);
           child.addClass(`layer-${layerNumber+1}`);
           child.attr('id', data.id);
@@ -76,14 +129,30 @@ $(function() {
 
         })
         .fail(function() {
-          console.log('上传失败')
-        })
+          console.log('增加子节点成功');
+        });
         break;
       case 'btn-update':
         if(!text.val()) {
           alert('请先写入内容');
           return false;
-        }
+        };
+        if(layerNumber<1 || layerNumber>3) {
+          alert('当前节点不能修改');
+          return false;
+        };
+        $.ajax({
+          url: url,
+          type: 'PUT',
+          data: {name: text.val()}
+        })
+        .done(function(data) {
+          console.log('修改当前节点成功');
+          target.children('h4').text(data.name);
+        })
+        .fail(function() {
+          console.log('修改当前节点失败')
+        })
         target.children('h4').text(text.val());
         text.val(null);
         text.focus();
