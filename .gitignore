@@ -60,4 +60,6 @@ typings/
 
 .DS_Store
 public/example
-public/data
+
+#JSON
+public/data/
