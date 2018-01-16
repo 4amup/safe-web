@@ -24,9 +24,14 @@ router.get('/', function(req, res, next) {
   })
 });
 
-router.get('/tree', function(req, res, next) {
+router.get('/view/plant', function(req, res, next) {
   console.log('组织关系图···');
-  res.render('tree', {title: '厂房分布图'})
+  res.render('plant', {title: '工厂视图'});
+});
+
+router.get('/view/organization', function(req, res, next) {
+  console.log('公司关系图...');
+  res.render('organization', {title: '公司组织图'});
 })
 
 module.exports = router;

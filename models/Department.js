@@ -7,9 +7,5 @@ module.exports = db.defineModel('department', {
     type: db.STRING(100),
     unique: true,
     comment: '部门名'
-  },
-  info: {
-    type: db.STRING(100),
-    comment: '部门简介'
   }
 });

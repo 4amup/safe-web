@@ -2,12 +2,12 @@ $(function() {
   var tree = $('.tree');
   var target = null;
 
-  $.get('/api/json',function(json) {
+  $.get('/data/organization.json',function(json) {
     console.log(json);
-    var factorys = json.children;
-    
+    var company = json.children;
+
     // 根据数据在前端渲染出盒子们
-    factorys.forEach(function(value, index) {
+    company.forEach(function(value, index) {
       var factory = value;
       var fnode = $(`<div></div>`).addClass('layer-1').attr("id", factory.id);
       var ftitle = $('<h4></h4>').text(factory.name);
@@ -46,6 +46,7 @@ $(function() {
     });
   });
 
+  // 选择节点
   tree.on('click', 'div', function (event) {
     event.stopPropagation();
     var div = $(this);
@@ -78,19 +79,13 @@ $(function() {
 
     switch(layerNumber) {
       case 0:
-        url += `/factory`;
+        url += `/company`;
         break;
       case 1:
-        url += `/factory/${layerId}`;
+        url += `/company/${layerId}`;
         break;
       case 2:
-        url += `/workshop/${layerId}`;
-        break;
-      case 3:
-        url += `/stride/${layerId}`;
-        break;
-      case 4:
-        url += `/area/${layerId}`
+        url += `/department/${layerId}`;
     }
 
     var text = button.prev(); // 文字输入框内容
@@ -113,7 +108,7 @@ $(function() {
           alert('请先写入内容');
           return false;
         };
-        if(layerNumber<0 || layerNumber>3) {
+        if(layerNumber<0 || layerNumber>1) {
           alert('当前节点不能添加子节点');
           return false;
         };
@@ -137,7 +132,7 @@ $(function() {
           alert('请先写入内容');
           return false;
         };
-        if(layerNumber<1 || layerNumber>3) {
+        if(layerNumber<1 || layerNumber>2) {
           alert('当前节点不能修改');
           return false;
         };

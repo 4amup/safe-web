@@ -18,19 +18,19 @@ function updateJson() {
     name: "init",
     id: null
   };
-  
+
   Factory.findAll({
     attributes: ['name', 'id']
   })
   .then(function(factorys) {
-  
+
     json.children = factorys.map(function(value, index) {
       return {
         name: value.name,
         id: value.id,
       }
     });
-  
+
     factorys.forEach(function(value, findex) {
       var f = value;
       f.getWorkshops()
@@ -41,7 +41,7 @@ function updateJson() {
             id: value.id,
           }
         });
-  
+
         workshops.forEach(function(value, windex) {
           var w = value;
           w.getStrides()
@@ -52,7 +52,7 @@ function updateJson() {
                 id: value.id,
               }
             });
-  
+
             strides.forEach(function(value, sindex) {
               var s = value;
               s.getAreas()
@@ -64,11 +64,11 @@ function updateJson() {
                   }
                 });
                 // 将json数据更新
-                fs.writeFile(path.join(__dirname, '../public/data/tree.json'), JSON.stringify(json), 'utf-8', function(err) {
+                fs.writeFile(path.join(__dirname, '../public/data/plant.json'), JSON.stringify(json), 'utf-8', function(err) {
                   if(err) {
                     throw(err);
                   }
-                  console.log('tree的json数据更新成功');
+                  console.log('plant视图的json数据更新成功');
                 });
               })
             })
@@ -76,13 +76,16 @@ function updateJson() {
         })
       });
     });
-  return false;
   });
 }
 
 // 添加一个调试json的路由
-router.get('/json', function(req, res, next) {
-  res.sendFile(path.join(__dirname, '../public/data/tree.json'));
+router.get('/data/plant', function(req, res, next) {
+  res.sendFile(path.join(__dirname, '../public/data/plant.json'));
+});
+
+router.get('/data/organization', function(req, res, next) {
+  res.sendFile(path.join(__dirname, '../public/data/organization.json'));
 });
 
 // 文件上传中间件配置
@@ -122,93 +125,68 @@ router.post('/images',upload.array('images', 9), function(req, res, next) {
   res.send(req.files);
 });
 
-// // 增加公司信息
-// router.post('/company', function (req, res, next) {
-//   Company.create(req.body)
-//   .then(function(company) {
-//     res.send(company);
-//   })
-// });
+// 增加公司信息
+router.post('/company', function (req, res, next) {
+  Company.create(req.body)
+  .then(function(company) {
+    res.send(company);
+  })
+});
 
-// // 查公司信息
-// router.get('/company', function (req, res, next) {
-//   console.log('api查询公司信息...')
-//   Company.findOne()
-//   .then(function(company) {
-//     res.send(company);
-//   })
-// });
+// 修改公司信息
+router.put('/company/:id', function(req, res, next) {
+  Company.findById(req.params.id)
+  .then(function(company) {
+    company.update(req.body, {where: {id: company.id}})
+    .then(function(company) {
+      res.send(company);
+    });
+  });
+});
 
-// // 修改公司信息
-// router.put('/company/:id', function(req, res, next) {
-//   Company.findById(req.params.id)
-//   .then(function(company) {
-//     company.update(req.body, {where: {id: company.id}})
-//     .then(function(company) {
-//       res.send(company);
-//     });
-//   });
-// });
+// 删除公司
+router.delete('/company/:id', function(req, res, next) {
+  console.log(`api删除公司信息...`);
+  Company.destroy({where: {id: req.params.id}})
+  .then(() => {
+    res.send(`delete company`);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+});
 
-// // 删除公司
-// router.delete('/company/:id', function(req, res, next) {
-//   console.log(`api删除公司信息...`);
-//   Company.destroy({where: {id: req.params.id}})
-//   .then(() => {
-//     res.send(`delete company`);
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-// });
+// 增加部门信息
+router.post('/company/:id', function (req, res, next) {
+  req.body.companyId = req.params.id; // 设置关联
+  Department.create(req.body)
+  .then(function(department) {
+    res.send(department);
+  });
+});
 
-// // 查公司对应的区域信息
-// router.get('/company/areas', function (req, res, next) {
-//   console.log(`api查询公司下属的部门信息...`);
-//   Company.findOne()
-//   .then(function (company) {
-//     if(company){
-//       company.getAreas()
-//       .then(function (areas) {
-//         res.send(areas);
-//       })
-//     } else {
-//       res.send(null);
-//     }
-//   })
-// });
+// 修改部门信息
+router.put('/department/:id', function (req, res, next) {
+  Department.findById(req.params.id)
+  .then(function(department) {
+    department.update(req.body, {where: {id: department.id}})
+    .then(function(department) {
+      res.send(department);
+    });
+  });
+});
 
-// // 增加区域信息
-// router.post('/company/:id/areas', function (req, res, next) {
-//   req.body.companyId = req.params.id; // 设置关联
-//   Area.create(req.body)
-//   .then(function(area) {
-//     res.send(area);
-//   });
-// });
-
-// // 修改区域信息
-// router.put('/company/areas/:id', function (req, res, next) {
-//   Area.findById(req.params.id)
-//   .then(function(area) {
-//     area.update(req.body, {where: {id: area.id}})
-//     .then(function(area) {
-//       res.send(area);
-//     });
-//   });
-// });
-
-// // 删除区域信息
-// router.delete('/company/areas/:id', function(req, res, next) {
-//   console.log(`api删除部门信息...`);
-//   Area.destroy({where: {id: req.params.id}})
-//   .then(() => {
-//     res.send(`delete area`);
-//   })
-//   .catch((err) => {
-//     next(err);
-//   });
-// });
+// 删除部门信息
+router.delete('/department/:id', function(req, res, next) {
+  console.log(`api删除部门信息...`);
+  Department.destroy({where: {id: req.params.id}})
+  .then(() => {
+    res.send(`delete department`);
+  })
+  .catch((err) => {
+    next(err);
+  });
+});
 
 // 增加厂区信息
 router.post('/factory', function(req, res, next) {
