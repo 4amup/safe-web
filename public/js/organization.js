@@ -8,41 +8,21 @@ $(function() {
 
     // 根据数据在前端渲染出盒子们
     company.forEach(function(value, index) {
-      var factory = value;
-      var fnode = $(`<div></div>`).addClass('layer-1').attr("id", factory.id);
-      var ftitle = $('<h4></h4>').text(factory.name);
-      fnode.append(ftitle);
+      var company = value;
+      var cnode = $(`<div></div>`).addClass('layer-1').attr("id", company.id);
+      var ctitle = $('<h4></h4>').text(company.name);
+      cnode.append(ctitle);
 
       // 厂房层
-      var workshops = factory.children;
-      workshops.forEach(function(value, index) {
-        var workshop = value;
-        var wnode = $('<div></div>').addClass('layer-2').attr('id', workshop.id);
-        var wtitle = $('<h4></h4>').text(workshop.name);
-        wnode.append(wtitle);
-
-        // 跨层
-        var strides = workshop.children;
-        strides.forEach(function(value, index) {
-          var stride = value;
-          var snode = $('<div></div>').addClass('layer-3').attr('id', stride.id);
-          var stitle = $('<h4></h4>').text(stride.name);
-          snode.append(stitle);
-
-          // 区域层
-          var areas = stride.children;
-          areas.forEach(function(value, index) {
-            var area = value;
-            var anode = $('<div></div>').addClass('layer-4').attr('id', area.id);
-            var atitle = $('<h4></h4>').text(area.name);
-            anode.append(atitle);
-            snode.append(anode);
-          });
-          wnode.append(snode);
-        });
-        fnode.append(wnode);
+      var departments = company.children;
+      departments.forEach(function(value, index) {
+        var department = value;
+        var dnode = $('<div></div>').addClass('layer-2').attr('id', department.id);
+        var dtitle = $('<h4></h4>').text(department.name);
+        dnode.append(dtitle);
+        cnode.append(dnode);
       });
-      $('.layer-0').append(fnode);
+      $('.layer-0').append(cnode);
     });
   });
 
@@ -91,6 +71,9 @@ $(function() {
     var text = button.prev(); // 文字输入框内容
     switch(button.attr('id')) {
       case 'btn-delete':
+        if(layerNumber===0) {
+          alert('当前节点不可删除');
+        }
         $.ajax({
           url: url,
           type: 'DELETE',
