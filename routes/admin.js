@@ -13,9 +13,9 @@ router.get('/', function(req, res, next) {
     if(company === null) {
       res.render('admin', {title: '初始化'});
     } else {
-      company.getAreas()
-      .then(function (areas) {
-        res.render('admin', { title: '管理员', company: company, areas: areas });
+      company.getDepartments()
+      .then(function (departments) {
+        res.render('admin', { title: '管理员', company: company, departments: departments });
       });
     };
   })
