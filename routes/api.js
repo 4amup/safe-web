@@ -11,6 +11,47 @@ var Workshop = model.Workshop;
 var Stride = model.Stride;
 var Area = model.Area;
 
+// 构造组织机构的json数据
+function updateJson2() {
+  var json = {
+    name: "init",
+    id: null
+  };
+
+  Company.findAll({
+    attributes: ['name', 'id']
+  })
+  .then(function(companys) {
+
+    json.children = companys.map(function(value, index) {
+      return {
+        name: value.name,
+        id: value.id,
+      }
+    });
+
+    companys.forEach(function(value, findex) {
+      var f = value;
+      f.getDepartments()
+      .then(function(departments) {
+        json.children[findex].children = departments.map(function(value, index) {
+          return {
+            name: value.name,
+            id: value.id,
+          }
+        });
+        // 将json数据更新
+        fs.writeFile(path.join(__dirname, '../public/data/organization.json'), JSON.stringify(json), 'utf-8', function(err) {
+          if(err) {
+            throw(err);
+          }
+          console.log('organization视图的json数据更新成功');
+        });
+      });
+    });
+  });
+}
+
 // 构造树图的json数据
 function updateJson() {
   // 建立组织树的json数据
@@ -130,6 +171,7 @@ router.post('/company', function (req, res, next) {
   Company.create(req.body)
   .then(function(company) {
     res.send(company);
+    updateJson2();
   })
 });
 
@@ -140,6 +182,7 @@ router.put('/company/:id', function(req, res, next) {
     company.update(req.body, {where: {id: company.id}})
     .then(function(company) {
       res.send(company);
+      updateJson2();
     });
   });
 });
@@ -150,6 +193,7 @@ router.delete('/company/:id', function(req, res, next) {
   Company.destroy({where: {id: req.params.id}})
   .then(() => {
     res.send(`delete company`);
+    updateJson2();
   })
   .catch((err) => {
     console.log(err);
@@ -162,6 +206,7 @@ router.post('/company/:id', function (req, res, next) {
   Department.create(req.body)
   .then(function(department) {
     res.send(department);
+    updateJson2();
   });
 });
 
@@ -172,6 +217,7 @@ router.put('/department/:id', function (req, res, next) {
     department.update(req.body, {where: {id: department.id}})
     .then(function(department) {
       res.send(department);
+      updateJson2();
     });
   });
 });
@@ -182,6 +228,7 @@ router.delete('/department/:id', function(req, res, next) {
   Department.destroy({where: {id: req.params.id}})
   .then(() => {
     res.send(`delete department`);
+    updateJson2();
   })
   .catch((err) => {
     next(err);
