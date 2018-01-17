@@ -11,6 +11,8 @@ var Workshop = model.Workshop;
 var Stride = model.Stride;
 var Area = model.Area;
 
+updateJson();
+updateJson2();
 // 构造组织机构的json数据
 function updateJson2() {
   var json = {
