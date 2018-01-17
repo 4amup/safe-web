@@ -2,7 +2,7 @@ $(function() {
   var tree = $('.tree');
   var target = null;
 
-  $.get('/data/plant.json',function(json) {
+  $.get('/api/data/plant',function(json) {
     console.log(json);
     var factorys = json.children;
 

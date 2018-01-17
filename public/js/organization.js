@@ -2,7 +2,7 @@ $(function() {
   var tree = $('.tree');
   var target = null;
 
-  $.get('/data/organization.json',function(json) {
+  $.get('/api/data/organization',function(json) {
     console.log(json);
     var company = json.children;
 
@@ -71,7 +71,7 @@ $(function() {
     var text = button.prev(); // 文字输入框内容
     switch(button.attr('id')) {
       case 'btn-delete':
-        if(layerNumber===0) {
+        if(layerNumber<1 || layerNumber>3) {
           alert('当前节点不可删除');
         }
         $.ajax({

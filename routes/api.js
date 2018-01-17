@@ -11,51 +11,11 @@ var Workshop = model.Workshop;
 var Stride = model.Stride;
 var Area = model.Area;
 
-updateJson();
-updateJson2();
-// 构造组织机构的json数据
-function updateJson2() {
-  var json = {
-    name: "init",
-    id: null
-  };
-
-  Company.findAll({
-    attributes: ['name', 'id']
-  })
-  .then(function(companys) {
-
-    json.children = companys.map(function(value, index) {
-      return {
-        name: value.name,
-        id: value.id,
-      }
-    });
-
-    companys.forEach(function(value, findex) {
-      var f = value;
-      f.getDepartments()
-      .then(function(departments) {
-        json.children[findex].children = departments.map(function(value, index) {
-          return {
-            name: value.name,
-            id: value.id,
-          }
-        });
-        // 将json数据更新
-        fs.writeFile(path.join(__dirname, '../public/data/organization.json'), JSON.stringify(json), 'utf-8', function(err) {
-          if(err) {
-            throw(err);
-          }
-          console.log('organization视图的json数据更新成功');
-        });
-      });
-    });
-  });
-}
+var orgJson = updateOrg();
+var plantJson = updatePlant();
 
 // 构造树图的json数据
-function updateJson() {
+function updatePlant() {
   // 建立组织树的json数据
   var json = {
     name: "init",
@@ -107,12 +67,12 @@ function updateJson() {
                   }
                 });
                 // 将json数据更新
-                fs.writeFile(path.join(__dirname, '../public/data/plant.json'), JSON.stringify(json), 'utf-8', function(err) {
-                  if(err) {
-                    throw(err);
-                  }
-                  console.log('plant视图的json数据更新成功');
-                });
+                // fs.writeFile(path.join(__dirname, '../public/data/plant.json'), JSON.stringify(json), 'utf-8', function(err) {
+                //   if(err) {
+                //     throw(err);
+                //   }
+                //   console.log('plant视图的json数据更新成功');
+                // });
               })
             })
           });
@@ -120,15 +80,62 @@ function updateJson() {
       });
     });
   });
+  return  json;
+  console.log('plant视图的json数据更新成功');
+}
+
+// 构造组织机构的json数据
+function updateOrg() {
+  var json = {
+    name: "init",
+    id: null
+  };
+
+  Company.findAll({
+    attributes: ['name', 'id']
+  })
+  .then(function(companys) {
+
+    json.children = companys.map(function(value, index) {
+      return {
+        name: value.name,
+        id: value.id,
+      }
+    });
+
+    companys.forEach(function(value, findex) {
+      var f = value;
+      f.getDepartments()
+      .then(function(departments) {
+        json.children[findex].children = departments.map(function(value, index) {
+          return {
+            name: value.name,
+            id: value.id,
+          }
+        });
+        // 将json数据更新
+        // fs.writeFile(path.join(__dirname, '../public/data/organization.json'), JSON.stringify(json), 'utf-8', function(err) {
+        //   if(err) {
+        //     throw(err);
+        //   }
+        //   console.log('organization视图的json数据更新成功');
+        // });
+      });
+    });
+  });
+  return json;
+  console.log('organization视图的json数据更新成功');
 }
 
 // 添加一个调试json的路由
 router.get('/data/plant', function(req, res, next) {
-  res.sendFile(path.join(__dirname, '../public/data/plant.json'));
+  // res.sendFile(path.join(__dirname, '../public/data/plant.json'));
+  res.send(plantJson);
 });
 
 router.get('/data/organization', function(req, res, next) {
-  res.sendFile(path.join(__dirname, '../public/data/organization.json'));
+  // res.sendFile(path.join(__dirname, '../public/data/organization.json'));
+  res.send(orgJson);
 });
 
 // 文件上传中间件配置
@@ -172,8 +179,8 @@ router.post('/images',upload.array('images', 9), function(req, res, next) {
 router.post('/company', function (req, res, next) {
   Company.create(req.body)
   .then(function(company) {
+    orgJson = updateOrg();
     res.send(company);
-    updateJson2();
   })
 });
 
@@ -183,8 +190,8 @@ router.put('/company/:id', function(req, res, next) {
   .then(function(company) {
     company.update(req.body, {where: {id: company.id}})
     .then(function(company) {
+      orgJson = updateOrg();
       res.send(company);
-      updateJson2();
     });
   });
 });
@@ -194,8 +201,8 @@ router.delete('/company/:id', function(req, res, next) {
   console.log(`api删除公司信息...`);
   Company.destroy({where: {id: req.params.id}})
   .then(() => {
+    orgJson = updateOrg();
     res.send(`delete company`);
-    updateJson2();
   })
   .catch((err) => {
     console.log(err);
@@ -207,8 +214,8 @@ router.post('/company/:id', function (req, res, next) {
   req.body.companyId = req.params.id; // 设置关联
   Department.create(req.body)
   .then(function(department) {
+    orgJson = updateOrg();
     res.send(department);
-    updateJson2();
   });
 });
 
@@ -218,8 +225,8 @@ router.put('/department/:id', function (req, res, next) {
   .then(function(department) {
     department.update(req.body, {where: {id: department.id}})
     .then(function(department) {
+      orgJson = updateOrg();
       res.send(department);
-      updateJson2();
     });
   });
 });
@@ -229,8 +236,8 @@ router.delete('/department/:id', function(req, res, next) {
   console.log(`api删除部门信息...`);
   Department.destroy({where: {id: req.params.id}})
   .then(() => {
+    orgJson = updateOrg();
     res.send(`delete department`);
-    updateJson2();
   })
   .catch((err) => {
     next(err);
@@ -242,8 +249,8 @@ router.post('/factory', function(req, res, next) {
   Factory.create(req.body)
   .then(function(factory) {
     console.log(`建立了ID为${factory.id}的厂区`);
+    plantJson = updatePlant();
     res.send(factory);
-    updateJson();
   });
 });
 
@@ -254,8 +261,8 @@ router.put('/factory/:id',function(req, res, next) {
   .then(function(factory) {
     factory.update(req.body)
     .then(function(factory) {
+      plantJson = updatePlant();
       res.send(factory);
-      updateJson();
     })
     .catch(function(err) {
       next(err);
@@ -276,8 +283,8 @@ router.delete('/factory/:id', function(req, res, next) {
     })
     .then(function() {
       console.log(`删除厂房下的所有厂房节点成功`);
+      plantJson = updatePlant();
       res.send('删除厂区节点');
-      updateJson();
     })
   })
   .catch(function(err) {
@@ -291,8 +298,8 @@ router.post('/factory/:id', function(req, res, next) {
   req.body.factoryId = req.params.id;
   Workshop.create(req.body)
   .then(function(workshop) {
+    plantJson = updatePlant();
     res.send(workshop);
-    updateJson();
   });
 });
 
@@ -303,8 +310,9 @@ router.put('/workshop/:id',function(req, res, next) {
   .then(function(workshop) {
     workshop.update(req.body)
     .then(function(workshop) {
+      plantJson = updatePlant();
       res.send(workshop);
-      updateJson();
+
     })
     .catch(function(err) {
       next(err);
@@ -325,8 +333,9 @@ router.delete('/workshop/:id', function(req, res, next) {
     })
     .then(function() {
       console.log(`删除厂房下的所有跨节点成功`);
+      plantJson = updatePlant();
       res.send('删除厂房节点');
-      updateJson();
+
     })
   })
   .catch(function(err) {
@@ -340,8 +349,8 @@ router.post('/workshop/:id', function(req, res, next) {
   req.body.workshopId = req.params.id;
   Stride.create(req.body)
   .then(function(stride) {
+    plantJson = updatePlant();
     res.send(stride);
-    updateJson();
   });
 });
 
@@ -352,8 +361,8 @@ router.put('/stride/:id',function(req, res, next) {
   .then(function(stride) {
     stride.update(req.body)
     .then(function(stride) {
+      plantJson = updatePlant();
       res.send(stride);
-      updateJson();
     })
     .catch(function(err) {
       next(err);
@@ -374,8 +383,8 @@ router.delete('/stride/:id', function(req, res, next) {
     })
     .then(function() {
       console.log(`删除跨下的所有区域节点成功`);
+      plantJson = updatePlant();
       res.send('删除跨节点成功');
-      updateJson();
     });
   })
   .catch(function(err) {
@@ -389,8 +398,8 @@ router.post('/stride/:id', function(req, res, next) {
   req.body.strideId = req.params.id;
   Area.create(req.body)
   .then(function(area) {
+    plantJson = updatePlant();
     res.send(area);
-    updateJson();
   });
 });
 
@@ -401,8 +410,9 @@ router.put('/area/:id',function(req, res, next) {
   .then(function(area) {
     area.update(req.body)
     .then(function(area) {
+      plantJson = updatePlant();
       res.send(area);
-      updateJson();
+
     })
     .catch(function(err) {
       next(err);
@@ -418,8 +428,8 @@ router.delete('/area/:id', function(req, res, next) {
   })
   .then(function(area) {
     console.log(`删除区域节点成功`);
+    plantJson = updatePlant();
     res.send(`删除区域节点成功`);
-    updateJson();
   })
   .catch(function(err) {
     next(err);

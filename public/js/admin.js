@@ -2,189 +2,57 @@ $(function() {
   // 第一部分初始化设置
   // 使用echarts显示关系图
   var myChart = echarts.init(document.getElementById('tree'));
-  // 指定图表的配置项和数据
-  var data = {
-    "name": "init",
-    "id": null,
-    "children": [
-      {
-        "name": "厂区",
-        "id": "0cadaaf6-2541-41a8-be5f-529b5b221ec2",
-        "children": [
-          {
-            "name": "二厂房",
-            "id": "4a2d12a2-5264-4b40-bad7-e948cdcf41f8",
-            "children": [
-              {
-                "name": "八跨",
-                "id": "7d83465f-66a7-4987-be5e-f5bd12983478",
-                "children": [
+  $.get('/api/data/plant', function(data) {
+    myChart.hideLoading();
+    var data = data.children[0];
 
-                ]
-              },
-              {
-                "name": "十跨",
-                "id": "a99ad147-8945-4d95-8d28-6d1d0fd78c76",
-                "children": [
-                  {
-                    "name": "恢复区",
-                    "id": "39dbbd14-c5e2-44da-b787-b000dda66550"
-                  },
-                  {
-                    "name": "防区",
-                    "id": "5dc58ba5-a7a0-4e0a-8abc-ac0fea48b7dd"
-                  }
-                ]
-              },
-              {
-                "name": "九跨",
-                "id": "e6856d57-8edd-4b66-b3c1-450e995f6497",
-                "children": [
+    // 指定图表的配置项和数据
+    myChart.setOption(option = {
+      backgroundColor: '#fcf9f2',
+      tooltip: {
+        trigger: 'item',
+        triggerOn: 'mousemove'
+      },
+      series: [
+        {
+          type: 'tree',
 
-                ]
-              },
-              {
-                "name": "六跨",
-                "id": "e993cf11-7a2c-4df9-8d85-1d8faa0a30ab",
-                "children": [
+          data: [data],
 
-                ]
-              }
-            ]
-          },
-          {
-            "name": "八三厂房",
-            "id": "58f419d1-a2e7-46c8-8dd7-a801ae5d7d9d",
-            "children": [
-              {
-                "name": "五跨",
-                "id": "b10c8505-32db-4dfc-9273-7a27ad6001a8",
-                "children": [
-                  {
-                    "name": "装配区",
-                    "id": "e7b2e582-d89d-466d-a11d-459436e55847"
-                  }
-                ]
-              },
-              {
-                "name": "七跨",
-                "id": "d21b7ae1-de75-4a92-bf3e-288ee6b85229",
-                "children": [
+          top: '1%',
+          left: '20%',
+          bottom: '1%',
+          right: '20%',
 
-                ]
-              },
-              {
-                "name": "六跨",
-                "id": "fe1b44dc-610d-436c-bbb9-eecc7dec56e8",
-                "children": [
+          symbolSize: 7,
 
-                ]
-              }
-            ]
-          },
-          {
-            "name": "四厂房",
-            "id": "78ff5750-75fc-4935-b1b9-4df0c4f8dcc8",
-            "children": [
-
-            ]
-          },
-          {
-            "name": "三厂房",
-            "id": "b09580d0-d524-4bc1-9813-02432609a7b6",
-            "children": [
-              {
-                "name": "十一跨",
-                "id": "137567f4-a51f-4df5-b15e-e95900de2926",
-                "children": [
-
-                ]
-              }
-            ]
-          },
-          {
-            "name": "一厂房",
-            "id": "c799cb48-95ec-47af-9f81-fdbf795d25ea",
-            "children": [
-              {
-                "name": "一跨",
-                "id": "06c650f4-aa0d-473c-9e69-cc73ad6dab75",
-                "children": [
-                  {
-                    "name": "装配区",
-                    "id": "975608a8-d0cd-4a31-98fa-b8921c28bc40"
-                  },
-                  {
-                    "name": "焊接区",
-                    "id": "f1039298-b1f9-44e0-ad53-c5f7c0f83f78"
-                  }
-                ]
-              },
-              {
-                "name": "三跨",
-                "id": "3d664cab-46d9-482b-ab9c-78b293497314",
-                "children": [
-
-                ]
-              },
-              {
-                "name": "二跨",
-                "id": "a8a21075-cb8c-43ce-a616-143684515c76",
-                "children": [
-
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  };
-
-  myChart.setOption(option = {
-    backgroundColor: '#fcf9f2',
-    tooltip: {
-      trigger: 'item',
-      triggerOn: 'mousemove'
-    },
-    series: [
-      {
-        type: 'tree',
-
-        data: [data.children[0]],
-
-        top: '1%',
-        left: '10%',
-        bottom: '1%',
-        right: '20%',
-
-        symbolSize: 7,
-
-        label: {
-            normal: {
-              position: 'left',
-              verticalAlign: 'middle',
-              align: 'right',
-              fontSize: 9
-            }
-        },
-
-        leaves: {
           label: {
-            normal: {
-              position: 'right',
-              verticalAlign: 'middle',
-              align: 'left'
-            }
-          }
-        },
+              normal: {
+                position: 'left',
+                verticalAlign: 'middle',
+                align: 'right',
+                fontSize: 9
+              }
+          },
 
-        expandAndCollapse: true,
-        animationDuration: 550,
-        animationDurationUpdate: 750
-      }
-    ]
-});
+          leaves: {
+            label: {
+              normal: {
+                position: 'right',
+                verticalAlign: 'middle',
+                align: 'left'
+              }
+            }
+          },
+
+          expandAndCollapse: true,
+          animationDuration: 550,
+          animationDurationUpdate: 750
+        }
+      ]
+    });
+  });
+
   // 初始化信息提示
   var tips = $('.tips p');
   $('form').attr('autocomplete', 'off');
