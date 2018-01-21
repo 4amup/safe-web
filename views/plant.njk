@@ -1,0 +1,31 @@
+{# 先在前端实现数据格式，在做这个超级管理员页面 #}
+{% extends "layout.njk" %}
+{# 首页自定义样式文件 #}
+{% block cssFiles %}
+  <link rel="stylesheet" href="/css/tree.css">
+{% endblock %}
+{% block jsFiles %}
+  <script src="/js/plant.js"></script>
+{% endblock %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+<div class="container">
+  <div class="tree">
+    <h5 class="tips">点击此区域可取消当前区域的选择</h5>
+    <div class="layer-0"></div>
+  </div>
+  <form class="control-panel">
+    <input type="button" id="btn-delete" value="删除">
+    <div>
+      <input type="text" name="add-layer">
+      <input type="button" id="btn-add" value="添加">
+    </div>
+    <div>
+      <input type="text" name="update-layer">
+      <input type="button" id="btn-update" value="修改">
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% include './parts/footer.njk' %}

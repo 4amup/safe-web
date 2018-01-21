@@ -1,9 +1,9 @@
 var db = require('../db');
 
-module.exports = db.defineModel('area', {
+module.exports = db.defineModel('workshop', {
   name: {
     type: db.STRING(100),
-    comment: '作业区'
+    comment: '厂房-类似于城市意义中的区'
   },
   polygonPath: {
     type: db.TEXT(),

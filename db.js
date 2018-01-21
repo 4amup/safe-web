@@ -10,7 +10,7 @@ function generateId() {
 }
 
 // 实例化sequelize
-var sequelize = new Sequelize('test', 'root', '8307', {
+var sequelize = new Sequelize('test2', 'root', '8307', {
   host: 'localhost',
   dialect: 'mysql',
   pool: {
@@ -18,6 +18,15 @@ var sequelize = new Sequelize('test', 'root', '8307', {
     min: 0,
     idle: 10000
   }
+});
+
+// 测试数据库连接
+sequelize.authenticate().then(function() {
+  console.log("数据库连接成功");
+}).catch(function(err) {
+  //数据库连接失败时打印输出
+  console.error(err);
+  throw err;
 });
 
 // 定义ID的数据类型

@@ -8,6 +8,7 @@ router.get('/:trouble_id', function(req, res, next) {
   .then((trouble) => {
     trouble.troubleImagesPath = JSON.parse(trouble.troubleImagesPath);
     trouble.renovationImagesPath = JSON.parse(trouble.renovationImagesPath);
+    trouble.Markerposition = JSON.parse(trouble.Markerposition);
     res.render('trouble', {
       title: trouble.troubleDescription,
       trouble: trouble,

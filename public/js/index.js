@@ -11,7 +11,11 @@ $(function () {
   });
 
   var datetime = new Date();
-  var date = `${datetime.getFullYear()}-${datetime.getMonth()+1}-${datetime.getDate()}`;
+  var mouth = datetime.getMonth()+1;
+  mouth = mouth<10 ? '0'+mouth:mouth;
+  var date = datetime.getDate();
+  date = date<10 ? '0'+date:date;
+  var date = `${datetime.getFullYear()}-${mouth}-${date}`;
   var hours = (datetime.getHours()<10)?'0'+datetime.getHours():datetime.getHours();
   var minutes = (datetime.getMinutes()<10)?'0'+datetime.getMinutes():datetime.getMinutes();
   var time = `${hours}:${minutes}`;
@@ -99,8 +103,11 @@ $(function () {
         size: new AMap.Size(300, 220)
       });
 
-      marker.on('click', function() {
+      marker.on('mouseover', function() {
         infoWindow.open(map, JSON.parse(value.Markerposition));
+      });
+      marker.on('mouseout', function() {
+        infoWindow.close(map, JSON.parse(value.Markerposition));
       });
       markers.push(marker);
     })
@@ -360,7 +367,7 @@ $(function () {
           image: (trouble.renovationStatus == 'on') ? "images/green_brand.png" : "images/red_brand.png",
           imageOffset: new AMap.Pixel(-8, 2),
           imageSize: new AMap.Size(36, 36)
-        })    
+        })
       });
       marker.setMap(map);
       $('#troubleList').prepend($(`<li><a href="/trouble/${trouble.id}">${trouble.troubleDescription}</a></li>`));
@@ -370,5 +377,5 @@ $(function () {
     .fail(function() {
       alert('提交问题失败！');
     })
-  })
+  });
 });

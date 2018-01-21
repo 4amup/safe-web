@@ -1,9 +1,10 @@
+// 厂区区域模型
 var db = require('../db');
 
-module.exports = db.defineModel('area', {
+module.exports = db.defineModel('factory', {
   name: {
     type: db.STRING(100),
-    comment: '作业区'
+    comment: '厂区名'
   },
   polygonPath: {
     type: db.TEXT(),

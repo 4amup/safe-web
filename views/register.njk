@@ -15,7 +15,21 @@
     <input type="text" name="name" id="username">
   </div>
   <div>
+    <label for="role">岗位：</label>
+    <select name="role" id="role">
+      <option value="1">普通员工</option>
+      <option value="2">基层班组长</option>
+      <option value="3">生产单位管理者</option>
+      <option value="4">高级管理者</option>
+    </select>
+  </div>
+  <div>
+    <label for="cellphone">手机号：</label>
+    <input type="text" name="cellphone" id="cellphone">
+  </div>
+  <div>
     <input type="submit" value="注册">
   </div>
 </form>
 {% endblock %}
+{% include './parts/footer.njk' %}

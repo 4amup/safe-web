@@ -1,41 +1,13 @@
-body {
-  margin: 0;
-  padding: 0;
+.container #tree {
+  width: 280px;
+  margin-right: 16px;
+  position: relative;
+  height: 700px;
+  min-height: 50px;
+  float: left;
 }
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.mapBox {
-  width: 60%;
-}
-.companyBox {
-  width: 40%;
-}
-.companyBox {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-}
-.areaBox {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  border: 1px solid red;
-  margin: 1em;
-}
-h2, h3, h4, h5 {
-  text-align: center;
-}
-#map {
-  height: 500px;
-}
-form {
-  display: flex;
-}
-form input {
-  width: 5em;
+.container .mapBox {
+  margin-left: 296px;
+  min-height: 50px;
+  height: 700px;
 }

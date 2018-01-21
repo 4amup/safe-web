@@ -7,15 +7,15 @@ var Area = model.Area;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log('首页查询公司信息...')
+  console.log('首页查询公司信息...');
   Company.findOne()
   .then(function (company) {
     if(company === null) {
-      res.render('admin', {title: '项目初始化', company: null, area: null});
+      res.render('admin', {title: '初始化'});
     } else {
-      company.getAreas()
-      .then(function (areas) {
-        res.render('admin', { title: '管理员', company: company, areas: areas });
+      company.getDepartments()
+      .then(function (departments) {
+        res.render('admin', { title: '管理员', company: company, departments: departments });
       });
     };
   })
@@ -23,5 +23,15 @@ router.get('/', function(req, res, next) {
     console.log(err);
   })
 });
+
+router.get('/view/plant', function(req, res, next) {
+  console.log('组织关系图···');
+  res.render('plant', {title: '工厂视图'});
+});
+
+router.get('/view/organization', function(req, res, next) {
+  console.log('公司关系图...');
+  res.render('organization', {title: '公司组织图'});
+})
 
 module.exports = router;

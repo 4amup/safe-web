@@ -2,22 +2,31 @@
   margin: 0;
   padding: 0;
 }
+
+/* base css */
 body {
-  /* padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #EBEBEB;
+  min-height: 300px;
 }
 a {
   text-decoration: none;
   color: #00B7FF;
 }
-
-h1 {
-  text-align: center;
-}
-img {
-  width: 200px;
+ul, li {
+  list-style: none;
 }
 
+/* container区域开始 */
+.container {
+  width: 1000px;
+  margin: 15px auto;
+  min-height: 100px;
+  /* background-color: burlywood; */
+}
+
+/* 导航栏css */
+/* 导航栏 */
 nav {
   background: lightslategrey;
   height: 60px;
@@ -46,13 +55,12 @@ nav ul a {
   color: #ffffff;
   display: inline-block;
   height: 100%;
-  /*垂直居中的办法就是line-height*/
-  line-height: 60px;
+  line-height: 60px;  /*垂直居中的办法就是line-height*/
   text-decoration: none;
   margin: auto 0;
 }
 
-/* footer部分开始 */
+/* 底部信息栏 */
 .footer {
   position: absolute;
   bottom: 0;
@@ -78,4 +86,3 @@ nav ul a {
 	margin-top: 5px;
 	margin-bottom: 13px;
 }
-/* footer部分结束 */
